@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import Login from './views/login/register.vue';
-import Signup from './views/login/signup.vue';
-import DashboardMap from './views/dashboard/DashboardMap.vue';
+import Login from './views/login/Register.vue';
+import Signup from './views/login/Signup.vue';
 
-const currentView = ref<'login' | 'signup' | 'dashboard'>('login');
+const currentView = ref<'login' | 'signup'>('login');
 
 const switchToSignup = () => {
   currentView.value = 'signup';
@@ -13,18 +12,9 @@ const switchToSignup = () => {
 const switchToLogin = () => {
   currentView.value = 'login';
 };
-
-const switchToDashboard = () => {
-  currentView.value = 'dashboard';
-};
-
-const handleLogout = () => {
-  currentView.value = 'login';
-};
 </script>
 
 <template>
-  <Login v-if="currentView === 'login'" @switch-to-signup="switchToSignup" @login-success="switchToDashboard" />
-  <Signup v-else-if="currentView === 'signup'" @switch-to-login="switchToLogin" @signup-success="switchToDashboard" />
-  <DashboardMap v-else @logout="handleLogout" />
+  <Login v-if="currentView === 'login'" @switch-to-signup="switchToSignup" />
+  <Signup v-else @switch-to-login="switchToLogin" />
 </template>
