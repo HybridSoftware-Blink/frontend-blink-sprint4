@@ -1,23 +1,12 @@
-/**
- * Cliente HTTP base para todas las peticiones a la API
- * Configuración centralizada de axios
- */
-
 import axios, { type AxiosRequestConfig } from 'axios';
 import type { ApiError } from '../types/auth.types';
 
-// Por defecto usamos una ruta relativa para aprovechar el proxy de Vite
-// (ver vite.config.ts) y evitar problemas de CORS en desarrollo.
-// Se puede sobreescribir con VITE_API_URL.
 const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 export interface ApiClientConfig {
   headers?: Record<string, string>;
 }
 
-/**
- * Instancia de axios configurada
- */
 const axiosInstance = axios.create({
   baseURL: API_URL,
   headers: {
@@ -26,9 +15,7 @@ const axiosInstance = axios.create({
   },
 });
 
-/**
- * Interceptor para agregar el token de autenticación
- */
+
 axiosInstance.interceptors.request.use((config) => {
   const token = localStorage.getItem('auth_token');
   if (token) {
@@ -37,14 +24,12 @@ axiosInstance.interceptors.request.use((config) => {
   return config;
 });
 
-/**
- * Interceptor para manejar errores
- */
+
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response) {
-      // Error de respuesta del servidor
+      // Error server
       throw {
         message: error.response.data?.message || 'Error en la petición',
         errors: error.response.data?.errors || {},
@@ -52,7 +37,7 @@ axiosInstance.interceptors.response.use(
       } as ApiError & { status: number };
     }
     
-    // Error de red u otro
+    // Error de red o otres
     throw {
       message: 'Error de conexión con el servidor',
       errors: {},
@@ -78,9 +63,6 @@ async function request<T>(
   }
 }
 
-/**
- * Cliente API con métodos HTTP
- */
 export const apiClient = {
   get: <T>(endpoint: string) =>
     request<T>(endpoint, { method: 'GET' }),

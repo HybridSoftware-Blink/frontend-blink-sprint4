@@ -1,8 +1,3 @@
-/**
- * Servicio de autenticación
- * Maneja login, logout, registro y obtención de usuario actual
- */
-
 import { apiClient } from './api.service';
 import type { LoginCredentials, RegisterData, AuthResponse, User } from '../types/auth.types';
 
@@ -28,11 +23,6 @@ export const authService = {
     } as AuthResponse;
   },
 
-  /**
-   * Inicia sesión de usuario
-   * @param credentials - Email y contraseña
-   * @returns Token y datos del usuario
-   */
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
     const raw = await apiClient.post<any>('/v1/auth/login', credentials);
     const normalized = this.normalizeAuthResponse(raw);
@@ -49,11 +39,6 @@ export const authService = {
     return { token: normalized.token, user: me };
   },
 
-  /**
-   * Registra un nuevo usuario
-   * @param data - Datos de registro
-   * @returns Token y datos del usuario
-   */
   async register(data: RegisterData): Promise<AuthResponse> {
     const raw = await apiClient.post<any>('/v1/auth/register', data);
     const normalized = this.normalizeAuthResponse(raw);
@@ -70,34 +55,20 @@ export const authService = {
     return { token: normalized.token, user: me };
   },
 
-  /**
-   * Cierra la sesión del usuario
-   */
   async logout(): Promise<void> {
     try {
       await apiClient.post('/v1/auth/logout');
     } catch (error) {
       console.error('Error al cerrar sesión:', error);
     } finally {
-      // Limpiar datos locales siempre
       this.clearAuth();
     }
   },
 
-  /**
-   * Obtiene el usuario autenticado actual
-   * @returns Datos del usuario
-   */
   async getCurrentUser(): Promise<User> {
     return await apiClient.get<User>('/v1/auth/me');
   },
 
-  /**
-   * Cambia la contraseña del usuario actual
-   * @param currentPassword - Contraseña actual
-   * @param newPassword - Nueva contraseña
-   * @param newPasswordConfirmation - Confirmación de nueva contraseña
-   */
   async changePassword(
     currentPassword: string,
     newPassword: string,
@@ -110,16 +81,10 @@ export const authService = {
     });
   },
 
-  /**
-   * Guarda el token en localStorage
-   */
   setToken(token: string): void {
     localStorage.setItem(AUTH_TOKEN_KEY, token);
   },
 
-  /**
-   * Obtiene el token del localStorage
-   */
   getToken(): string | null {
     return localStorage.getItem(AUTH_TOKEN_KEY);
   },
