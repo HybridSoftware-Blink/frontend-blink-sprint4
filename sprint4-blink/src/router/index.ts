@@ -17,6 +17,15 @@ const routes: RouteRecordRaw[] = [
     },
   },
   {
+    path: '/register',
+    name: 'Register',
+    component: () => import('../views/auth/RegisterView.vue'),
+    meta: {
+      requiresAuth: false,
+      title: 'Registro',
+    },
+  },
+  {
     path: '/dashboard',
     name: 'Dashboard',
     component: () => import('../views/dashboard/DashboardView.vue'),
@@ -58,7 +67,7 @@ router.beforeEach((to, _from, next) => {
   }
 
   // Si está autenticado e intenta acceder al login
-  if (to.name === 'Login' && isAuthenticated) {
+  if ((to.name === 'Login' || to.name === 'Register') && isAuthenticated) {
     // Redirigir al dashboard
     next({ name: 'Dashboard' });
     return;

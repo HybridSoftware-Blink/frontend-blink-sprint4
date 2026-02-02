@@ -1,7 +1,13 @@
 <script setup lang="ts">
-defineProps<{
-  showLogo?: boolean;
-}>();
+withDefaults(
+  defineProps<{
+    showLogo?: boolean;
+    containerClass?: string;
+  }>(),
+  {
+    containerClass: 'max-w-md',
+  }
+);
 </script>
 
 <template>
@@ -17,7 +23,7 @@ defineProps<{
     </video>
     
     <!-- Contenido -->
-    <div class="max-w-md w-full relative z-10">
+    <div :class="['w-full relative z-10', containerClass]">
       <slot></slot>
     </div>
   </div>

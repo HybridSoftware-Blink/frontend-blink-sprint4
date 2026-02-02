@@ -70,9 +70,9 @@ const togglePasswordVisibility = () => {
                 </h1>
                 <p class="text-gray-600">
                     Don't have an account?
-                    <a href="#" class="text-green-600 hover:text-green-700 font-medium">
+                    <router-link to="/register" class="text-green-600 hover:text-green-700 font-medium">
                         Create one
-                    </a>
+                    </router-link>
                 </p>
             </div>
 
