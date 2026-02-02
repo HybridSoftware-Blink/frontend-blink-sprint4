@@ -37,9 +37,11 @@ const handleRegister = async () => {
     try {
         const response = await authService.register(form);
 
-        toast.success(`¡Cuenta creada! Bienvenido/a ${response.user.name}`);
+        toast.success(`¡Cuenta creada! Bienvenido/a ${response.user?.name ?? 'a Blink'}`);
 
-        router.push('/dashboard');
+     
+        authService.clearAuth();
+        router.push({ name: 'Login' });
     } catch (err: any) {
         if (err.errors) {
             fieldErrors.value = err.errors;
@@ -70,7 +72,6 @@ const togglePasswordConfirmationVisibility = () => {
         <BaseCard>
             <AuthLogo />
 
-            <!-- Header -->
             <div class="text-center mb-8">
                 <h1 class="text-3xl font-bold text-gray-900 mb-2">
                     Create your Blink account

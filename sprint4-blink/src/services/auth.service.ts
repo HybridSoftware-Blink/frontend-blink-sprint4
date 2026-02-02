@@ -10,22 +10,43 @@ const AUTH_TOKEN_KEY = 'auth_token';
 const AUTH_USER_KEY = 'auth_user';
 
 export const authService = {
+  normalizeAuthResponse(raw: any): AuthResponse {
+    const payload = raw?.data ?? raw;
+    const token = payload?.token ?? payload?.access_token ?? payload?.accessToken;
+    const user = payload?.user ?? payload?.data?.user;
+
+    if (!token) {
+      throw {
+        message: 'Respuesta de login inválida: falta token',
+        errors: {},
+      };
+    }
+
+    return {
+      token,
+      user,
+    } as AuthResponse;
+  },
+
   /**
    * Inicia sesión de usuario
    * @param credentials - Email y contraseña
    * @returns Token y datos del usuario
    */
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
-    const response = await apiClient.post<AuthResponse>(
-      '/v1/auth/login',
-      credentials
-    );
+    const raw = await apiClient.post<any>('/v1/auth/login', credentials);
+    const normalized = this.normalizeAuthResponse(raw);
 
-    // Guardar token y usuario en localStorage
-    this.setToken(response.token);
-    this.setUser(response.user);
+    this.setToken(normalized.token);
 
-    return response;
+    if (normalized.user) {
+      this.setUser(normalized.user);
+      return normalized;
+    }
+
+    const me = await this.getCurrentUser();
+    this.setUser(me);
+    return { token: normalized.token, user: me };
   },
 
   /**
@@ -34,16 +55,19 @@ export const authService = {
    * @returns Token y datos del usuario
    */
   async register(data: RegisterData): Promise<AuthResponse> {
-    const response = await apiClient.post<AuthResponse>(
-      '/v1/auth/register',
-      data
-    );
+    const raw = await apiClient.post<any>('/v1/auth/register', data);
+    const normalized = this.normalizeAuthResponse(raw);
 
-    // Guardar token y usuario en localStorage
-    this.setToken(response.token);
-    this.setUser(response.user);
+    this.setToken(normalized.token);
 
-    return response;
+    if (normalized.user) {
+      this.setUser(normalized.user);
+      return normalized;
+    }
+
+    const me = await this.getCurrentUser();
+    this.setUser(me);
+    return { token: normalized.token, user: me };
   },
 
   /**
@@ -100,31 +124,19 @@ export const authService = {
     return localStorage.getItem(AUTH_TOKEN_KEY);
   },
 
-  /**
-   * Guarda el usuario en localStorage
-   */
   setUser(user: User): void {
     localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
   },
 
-  /**
-   * Obtiene el usuario del localStorage
-   */
   getUser(): User | null {
     const user = localStorage.getItem(AUTH_USER_KEY);
     return user ? JSON.parse(user) : null;
   },
 
-  /**
-   * Verifica si el usuario está autenticado
-   */
   isAuthenticated(): boolean {
     return !!this.getToken();
   },
 
-  /**
-   * Limpia todos los datos de autenticación
-   */
   clearAuth(): void {
     localStorage.removeItem(AUTH_TOKEN_KEY);
     localStorage.removeItem(AUTH_USER_KEY);

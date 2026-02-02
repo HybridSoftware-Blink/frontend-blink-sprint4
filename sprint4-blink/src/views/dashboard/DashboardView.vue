@@ -3,13 +3,25 @@ import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { authService } from '../../services/auth.service';
 import type { User } from '../../types/auth.types';
+import { useToast } from '../../composables/useToast';
 
 const router = useRouter();
+const toast = useToast();
 const user = ref<User | null>(null);
 
-onMounted(() => {
-  // Obtener usuario del localStorage
+onMounted(async () => {
+  // Cargar usuario local (UI rápida) y validar token contra backend
   user.value = authService.getUser();
+
+  try {
+    const me = await authService.getCurrentUser();
+    user.value = me;
+    authService.setUser(me);
+  } catch (_err) {
+    toast.error('Tu sesión ha caducado. Vuelve a iniciar sesión.');
+    await authService.logout();
+    router.push('/login');
+  }
 });
 
 /**
@@ -29,7 +41,7 @@ const handleLogout = async () => {
         <div class="flex justify-between h-16">
           <div class="flex items-center">
             <h1 class="text-2xl font-bold text-primary-600">
-              🚗 Blink
+              Blink
             </h1>
           </div>
           
@@ -55,15 +67,6 @@ const handleLogout = async () => {
           ¡Bienvenido al Dashboard!
         </h2>
         
-        <div class="bg-green-50 border border-green-200 rounded-lg p-6 mb-6">
-          <p class="text-green-800 font-semibold mb-2">
-            ✅ Login exitoso
-          </p>
-          <p class="text-green-700 text-sm">
-            Has iniciado sesión correctamente. El sistema de autenticación está funcionando.
-          </p>
-        </div>
-
         <div class="space-y-4">
           <div>
             <h3 class="text-lg font-semibold text-gray-800 mb-2">
@@ -77,18 +80,6 @@ const handleLogout = async () => {
             </div>
           </div>
 
-          <div class="border-t pt-4">
-            <h3 class="text-lg font-semibold text-gray-800 mb-2">
-              Próximas funcionalidades
-            </h3>
-            <ul class="list-disc list-inside text-gray-600 space-y-1">
-              <li>Gestión de usuarios</li>
-              <li>Gestión de vehículos</li>
-              <li>Sistema de reservas</li>
-              <li>Tickets de soporte</li>
-              <li>Geofencing</li>
-            </ul>
-          </div>
         </div>
       </div>
     </main>

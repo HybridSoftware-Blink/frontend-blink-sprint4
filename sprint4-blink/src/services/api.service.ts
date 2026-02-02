@@ -6,7 +6,10 @@
 import axios, { type AxiosRequestConfig } from 'axios';
 import type { ApiError } from '../types/auth.types';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8001/api';
+// Por defecto usamos una ruta relativa para aprovechar el proxy de Vite
+// (ver vite.config.ts) y evitar problemas de CORS en desarrollo.
+// Se puede sobreescribir con VITE_API_URL.
+const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 export interface ApiClientConfig {
   headers?: Record<string, string>;

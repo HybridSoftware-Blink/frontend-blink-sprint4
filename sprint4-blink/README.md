@@ -1,5 +1,45 @@
-# Vue 3 + TypeScript + Vite
+## Blink (Frontend) — Vue 3 + Vite
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+### Conexión con el backend (Laravel)
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+Este frontend consume la API del backend en `/api/v1/...` (login, registro, etc.).
+
+#### 1) Configurar la variable de entorno
+
+Crea un fichero `.env.local` a partir de `.env.example`:
+
+```bash
+cp .env.example .env.local
+```
+
+Configuración recomendada (dev):
+
+```env
+VITE_API_URL=/api
+```
+
+Esto funciona junto con el proxy de Vite (ya configurado) y evita problemas de CORS.
+
+> Alternativa: si prefieres llamar directo al backend y tienes CORS bien configurado, puedes usar:
+> `VITE_API_URL=http://localhost:8001/api`
+
+#### 2) Levantar backend y frontend
+
+- Backend: debe estar accesible en `http://localhost:8001` (según tu docker-compose del backend).
+- Frontend:
+
+```bash
+npm install
+npm run dev
+```
+
+#### 3) Endpoints que usa el frontend
+
+- `POST /api/v1/auth/login`
+- `POST /api/v1/auth/register`
+- `POST /api/v1/auth/logout`
+- `GET /api/v1/auth/me`
+
+El token se guarda en `localStorage` como `auth_token` y se envía automáticamente como:
+
+`Authorization: Bearer <token>`
