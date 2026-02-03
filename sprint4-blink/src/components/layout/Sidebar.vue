@@ -1,68 +1,135 @@
 <template>
   <div
-    class="relative flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 dark:before:pointer-events-none dark:before:absolute dark:before:inset-0 dark:before:border-r dark:before:border-white/10 dark:before:bg-black/10"
+    :class="[
+      isCollapsed ? 'w-20 px-3' : 'w-72 px-6',
+      'relative flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 transition-[width,padding] duration-200 ease-in-out dark:before:pointer-events-none dark:before:absolute dark:before:inset-0 dark:before:border-r dark:before:border-white/10 dark:before:bg-black/10',
+    ]"
   >
-    <div class="relative flex h-16 shrink-0 items-center">
-      <img
-        class="h-8 w-auto"
+    <!-- HEADER -->
+    <div class="flex h-20 shrink-0 items-center justify-center">
+      <!-- LOGO -->
+      <img  
+        :class="[
+          'rounded-lg bg-white/5 p-1 transition-all duration-200',
+          isCollapsed ? 'size-9' : 'h-12'
+        ]"
         :src="blinkLogo"
         alt="Blink"
       />
     </div>
 
+    <!-- NAV -->
     <nav class="relative flex flex-1 flex-col">
-      <ul role="list" class="flex flex-1 flex-col gap-y-7">
-        <li>
-          <ul role="list" class="-mx-2 space-y-1">
-            <li v-for="item in navigation" :key="item.name">
+      <ul role="list" class="flex flex-1 flex-col gap-y-7 items-center">
+        <!-- CLIENTE SECTION -->
+        <li class="w-full">
+          <div
+            v-if="!isCollapsed"
+            class="text-xs/6 font-semibold text-gray-400 px-2 mb-2"
+          >
+            Cliente
+          </div>
+          <ul role="list" class="space-y-1 flex flex-col items-center">
+            <li
+              v-for="item in clienteNavigation"
+              :key="item.name"
+              class="w-full flex justify-center"
+            >
               <a
                 :href="item.href"
+                :title="isCollapsed ? item.name : undefined"
                 :class="[
                   item.current
                     ? 'bg-white/5 text-white'
                     : 'text-gray-400 hover:bg-white/5 hover:text-white',
-                  'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold',
+                  'group relative flex items-center font-semibold rounded-md transition-colors',
+                  isCollapsed
+                    ? 'h-10 w-10 justify-center'
+                    : 'w-full gap-x-3 p-2 text-sm/6',
                 ]"
               >
-                <component :is="item.icon" class="size-6 shrink-0" aria-hidden="true" />
-                {{ item.name }}
-                <span
-                  v-if="item.count"
-                  class="ml-auto w-9 min-w-max rounded-full bg-gray-900 px-2.5 py-0.5 text-center text-xs/5 font-medium whitespace-nowrap text-white outline-1 -outline-offset-1 outline-white/15"
+                <component
+                  :is="item.icon"
+                  class="size-6 shrink-0"
                   aria-hidden="true"
+                />
+
+                <span v-if="!isCollapsed" class="truncate">
+                  {{ item.name }}
+                </span>
+
+                <!-- BADGE (expanded) -->
+                <span
+                  v-if="!isCollapsed && item.count"
+                  class="ml-auto w-9 min-w-max rounded-full bg-gray-900 px-2.5 py-0.5 text-center text-xs/5 font-medium whitespace-nowrap text-white"
                 >
                   {{ item.count }}
                 </span>
+
+                <!-- DOT (collapsed) -->
+                <span
+                  v-if="isCollapsed && item.count"
+                  class="absolute right-1 top-1 block size-2 rounded-full bg-primary-500"
+                />
               </a>
             </li>
           </ul>
         </li>
 
-        <li>
-          <div class="text-xs/6 font-semibold text-gray-400">Your teams</div>
-          <ul role="list" class="-mx-2 mt-2 space-y-1">
-            <li v-for="team in teams" :key="team.name">
+        <!-- ADMIN SECTION -->
+        <li class="w-full">
+          <div
+            v-if="!isCollapsed"
+            class="text-xs/6 font-semibold text-gray-400 px-2 mb-2"
+          >
+            Admin
+          </div>
+          <ul role="list" class="space-y-1 flex flex-col items-center">
+            <li
+              v-for="item in adminNavigation"
+              :key="item.name"
+              class="w-full flex justify-center"
+            >
               <a
-                :href="team.href"
+                :href="item.href"
+                :title="isCollapsed ? item.name : undefined"
                 :class="[
-                  team.current
+                  item.current
                     ? 'bg-white/5 text-white'
                     : 'text-gray-400 hover:bg-white/5 hover:text-white',
-                  'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold',
+                  'group relative flex items-center font-semibold rounded-md transition-colors',
+                  isCollapsed
+                    ? 'h-10 w-10 justify-center'
+                    : 'w-full gap-x-3 p-2 text-sm/6',
                 ]"
               >
-                <span
-                  class="flex size-6 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-[0.625rem] font-medium text-gray-400 group-hover:border-white/20 group-hover:text-white"
-                >
-                  {{ team.initial }}
+                <component
+                  :is="item.icon"
+                  class="size-6 shrink-0"
+                  aria-hidden="true"
+                />
+
+                <span v-if="!isCollapsed" class="truncate">
+                  {{ item.name }}
                 </span>
-                <span class="truncate">{{ team.name }}</span>
+
+                <!-- BADGE (expanded) -->
+                <span
+                  v-if="!isCollapsed && item.count"
+                  class="ml-auto w-9 min-w-max rounded-full bg-gray-900 px-2.5 py-0.5 text-center text-xs/5 font-medium whitespace-nowrap text-white"
+                >
+                  {{ item.count }}
+                </span>
+
+                <!-- DOT (collapsed) -->
+                <span
+                  v-if="isCollapsed && item.count"
+                  class="absolute right-1 top-1 block size-2 rounded-full bg-primary-500"
+                />
               </a>
             </li>
           </ul>
         </li>
-
-        
       </ul>
     </nav>
   </div>
@@ -71,6 +138,7 @@
 <script setup lang="ts">
 import {
   ChartPieIcon,
+  Cog6ToothIcon,
   HomeIcon,
   MapPinIcon,
   TicketIcon,
@@ -88,16 +156,18 @@ type NavItem = {
   current: boolean
 }
 
-type TeamItem = {
-  id: number
-  name: string
-  href: string
-  initial: string
-  current: boolean
-}
+defineProps<{
+  isCollapsed: boolean
+}>()
 
-const navigation: NavItem[] = [
-  { name: 'Dashboard', href: '#', icon: HomeIcon, count: '5', current: true },
+const clienteNavigation: NavItem[] = [
+  { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
+  { name: 'Tickets', href: '#', icon: TicketIcon, current: false },
+  { name: 'Reservas', href: '#', icon: ChartPieIcon, current: false },
+  { name: 'Configuración', href: '#', icon: Cog6ToothIcon, current: false },
+]
+
+const adminNavigation: NavItem[] = [
   { name: 'Usuarios', href: '#', icon: UsersIcon, current: false },
   { name: 'Vehículos', href: '#', icon: TruckIcon, count: '12', current: false },
   { name: 'Reservas', href: '#', icon: ChartPieIcon, current: false },
@@ -105,9 +175,4 @@ const navigation: NavItem[] = [
   { name: 'Tickets', href: '#', icon: TicketIcon, current: false },
 ]
 
-const teams: TeamItem[] = [
-  { id: 1, name: 'Heroicons', href: '#', initial: 'H', current: false },
-  { id: 2, name: 'Tailwind Labs', href: '#', initial: 'T', current: false },
-  { id: 3, name: 'Workcation', href: '#', initial: 'W', current: false },
-]
 </script>
