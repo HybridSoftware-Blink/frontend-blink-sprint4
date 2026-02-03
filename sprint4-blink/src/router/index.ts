@@ -35,6 +35,15 @@ const routes: RouteRecordRaw[] = [
     },
   },
   {
+    path: '/geofences',
+    name: 'Geofences',
+    component: () => import('../views/geofences/GeofencesView.vue'),
+    meta: {
+      requiresAuth: true,
+      title: 'Geofencing',
+    },
+  },
+  {
     path: '/:pathMatch(.*)*',
     redirect: '/login',
   },
