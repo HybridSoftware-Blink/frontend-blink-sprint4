@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gray-50 flex">
+  <div class="h-screen bg-gray-50 flex overflow-hidden">
     <aside class="w-72 shrink-0 h-screen">
       <Sidebar class="h-full" />
     </aside>
@@ -34,7 +34,7 @@
           </div>
 
           <div class="flex flex-1 gap-6 min-h-0">
-              <div class="w-80 bg-gray-50 rounded-md border border-gray-200 p-4 overflow-auto min-h-0">
+              <div class="w-80 bg-gray-50 rounded-md border border-gray-200 p-4 min-h-0 flex flex-col">
                 <div class="flex items-center justify-between mb-3">
                   <h3 class="font-semibold">Geofences</h3>
                   <button
@@ -68,24 +68,35 @@
                   </div>
                 </div>
 
-                <ul class="space-y-2">
-                  <li v-for="g in geofences" :key="g.geofence_id" class="flex items-center justify-between">
-                    <div class="flex-1">
-                      <button
-                        @click="selectGeofence(g)"
-                        class="w-full text-left p-2 rounded hover:bg-white/50"
-                      >
-                        <div class="font-medium">{{ g.name }}</div>
-                        <div class="text-xs text-gray-500">ID: {{ g.geofence_id }}</div>
-                      </button>
-                    </div>
-                    <div class="ml-2">
-                      <button @click="deleteGeofence(g)" title="Eliminar" class="p-1 rounded hover:bg-red-50" aria-label="Eliminar geofence">
-                        <TrashIcon class="w-4 h-4 text-red-600" />
-                      </button>
-                    </div>
-                  </li>
-                </ul>
+                <div class="overflow-auto flex-1">
+                  <ul class="space-y-2 p-1">
+                    <li v-for="g in paginatedGeofences" :key="g.geofence_id" class="flex items-center justify-between">
+                      <div class="flex-1">
+                        <button
+                          @click="selectGeofence(g)"
+                          class="w-full text-left p-2 rounded hover:bg-white/50"
+                        >
+                          <div class="font-medium">{{ g.name }}</div>
+                          <div class="text-xs text-gray-500">ID: {{ g.geofence_id }}</div>
+                        </button>
+                      </div>
+                      <div class="ml-2">
+                        <button @click="deleteGeofence(g)" title="Eliminar" class="p-1 rounded hover:bg-red-50" aria-label="Eliminar geofence">
+                          <TrashIcon class="w-4 h-4 text-red-600" />
+                        </button>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="mt-2 flex items-center justify-between text-sm">
+                  <div class="text-gray-600">Mostrando {{ startItem }}-{{ endItem }} de {{ geofences.length }}</div>
+                  <div class="flex items-center gap-2">
+                    <button :disabled="currentPage===1" @click="prevPage" class="px-2 py-1 bg-gray-100 rounded disabled:opacity-50">Prev</button>
+                    <button v-for="p in pages" :key="p" @click="goToPage(p)" :class="['px-2 py-1 rounded', p===currentPage? 'bg-blue-600 text-white' : 'bg-gray-100']">{{ p }}</button>
+                    <button :disabled="currentPage===totalPages" @click="nextPage" class="px-2 py-1 bg-gray-100 rounded disabled:opacity-50">Next</button>
+                  </div>
+                </div>
               </div>
 
             <div class="flex-1 min-h-0">
@@ -100,7 +111,7 @@
 
 <script setup lang="ts">
 
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import Sidebar from '../../components/layout/Sidebar.vue'
 import { authService } from '../../services/auth.service'
@@ -121,6 +132,36 @@ const form = ref<Partial<Geofence>>({ name: '', type: '', radius: 50, polygon_co
 let map: L.Map | null = null
 let markersLayer: L.LayerGroup | null = null
 let selectedMarker: L.Marker | null = null
+// Pagination
+const pageSize = 10
+const currentPage = ref(1)
+
+const totalPages = computed(() => Math.max(1, Math.ceil(geofences.value.length / pageSize)))
+const pages = computed(() => Array.from({ length: totalPages.value }, (_, i) => i + 1))
+
+const paginatedGeofences = computed(() => {
+  const start = (currentPage.value - 1) * pageSize
+  return geofences.value.slice(start, start + pageSize)
+})
+
+const startItem = computed(() => (geofences.value.length === 0 ? 0 : (currentPage.value - 1) * pageSize + 1))
+const endItem = computed(() => Math.min(geofences.value.length, currentPage.value * pageSize))
+
+function prevPage() {
+  if (currentPage.value > 1) currentPage.value--
+}
+
+function nextPage() {
+  if (currentPage.value < totalPages.value) currentPage.value++
+}
+
+function goToPage(p: number) {
+  if (p >= 1 && p <= totalPages.value) currentPage.value = p
+}
+
+watch(geofences, () => {
+  if (currentPage.value > totalPages.value) currentPage.value = totalPages.value
+})
 
 onMounted(async () => {
   user.value = authService.getUser()
