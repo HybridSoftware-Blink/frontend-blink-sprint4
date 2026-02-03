@@ -72,9 +72,11 @@
 import {
   CalendarIcon,
   ChartPieIcon,
-  DocumentDuplicateIcon,
   FolderIcon,
   HomeIcon,
+  MapPinIcon,
+  TicketIcon,
+  TruckIcon,
   UsersIcon,
 } from '@heroicons/vue/24/outline'
 
@@ -98,11 +100,11 @@ type TeamItem = {
 
 const navigation: NavItem[] = [
   { name: 'Dashboard', href: '#', icon: HomeIcon, count: '5', current: true },
-  { name: 'Team', href: '#', icon: UsersIcon, current: false },
-  { name: 'Projects', href: '#', icon: FolderIcon, count: '12', current: false },
-  { name: 'Calendar', href: '#', icon: CalendarIcon, count: '20+', current: false },
-  { name: 'Documents', href: '#', icon: DocumentDuplicateIcon, current: false },
-  { name: 'Reports', href: '#', icon: ChartPieIcon, current: false },
+  { name: 'Usuarios', href: '#', icon: UsersIcon, current: false },
+  { name: 'Vehículos', href: '#', icon: TruckIcon, count: '12', current: false },
+  { name: 'Reservas', href: '#', icon: ChartPieIcon, current: false },
+  { name: 'Geofencing', href: '#', icon: MapPinIcon, count: '20+', current: false },
+  { name: 'Tickets', href: '#', icon: TicketIcon, current: false },
 ]
 
 const teams: TeamItem[] = [
