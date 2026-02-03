@@ -34,7 +34,7 @@ const buttonClasses = computed(() => {
   classes.push(sizeClasses[props.size]);
 
   const variantClasses = {
-    primary: 'bg-purple-600 hover:bg-purple-700 text-white focus:ring-purple-500 shadow-md',
+    primary: 'bg-blue-600 hover:bg-blue-700 text-white focus:ring-blue-500 shadow-md',
     secondary: 'bg-green-600 hover:bg-green-700 text-white focus:ring-green-500 shadow-md',
     tertiary: 'bg-red-600 hover:bg-red-700 text-white focus:ring-red-500 shadow-md',
   };

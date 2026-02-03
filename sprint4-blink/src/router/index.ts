@@ -35,6 +35,15 @@ const routes: RouteRecordRaw[] = [
     },
   },
   {
+    path: '/settings',
+    name: 'Settings',
+    component: () => import('../views/settings/SettingsView.vue'),
+    meta: {
+      requiresAuth: true,
+      title: 'Configuración',
+    },
+  },
+  {
     path: '/:pathMatch(.*)*',
     redirect: '/login',
   },

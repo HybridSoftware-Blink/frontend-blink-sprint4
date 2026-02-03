@@ -5,7 +5,7 @@ import { authService } from '../../services/auth.service';
 import type { User } from '../../types/auth.types';
 import { useToast } from '../../composables/useToast';
 import Sidebar from '../../components/layout/Sidebar.vue';
-import BaseButton from '../../components/base/BaseButton.vue';
+import Navbar from '../../components/layout/Navbar.vue';
 
 const router = useRouter();
 const toast = useToast();
@@ -42,49 +42,17 @@ const handleLogout = async () => {
 
 <template>
   <div class="min-h-screen bg-gray-50 flex">
-    <aside class="shrink-0 h-screen">
+    <aside class="shrink-0 h-screen sticky top-0">
       <Sidebar :is-collapsed="isCollapsed" class="h-full" />
     </aside>
 
     <div class="flex min-w-0 flex-1 flex-col">
       <!-- Navbar -->
-      <nav class="bg-white shadow-sm">
-        <div class="flex h-16">
-          <!-- Toggle button -->
-          <button
-            @click="toggleSidebar"
-            class="inline-flex items-center justify-center px-4 text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500 transition-colors"
-            :aria-label="isCollapsed ? 'Expandir sidebar' : 'Colapsar sidebar'"
-          >
-            <!-- Hamburger icon (cuando está colapsado) -->
-            <svg v-if="isCollapsed" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-            <!-- X icon (cuando está expandido) -->
-            <svg v-else class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-
-          <div class="flex flex-1 justify-between px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center">
-            </div>
-
-            <div class="flex items-center space-x-4">
-              <span class="text-gray-700">
-                {{ user?.name }}
-              </span>
-              <BaseButton
-                @click="handleLogout"
-                variant="tertiary"
-                size="sm"
-              >
-                Cerrar Sesión
-              </BaseButton>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Navbar 
+        title="Dashboard" 
+        @toggle-menu="toggleSidebar"
+        @logout="handleLogout"
+      />
 
       <!-- Contenido principal -->
       <main class="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
