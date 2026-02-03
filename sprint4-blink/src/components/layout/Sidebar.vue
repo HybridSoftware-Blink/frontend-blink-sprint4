@@ -70,9 +70,7 @@
 
 <script setup lang="ts">
 import {
-  CalendarIcon,
   ChartPieIcon,
-  FolderIcon,
   HomeIcon,
   MapPinIcon,
   TicketIcon,
