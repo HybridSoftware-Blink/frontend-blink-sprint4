@@ -3,7 +3,7 @@ import { computed } from 'vue';
 
 interface Props {
   type?: 'button' | 'submit' | 'reset';
-  variant?: 'primary' | 'secondary' | 'tertiary';
+  variant?: 'primary' | 'secondary' | 'tertiary' | 'danger';
   size?: 'sm' | 'md' | 'lg';
   disabled?: boolean;
   loading?: boolean;
@@ -37,6 +37,7 @@ const buttonClasses = computed(() => {
     primary: 'bg-blue-600 hover:bg-blue-700 text-white focus:ring-blue-500 shadow-md',
     secondary: 'bg-green-600 hover:bg-green-700 text-white focus:ring-green-500 shadow-md',
     tertiary: 'bg-red-600 hover:bg-red-700 text-white focus:ring-red-500 shadow-md',
+    danger: 'bg-red-600 hover:bg-red-700 text-white focus:ring-red-500 shadow-md',
   };
   classes.push(variantClasses[props.variant]);
 

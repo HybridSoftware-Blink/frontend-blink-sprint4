@@ -1,0 +1,335 @@
+<template>
+  <div class="min-h-screen bg-gradient-to-br from-gray-50 via-gray-50 to-indigo-50/30 flex">
+    <aside class="shrink-0 h-screen sticky top-0">
+      <Sidebar :is-collapsed="isCollapsed" class="h-full" />
+    </aside>
+
+    <div class="flex min-w-0 flex-1 flex-col">
+      <Navbar 
+        title="Gestión de Usuarios" 
+        @toggle-menu="toggleSidebar"
+        @logout="handleLogout"
+      />
+
+      <!-- Contenido principal -->
+      <main class="flex-1 overflow-y-auto bg-transparent">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <!-- Header -->
+          <div class="mb-8">
+            <div class="flex justify-between items-center">
+              <div>
+                <p class="mt-2 text-sm text-gray-600">
+                  Administra los usuarios del sistema
+                </p>
+              </div>
+              <BaseButton @click="openCreateModal" variant="primary">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+                Nuevo Usuario
+              </BaseButton>
+            </div>
+          </div>
+
+          <!-- Búsqueda y filtros -->
+          <div class="mb-6 bg-white p-4 rounded-lg shadow">
+            <div class="flex gap-4">
+              <div class="flex-1">
+                <BaseInput
+                  v-model="searchQuery"
+                  type="text"
+                  placeholder="Buscar por nombre o email..."
+                  @input="handleSearch"
+                />
+              </div>
+              <BaseButton @click="loadUsers" variant="secondary">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                Actualizar
+              </BaseButton>
+            </div>
+          </div>
+
+          <!-- Alertas -->
+          <BaseAlert
+            v-if="alert.show"
+            :type="alert.type"
+            :message="alert.message"
+            @close="alert.show = false"
+            class="mb-6"
+          />
+
+          <!-- Tabla de usuarios -->
+          <UserTable
+            :users="users"
+            :loading="loading"
+            :pagination="pagination"
+            @edit="openEditModal"
+            @delete="openDeleteModal"
+            @page-change="handlePageChange"
+          />
+
+          <!-- Modal de Crear/Editar Usuario -->
+          <Teleport to="body">
+            <Transition name="modal">
+              <div
+                v-if="showUserModal"
+                class="fixed inset-0 z-50 overflow-y-auto"
+                aria-labelledby="modal-title"
+                role="dialog"
+                aria-modal="true"
+              >
+                <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                  <!-- Overlay -->
+                  <div
+                    class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+                    @click="closeUserModal"
+                  />
+
+                  <!-- Center modal -->
+                  <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+                  <!-- Modal panel -->
+                  <div
+                    class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+                  >
+                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                      <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+                        {{ editingUser ? 'Editar Usuario' : 'Crear Nuevo Usuario' }}
+                      </h3>
+                      <UserForm
+                        :user="editingUser"
+                        :loading="submitting"
+                        :errors="formErrors"
+                        @submit="handleSubmit"
+                        @cancel="closeUserModal"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Transition>
+          </Teleport>
+
+          <!-- Modal de Confirmación de Eliminación -->
+          <BaseModal
+            :show="showDeleteModal"
+            title="Eliminar Usuario"
+            :message="`¿Estás seguro de que deseas eliminar al usuario ${userToDelete?.name}? Esta acción no se puede deshacer.`"
+            type="danger"
+            confirm-text="Eliminar"
+            cancel-text="Cancelar"
+            :loading="deleting"
+            @confirm="handleDelete"
+            @close="closeDeleteModal"
+          />
+        </div>
+      </main>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, onMounted, reactive } from 'vue';
+import { useRouter } from 'vue-router';
+import { BaseButton, BaseInput, BaseAlert, BaseModal } from '../../components/base';
+import Navbar from '../../components/layout/Navbar.vue';
+import Sidebar from '../../components/layout/Sidebar.vue';
+import UserTable from '../../components/users/UserTable.vue';
+import UserForm from '../../components/users/UserForm.vue';
+import { userService } from '../../services/user.service';
+import { authService } from '../../services/auth.service';
+import type { User, CreateUserData, UpdateUserData } from '../../types/user.types';
+import { useToast } from '../../composables/useToast';
+
+const router = useRouter();
+const toast = useToast();
+const isCollapsed = ref(true);
+
+const toggleSidebar = () => {
+  isCollapsed.value = !isCollapsed.value;
+};
+
+const handleLogout = async () => {
+  await authService.logout();
+  router.push('/login');
+};
+
+// Estado
+const users = ref<User[]>([]);
+const loading = ref(false);
+const submitting = ref(false);
+const deleting = ref(false);
+const searchQuery = ref('');
+
+// Modales
+const showUserModal = ref(false);
+const showDeleteModal = ref(false);
+const editingUser = ref<User | null>(null);
+const userToDelete = ref<User | null>(null);
+
+// Errores del formulario
+const formErrors = ref<Record<string, string>>({});
+
+// Paginación
+const pagination = ref<{
+  current_page: number;
+  from: number;
+  last_page: number;
+  per_page: number;
+  to: number;
+  total: number;
+} | undefined>(undefined);
+
+// Alertas
+const alert = reactive({
+  show: false,
+  type: 'success' as 'success' | 'error' | 'warning' | 'info',
+  message: '',
+});
+
+// Cargar usuarios
+const loadUsers = async (page: number = 1) => {
+  loading.value = true;
+  try {
+    const response = await userService.getUsers(page, 10);
+    users.value = response.data;
+    pagination.value = response.meta;
+  } catch (error: any) {
+    showAlert('error', error.message || 'Error al cargar usuarios');
+  } finally {
+    loading.value = false;
+  }
+};
+
+// Búsqueda
+let searchTimeout: ReturnType<typeof setTimeout>;
+const handleSearch = () => {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(async () => {
+    if (searchQuery.value.trim()) {
+      loading.value = true;
+      try {
+        const results = await userService.searchUsers(searchQuery.value);
+        users.value = results;
+        pagination.value = undefined; // Deshabilitar paginación en búsqueda
+      } catch (error: any) {
+        showAlert('error', error.message || 'Error al buscar usuarios');
+      } finally {
+        loading.value = false;
+      }
+    } else {
+      loadUsers();
+    }
+  }, 300);
+};
+
+// Cambio de página
+const handlePageChange = (page: number) => {
+  loadUsers(page);
+};
+
+// Abrir modal de crear
+const openCreateModal = () => {
+  editingUser.value = null;
+  formErrors.value = {};
+  showUserModal.value = true;
+};
+
+// Abrir modal de editar
+const openEditModal = (user: User) => {
+  editingUser.value = user;
+  formErrors.value = {};
+  showUserModal.value = true;
+};
+
+// Cerrar modal de usuario
+const closeUserModal = () => {
+  showUserModal.value = false;
+  editingUser.value = null;
+  formErrors.value = {};
+};
+
+// Abrir modal de eliminar
+const openDeleteModal = (user: User) => {
+  userToDelete.value = user;
+  showDeleteModal.value = true;
+};
+
+// Cerrar modal de eliminar
+const closeDeleteModal = () => {
+  showDeleteModal.value = false;
+  userToDelete.value = null;
+};
+
+// Manejar envío del formulario
+const handleSubmit = async (data: CreateUserData | UpdateUserData) => {
+  submitting.value = true;
+  formErrors.value = {};
+  
+  try {
+    if (editingUser.value) {
+      // Actualizar usuario
+      await userService.updateUser(editingUser.value.id, data as UpdateUserData);
+      showAlert('success', 'Usuario actualizado correctamente');
+      toast.success('Usuario actualizado correctamente');
+    } else {
+      // Crear usuario
+      await userService.createUser(data as CreateUserData);
+      showAlert('success', 'Usuario creado correctamente');
+      toast.success('Usuario creado correctamente');
+    }
+    
+    closeUserModal();
+    loadUsers(pagination.value?.current_page || 1);
+  } catch (error: any) {
+    if (error.errors) {
+      // Errores de validación
+      formErrors.value = Object.keys(error.errors).reduce((acc, key) => {
+        acc[key] = error.errors[key][0];
+        return acc;
+      }, {} as Record<string, string>);
+    }
+    showAlert('error', error.message || 'Error al guardar usuario');
+    toast.error(error.message || 'Error al guardar usuario');
+  } finally {
+    submitting.value = false;
+  }
+};
+
+// Manejar eliminación
+const handleDelete = async () => {
+  if (!userToDelete.value) return;
+  
+  deleting.value = true;
+  try {
+    await userService.deleteUser(userToDelete.value.id);
+    showAlert('success', 'Usuario eliminado correctamente');
+    toast.success('Usuario eliminado correctamente');
+    closeDeleteModal();
+    loadUsers(pagination.value?.current_page || 1);
+  } catch (error: any) {
+    showAlert('error', error.message || 'Error al eliminar usuario');
+    toast.error(error.message || 'Error al eliminar usuario');
+  } finally {
+    deleting.value = false;
+  }
+};
+
+// Mostrar alerta
+const showAlert = (type: 'success' | 'error' | 'warning' | 'info', message: string) => {
+  alert.type = type;
+  alert.message = message;
+  alert.show = true;
+  
+  setTimeout(() => {
+    alert.show = false;
+  }, 5000);
+};
+
+// Cargar usuarios al montar
+onMounted(() => {
+  loadUsers();
+});
+</script>

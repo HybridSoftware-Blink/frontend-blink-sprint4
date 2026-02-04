@@ -15,7 +15,7 @@ const sizeClasses = {
     <img 
       src="../../assets/blink-logo.png" 
       alt="Blink Logo" 
-      :class="[sizeClasses[size || 'md'], 'w-auto object-contain']"
+      :class="[sizeClasses[size || 'md'], 'w-auto object-contain', 'shadow-none']"
     />
   </div>
 </template>

@@ -16,8 +16,12 @@
           </div>
           <ul role="list" class="space-y-1 flex flex-col items-center">
             <li v-for="item in clienteNavigation" :key="item.name" class="w-full flex justify-center">
-              <router-link :to="item.href" :title="isCollapsed ? item.name : undefined" :class="navLinkClasses"
-                active-class="bg-white/5 text-white">
+              <button
+                v-if="item.href === '#'"
+                :disabled="true"
+                :title="isCollapsed ? item.name : undefined"
+                :class="getItemClasses(item)"
+              >
                 <component :is="item.icon" class="size-6 shrink-0" aria-hidden="true" />
 
                 <span v-if="!isCollapsed" class="truncate">
@@ -31,7 +35,28 @@
 
                 <span v-if="isCollapsed && item.count"
                   class="absolute right-1 top-1 block size-2 rounded-full bg-primary-500" />
-              </router-link>
+              </button>
+              
+              <RouterLink
+                v-else
+                :to="item.href"
+                :title="isCollapsed ? item.name : undefined"
+                :class="getItemClasses(item)"
+              >
+                <component :is="item.icon" class="size-6 shrink-0" aria-hidden="true" />
+
+                <span v-if="!isCollapsed" class="truncate">
+                  {{ item.name }}
+                </span>
+
+                <span v-if="!isCollapsed && item.count"
+                  class="ml-auto w-9 min-w-max rounded-full bg-gray-900 px-2.5 py-0.5 text-center text-xs/5 font-medium whitespace-nowrap text-white">
+                  {{ item.count }}
+                </span>
+
+                <span v-if="isCollapsed && item.count"
+                  class="absolute right-1 top-1 block size-2 rounded-full bg-primary-500" />
+              </RouterLink>
             </li>
           </ul>
         </li>
@@ -43,8 +68,12 @@
           </div>
           <ul role="list" class="space-y-1 flex flex-col items-center">
             <li v-for="item in adminNavigation" :key="item.name" class="w-full flex justify-center">
-              <router-link :to="item.href" :title="isCollapsed ? item.name : undefined" :class="navLinkClasses"
-                active-class="bg-white/5 text-white">
+              <button
+                v-if="item.href === '#'"
+                :disabled="true"
+                :title="isCollapsed ? item.name : undefined"
+                :class="getItemClasses(item)"
+              >
                 <component :is="item.icon" class="size-6 shrink-0" aria-hidden="true" />
 
                 <span v-if="!isCollapsed" class="truncate">
@@ -60,7 +89,30 @@
                 <!-- Indicador colapsado -->
                 <span v-if="isCollapsed && item.count"
                   class="absolute right-1 top-1 block size-2 rounded-full bg-primary-500" />
-              </router-link>
+              </button>
+              
+              <RouterLink
+                v-else
+                :to="item.href"
+                :title="isCollapsed ? item.name : undefined"
+                :class="getItemClasses(item)"
+              >
+                <component :is="item.icon" class="size-6 shrink-0" aria-hidden="true" />
+
+                <span v-if="!isCollapsed" class="truncate">
+                  {{ item.name }}
+                </span>
+
+                <!-- Badge expandido -->
+                <span v-if="!isCollapsed && item.count"
+                  class="ml-auto w-9 min-w-max rounded-full bg-gray-900 px-2.5 py-0.5 text-center text-xs/5 font-medium whitespace-nowrap text-white">
+                  {{ item.count }}
+                </span>
+
+                <!-- Indicador colapsado -->
+                <span v-if="isCollapsed && item.count"
+                  class="absolute right-1 top-1 block size-2 rounded-full bg-primary-500" />
+              </RouterLink>
             </li>
           </ul>
         </li>
@@ -71,7 +123,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, type Component } from 'vue'
+import { useRoute, RouterLink } from 'vue-router'
 import {
   ChartPieIcon,
   Cog6ToothIcon,
@@ -86,7 +139,7 @@ import blinkLogo from '../../assets/blink-logo.png'
 type NavItem = {
   name: string
   href: string
-  icon: unknown
+  icon: Component
   count?: string
 }
 
@@ -94,16 +147,16 @@ const props = defineProps<{
   isCollapsed: boolean
 }>()
 
+const route = useRoute()
+
 const sidebarClasses = computed(() => [
   props.isCollapsed ? 'w-20 px-3' : 'w-72 px-6',
   'relative flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900',
   'transition-[width,padding] duration-200 ease-in-out',
-  'dark:before:pointer-events-none dark:before:absolute dark:before:inset-0',
-  'dark:before:border-r dark:before:border-white/10 dark:before:bg-black/10'
 ])
 
 const logoClasses = computed(() => [
-  'rounded-lg bg-white/5 p-1 transition-all duration-200',
+  'bg-transparent p-0 transition-all duration-200 shadow-none',
   props.isCollapsed ? 'size-9' : 'h-12'
 ])
 
@@ -112,6 +165,18 @@ const navLinkClasses = computed(() => [
   'group relative flex items-center font-semibold rounded-md transition-colors',
   props.isCollapsed ? 'h-10 w-10 justify-center' : 'w-full gap-x-3 p-2 text-sm/6'
 ])
+
+const getItemClasses = (item: NavItem) => {
+  const classes = [...navLinkClasses.value]
+  if (route.path === item.href) {
+    // Ruta activa: apagar (sin fondo)
+    classes.push('!bg-transparent', '!text-gray-400')
+  } else {
+    // Resto: iluminados
+    classes.push('!bg-white/10', '!text-white')
+  }
+  return classes.join(' ')
+}
 
 const clienteNavigation: NavItem[] = [
   { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
@@ -122,7 +187,7 @@ const clienteNavigation: NavItem[] = [
 ]
 
 const adminNavigation: NavItem[] = [
-  { name: 'Usuarios', href: '#', icon: UsersIcon },
+  { name: 'Usuarios', href: '/users', icon: UsersIcon },
   { name: 'Vehículos', href: '#', icon: TruckIcon, count: '12' },
   { name: 'Reservas', href: '#', icon: ChartPieIcon },
   { name: 'Geofencing', href: '#', icon: MapPinIcon, count: '20+' },
