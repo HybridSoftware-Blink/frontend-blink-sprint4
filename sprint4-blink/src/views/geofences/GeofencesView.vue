@@ -1,6 +1,6 @@
 <template>
   <div class="h-screen bg-gray-50 flex overflow-hidden">
-    <aside class="w-72 shrink-0 h-screen">
+      <aside class="w-72 shrink-0 h-screen">
       <Sidebar class="h-full" />
     </aside>
 
@@ -28,7 +28,7 @@
 
       <!-- Contenido principal -->
       <main class="flex-1 w-full mx-auto px-4 sm:px-6 lg:px-8 py-4 overflow-hidden">
-        <div class="bg-white rounded-lg shadow-lg p-6 h-full flex flex-col min-h-0">
+        <BaseCard padding="md" class="h-full flex flex-col min-h-0 p-6">
           <div class="flex items-center justify-between mb-4">
             <h1 class="text-2xl font-semibold">Geofencing</h1>
           </div>
@@ -37,17 +37,13 @@
               <div class="w-80 bg-gray-50 rounded-md border border-gray-200 p-4 min-h-0 flex flex-col">
                 <div class="flex items-center justify-between mb-3">
                   <h3 class="font-semibold">Geofences</h3>
-                  <button
-                    @click="showForm = !showForm"
-                    class="text-sm text-white bg-green-600 px-2 py-1 rounded"
-                  >
+                  <BaseButton size="sm" variant="secondary" @click="showForm = !showForm">
                     {{ showForm ? 'Cancelar' : 'Nuevo' }}
-                  </button>
+                  </BaseButton>
                 </div>
 
                 <div v-if="showForm" class="mb-4">
-                  <label class="block text-sm font-medium text-gray-700">Nombre</label>
-                  <input v-model="form.name" class="w-full mt-1 p-2 border rounded" />
+                  <BaseInput v-model="form.name" label="Nombre" placeholder="Nombre del geofence" />
 
                   <label class="block text-sm font-medium text-gray-700 mt-2">Tipo</label>
                   <select v-model="form.type" class="w-full mt-1 p-2 border rounded">
@@ -58,13 +54,12 @@
                     <option value="service_area">service_area</option>
                   </select>
 
-                  <label class="block text-sm font-medium text-gray-700 mt-2">Radio (m)</label>
-                  <input v-model.number="form.radius" type="number" class="w-full mt-1 p-2 border rounded" />
+                  <BaseInput v-model.number="form.radius" label="Radio (m)" type="number" />
 
                   <div class="text-xs text-gray-500 mt-2">Selecciona la ubicación haciendo click en el mapa.</div>
                   <div class="mt-3 flex gap-2">
-                    <button @click="submitForm" class="px-3 py-1 bg-blue-600 text-white rounded">Guardar</button>
-                    <button @click="resetForm" class="px-3 py-1 bg-gray-200 rounded">Limpiar</button>
+                    <BaseButton size="sm" variant="primary" @click="submitForm">Guardar</BaseButton>
+                    <BaseButton size="sm" variant="tertiary" @click="resetForm">Limpiar</BaseButton>
                   </div>
                 </div>
 
@@ -81,9 +76,9 @@
                         </button>
                       </div>
                       <div class="ml-2">
-                        <button @click="deleteGeofence(g)" title="Eliminar" class="p-1 rounded hover:bg-red-50" aria-label="Eliminar geofence">
-                          <TrashIcon class="w-4 h-4 text-red-600" />
-                        </button>
+                        <BaseButton size="sm" variant="tertiary" @click="deleteGeofence(g)" title="Eliminar">
+                          <TrashIcon class="w-4 h-4" />
+                        </BaseButton>
                       </div>
                     </li>
                   </ul>
@@ -103,7 +98,7 @@
               <div id="map" class="h-full w-full rounded-md border border-gray-200 bg-gray-50"></div>
             </div>
           </div>
-        </div>
+        </BaseCard>
       </main>
     </div>
   </div>
@@ -114,6 +109,7 @@
 import { ref, onMounted, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import Sidebar from '../../components/layout/Sidebar.vue'
+import { BaseButton, BaseInput, BaseCard, BaseAlert } from '../../components/base'
 import { authService } from '../../services/auth.service'
 import { useToast } from '../../composables/useToast'
 import { geofenceService } from '../../services/geofence.service'
