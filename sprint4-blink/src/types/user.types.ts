@@ -4,6 +4,7 @@
 
 export interface User {
   id: number;
+  user_id?: number; // Alias del backend
   name: string;
   email: string;
   phone: string;

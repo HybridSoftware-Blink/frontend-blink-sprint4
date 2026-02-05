@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { BaseButton } from '../base';
+
 interface Props {
     title?: string;
     showMenuButton?: boolean;
@@ -45,10 +47,9 @@ const handleLogoutClick = () => {
             </div>
 
             <!-- Logout button -->
-            <button v-if="showLogoutButton" @click="handleLogoutClick"
-                class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-md transition-colors shadow-sm">
+            <BaseButton v-if="showLogoutButton" @click="handleLogoutClick" variant="tertiary" size="sm">
                 Cerrar Sesión
-            </button>
+            </BaseButton>
         </div>
     </nav>
 </template>

@@ -42,7 +42,7 @@
                   @input="handleSearch"
                 />
               </div>
-              <BaseButton @click="loadUsers" variant="secondary">
+              <BaseButton @click="handleRefresh" variant="secondary">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                 </svg>
@@ -51,23 +51,14 @@
             </div>
           </div>
 
-          <!-- Alertas -->
-          <BaseAlert
-            v-if="alert.show"
-            :type="alert.type"
-            :message="alert.message"
-            @close="alert.show = false"
-            class="mb-6"
-          />
+          <!-- Alertas: se muestran como toasts -->
 
           <!-- Tabla de usuarios -->
           <UserTable
             :users="users"
             :loading="loading"
-            :pagination="pagination"
             @edit="openEditModal"
             @delete="openDeleteModal"
-            @page-change="handlePageChange"
           />
 
           <!-- Modal de Crear/Editar Usuario -->
@@ -131,9 +122,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, reactive } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { BaseButton, BaseInput, BaseAlert, BaseModal } from '../../components/base';
+import { BaseButton, BaseInput, BaseModal } from '../../components/base';
 import Navbar from '../../components/layout/Navbar.vue';
 import Sidebar from '../../components/layout/Sidebar.vue';
 import UserTable from '../../components/users/UserTable.vue';
@@ -172,32 +163,25 @@ const userToDelete = ref<User | null>(null);
 // Errores del formulario
 const formErrors = ref<Record<string, string>>({});
 
-// Paginación
-const pagination = ref<{
-  current_page: number;
-  from: number;
-  last_page: number;
-  per_page: number;
-  to: number;
-  total: number;
-} | undefined>(undefined);
-
-// Alertas
-const alert = reactive({
-  show: false,
-  type: 'success' as 'success' | 'error' | 'warning' | 'info',
-  message: '',
-});
+// Usar toasts para notificaciones
 
 // Cargar usuarios
-const loadUsers = async (page: number = 1) => {
+const loadUsers = async () => {
   loading.value = true;
   try {
-    const response = await userService.getUsers(page, 10);
-    users.value = response.data;
-    pagination.value = response.meta;
+    const response = await userService.getUsers(1, 100); // Cargar todos los usuarios
+
+    // Response may be a UsersResponse object with data (and maybe meta),
+    // or in some setups apiClient may return a raw array. Handle both.
+    if (response && typeof response === 'object' && 'data' in response) {
+      users.value = Array.isArray(response.data) ? response.data : [];
+    } else if (Array.isArray(response)) {
+      users.value = response;
+    } else {
+      users.value = [];
+    }
   } catch (error: any) {
-    showAlert('error', error.message || 'Error al cargar usuarios');
+    toast.error(error.message || 'Error al cargar usuarios');
   } finally {
     loading.value = false;
   }
@@ -213,9 +197,14 @@ const handleSearch = () => {
       try {
         const results = await userService.searchUsers(searchQuery.value);
         users.value = results;
-        pagination.value = undefined; // Deshabilitar paginación en búsqueda
       } catch (error: any) {
-        showAlert('error', error.message || 'Error al buscar usuarios');
+        // Si el endpoint de búsqueda no existe (404), usar filtrado local
+        if (error.status === 404) {
+          toast.error('Endpoint de búsqueda no disponible. Recarga para ver todos los usuarios.');
+          loadUsers();
+        } else {
+          toast.error(error.message || 'Error al buscar usuarios');
+        }
       } finally {
         loading.value = false;
       }
@@ -225,9 +214,10 @@ const handleSearch = () => {
   }, 300);
 };
 
-// Cambio de página
-const handlePageChange = (page: number) => {
-  loadUsers(page);
+// Refrescar usuarios
+const handleRefresh = () => {
+  searchQuery.value = ''; // Limpiar búsqueda
+  loadUsers();
 };
 
 // Abrir modal de crear
@@ -270,19 +260,15 @@ const handleSubmit = async (data: CreateUserData | UpdateUserData) => {
   
   try {
     if (editingUser.value) {
-      // Actualizar usuario
       await userService.updateUser(editingUser.value.id, data as UpdateUserData);
-      showAlert('success', 'Usuario actualizado correctamente');
       toast.success('Usuario actualizado correctamente');
     } else {
-      // Crear usuario
       await userService.createUser(data as CreateUserData);
-      showAlert('success', 'Usuario creado correctamente');
       toast.success('Usuario creado correctamente');
     }
     
     closeUserModal();
-    loadUsers(pagination.value?.current_page || 1);
+    await loadUsers();
   } catch (error: any) {
     if (error.errors) {
       // Errores de validación
@@ -291,7 +277,6 @@ const handleSubmit = async (data: CreateUserData | UpdateUserData) => {
         return acc;
       }, {} as Record<string, string>);
     }
-    showAlert('error', error.message || 'Error al guardar usuario');
     toast.error(error.message || 'Error al guardar usuario');
   } finally {
     submitting.value = false;
@@ -305,28 +290,24 @@ const handleDelete = async () => {
   deleting.value = true;
   try {
     await userService.deleteUser(userToDelete.value.id);
-    showAlert('success', 'Usuario eliminado correctamente');
     toast.success('Usuario eliminado correctamente');
     closeDeleteModal();
-    loadUsers(pagination.value?.current_page || 1);
+    await loadUsers();
   } catch (error: any) {
-    showAlert('error', error.message || 'Error al eliminar usuario');
-    toast.error(error.message || 'Error al eliminar usuario');
+    const errorMsg = error.status === 404 
+      ? 'Usuario no encontrado. Puede que ya haya sido eliminado.'
+      : error.message || 'Error al eliminar usuario';
+    toast.error(errorMsg);
+    if (error.status === 404) {
+      closeDeleteModal();
+      await loadUsers();
+    }
   } finally {
     deleting.value = false;
   }
-};
+};  
 
-// Mostrar alerta
-const showAlert = (type: 'success' | 'error' | 'warning' | 'info', message: string) => {
-  alert.type = type;
-  alert.message = message;
-  alert.show = true;
-  
-  setTimeout(() => {
-    alert.show = false;
-  }, 5000);
-};
+// Las notificaciones se muestran con `toast` desde `useToast`
 
 // Cargar usuarios al montar
 onMounted(() => {

@@ -5,7 +5,6 @@ import { authService } from '../../services/auth.service';
 import type { LoginCredentials } from '../../types/auth.types';
 import BaseInput from '../../components/base/BaseInput.vue';
 import BaseButton from '../../components/base/BaseButton.vue';
-import BaseCheckbox from '../../components/base/BaseCheckbox.vue';
 import BaseCard from '../../components/base/BaseCard.vue';
 import AuthBackground from '../../components/auth/AuthBackground.vue';
 import AuthLogo from '../../components/auth/AuthLogo.vue';
@@ -22,7 +21,6 @@ const form = reactive<LoginCredentials>({
 const loading = ref(false);
 const fieldErrors = ref<Record<string, string[]>>({});
 const showPassword = ref(false);
-const rememberMe = ref(false);
 
 /**
  * Maneja el envío del formulario de login
@@ -86,8 +84,7 @@ const togglePasswordVisibility = () => {
                     :error="getFieldError('password')" :show-password-toggle="true"
                     @toggle-password="togglePasswordVisibility" />
 
-                <div class="flex items-center justify-between">
-                    <BaseCheckbox v-model="rememberMe" label="Remember me" />
+                <div class="flex items-center justify-end">
                     <a href="#" class="text-sm text-green-600 hover:text-green-700 font-medium">
                         Forgot password?
                     </a>

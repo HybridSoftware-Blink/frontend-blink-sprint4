@@ -11,25 +11,26 @@ export const userService = {
   /**
    * Obtener lista de usuarios
    */
-  async getUsers(page: number = 1, perPage: number = 10): Promise<UsersResponse> {
-    const response = await apiClient.get<UsersResponse>(`/v1/users?page=${page}&per_page=${perPage}`);
-    return response;
-  },
-
-  /**
-   * Obtener todos los usuarios sin paginación
-   */
-  async getAllUsers(): Promise<User[]> {
-    const response = await apiClient.get<UsersResponse>('/v1/users?all=true');
-    return response.data;
-  },
-
-  /**
-   * Obtener un usuario por ID
-   */
-  async getUserById(id: number): Promise<User> {
-    const response = await apiClient.get<UserResponse>(`/v1/users/${id}`);
-    return response.data;
+  async getUsers(page: number = 1, perPage: number = 5): Promise<UsersResponse> {
+    const response = await apiClient.get<any>(`/v1/users?page=${page}&per_page=${perPage}`);
+    
+    // Mapear user_id a id si es necesario
+    const mapUser = (user: any): User => ({
+      ...user,
+      id: user.id || user.user_id,
+    });
+    
+    if (Array.isArray(response)) {
+      return {
+        data: response.map(mapUser),
+      };
+    } else if (response && typeof response === 'object' && 'data' in response) {
+      return {
+        data: response.data.map(mapUser),
+        meta: response.meta,
+      };
+    }
+    return { data: [] };
   },
 
   /**
@@ -59,7 +60,11 @@ export const userService = {
    * Buscar usuarios por nombre o email
    */
   async searchUsers(query: string): Promise<User[]> {
-    const response = await apiClient.get<UsersResponse>(`/v1/users/search?q=${query}`);
-    return response.data;
+    const response = await apiClient.get<any>(`/v1/users/search?q=${query}`);
+    const data = Array.isArray(response) ? response : response.data || [];
+    return data.map((user: any) => ({
+      ...user,
+      id: user.id || user.user_id,
+    }));
   },
 };

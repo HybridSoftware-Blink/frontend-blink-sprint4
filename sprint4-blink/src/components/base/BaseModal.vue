@@ -169,7 +169,7 @@ const iconColor = computed(() => {
 });
 
 const confirmVariant = computed(() => {
-  return props.type === 'danger' ? 'danger' : 'primary';
+  return props.type === 'danger' ? 'tertiary' : 'primary';
 });
 </script>
 

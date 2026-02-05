@@ -69,18 +69,6 @@ export const authService = {
     return await apiClient.get<User>('/v1/auth/me');
   },
 
-  async changePassword(
-    currentPassword: string,
-    newPassword: string,
-    newPasswordConfirmation: string
-  ): Promise<{ message: string }> {
-    return await apiClient.post('/v1/auth/change-password', {
-      current_password: currentPassword,
-      password: newPassword,
-      password_confirmation: newPasswordConfirmation,
-    });
-  },
-
   setToken(token: string): void {
     localStorage.setItem(AUTH_TOKEN_KEY, token);
   },

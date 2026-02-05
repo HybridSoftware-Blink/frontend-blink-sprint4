@@ -3,10 +3,6 @@ import type { ApiError } from '../types/auth.types';
 
 const API_URL = import.meta.env.VITE_API_URL || '/api';
 
-export interface ApiClientConfig {
-  headers?: Record<string, string>;
-}
-
 const axiosInstance = axios.create({
   baseURL: API_URL,
   headers: {
@@ -37,7 +33,7 @@ axiosInstance.interceptors.response.use(
       } as ApiError & { status: number };
     }
     
-    // Error de red o otres
+    // Error de red o otros
     throw {
       message: 'Error de conexión con el servidor',
       errors: {},
@@ -52,15 +48,11 @@ async function request<T>(
   endpoint: string,
   options: AxiosRequestConfig = {}
 ): Promise<T> {
-  try {
-    const response = await axiosInstance.request<T>({
-      url: endpoint,
-      ...options,
-    });
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+  const response = await axiosInstance.request<T>({
+    url: endpoint,
+    ...options,
+  });
+  return response.data;
 }
 
 export const apiClient = {
