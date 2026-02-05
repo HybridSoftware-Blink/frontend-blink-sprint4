@@ -1,19 +1,6 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-gray-50 via-gray-50 to-indigo-50/30 flex">
-    <aside class="shrink-0 h-screen sticky top-0">
-      <Sidebar :is-collapsed="isCollapsed" class="h-full" />
-    </aside>
-
-    <div class="flex min-w-0 flex-1 flex-col">
-      <Navbar 
-        title="Gestión de Usuarios" 
-        @toggle-menu="toggleSidebar"
-        @logout="handleLogout"
-      />
-
-      <!-- Contenido principal -->
-      <main class="flex-1 overflow-y-auto bg-transparent">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <AppLayout title="Gestión de Usuarios">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <!-- Header -->
           <div class="mb-8">
             <div class="flex justify-between items-center">
@@ -116,36 +103,21 @@
             @close="closeDeleteModal"
           />
         </div>
-      </main>
-    </div>
-  </div>
-</template>
+      </AppLayout>
+    </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
 import { BaseButton, BaseInput, BaseModal } from '../../components/base';
-import Navbar from '../../components/layout/Navbar.vue';
-import Sidebar from '../../components/layout/Sidebar.vue';
+import AppLayout from '../../components/layout/AppLayout.vue';
 import UserTable from '../../components/users/UserTable.vue';
 import UserForm from '../../components/users/UserForm.vue';
 import { userService } from '../../services/user.service';
-import { authService } from '../../services/auth.service';
 import type { User, CreateUserData, UpdateUserData } from '../../types/user.types';
 import { useToast } from '../../composables/useToast';
+import { validateUserForm, type ValidationErrors } from '../../utils/userValidation';
 
-const router = useRouter();
 const toast = useToast();
-const isCollapsed = ref(true);
-
-const toggleSidebar = () => {
-  isCollapsed.value = !isCollapsed.value;
-};
-
-const handleLogout = async () => {
-  await authService.logout();
-  router.push('/login');
-};
 
 // Estado
 const users = ref<User[]>([]);
@@ -161,18 +133,13 @@ const editingUser = ref<User | null>(null);
 const userToDelete = ref<User | null>(null);
 
 // Errores del formulario
-const formErrors = ref<Record<string, string>>({});
-
-// Usar toasts para notificaciones
+const formErrors = ref<ValidationErrors>({});
 
 // Cargar usuarios
 const loadUsers = async () => {
   loading.value = true;
   try {
-    const response = await userService.getUsers(1, 100); // Cargar todos los usuarios
-
-    // Response may be a UsersResponse object with data (and maybe meta),
-    // or in some setups apiClient may return a raw array. Handle both.
+    const response = await userService.getUsers(1, 100);
     if (response && typeof response === 'object' && 'data' in response) {
       users.value = Array.isArray(response.data) ? response.data : [];
     } else if (Array.isArray(response)) {
@@ -198,7 +165,6 @@ const handleSearch = () => {
         const results = await userService.searchUsers(searchQuery.value);
         users.value = results;
       } catch (error: any) {
-        // Si el endpoint de búsqueda no existe (404), usar filtrado local
         if (error.status === 404) {
           toast.error('Endpoint de búsqueda no disponible. Recarga para ver todos los usuarios.');
           loadUsers();
@@ -216,7 +182,7 @@ const handleSearch = () => {
 
 // Refrescar usuarios
 const handleRefresh = () => {
-  searchQuery.value = ''; // Limpiar búsqueda
+  searchQuery.value = '';
   loadUsers();
 };
 
@@ -253,10 +219,18 @@ const closeDeleteModal = () => {
   userToDelete.value = null;
 };
 
-// Manejar envío del formulario
+// Manejar envío del formulario con validación
 const handleSubmit = async (data: CreateUserData | UpdateUserData) => {
   submitting.value = true;
   formErrors.value = {};
+  
+  // Validar datos antes de enviar
+  const validationErrors = validateUserForm(data, !!editingUser.value);
+  if (Object.keys(validationErrors).length > 0) {
+    formErrors.value = validationErrors;
+    submitting.value = false;
+    return;
+  }
   
   try {
     if (editingUser.value) {
@@ -271,7 +245,6 @@ const handleSubmit = async (data: CreateUserData | UpdateUserData) => {
     await loadUsers();
   } catch (error: any) {
     if (error.errors) {
-      // Errores de validación
       formErrors.value = Object.keys(error.errors).reduce((acc, key) => {
         acc[key] = error.errors[key][0];
         return acc;
@@ -305,9 +278,7 @@ const handleDelete = async () => {
   } finally {
     deleting.value = false;
   }
-};  
-
-// Las notificaciones se muestran con `toast` desde `useToast`
+};
 
 // Cargar usuarios al montar
 onMounted(() => {

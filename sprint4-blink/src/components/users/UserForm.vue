@@ -44,11 +44,12 @@ import { ref, watch } from 'vue';
 import { BaseInput, BaseButton } from '../base';
 import type { User, CreateUserData, UpdateUserData } from '../../types/user.types';
 import { useUserForm } from '../../composables/useUserForm';
+import type { ValidationErrors } from '../../utils/userValidation';
 
 interface Props {
   user?: User | null;
   loading?: boolean;
-  errors?: Record<string, string>;
+  errors?: ValidationErrors | Record<string, string>;
 }
 
 const props = withDefaults(defineProps<Props>(), {
