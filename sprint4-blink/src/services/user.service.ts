@@ -60,11 +60,27 @@ export const userService = {
    * Buscar usuarios por nombre o email
    */
   async searchUsers(query: string): Promise<User[]> {
-    const response = await apiClient.get<any>(`/v1/users/search?q=${query}`);
-    const data = Array.isArray(response) ? response : response.data || [];
-    return data.map((user: any) => ({
-      ...user,
-      id: user.id || user.user_id,
-    }));
+    try {
+      const response = await apiClient.get<any>(`/v1/users/search?q=${encodeURIComponent(query)}`);
+      const data = Array.isArray(response) ? response : response.data || [];
+      return data.map((user: any) => ({
+        ...user,
+        id: user.id || user.user_id,
+      }));
+    } catch (error: any) {
+      // Si la ruta de búsqueda no existe, filtrar localmente
+      if (error.status === 404) {
+        const response = await apiClient.get<any>(`/v1/users?page=1&per_page=100`);
+        const list = Array.isArray(response) ? response : response.data || [];
+        const q = query.toLowerCase();
+        return list
+          .map((user: any) => ({ ...user, id: user.id || user.user_id }))
+          .filter((u: User) =>
+            (u.name && u.name.toLowerCase().includes(q)) ||
+            (u.email && u.email.toLowerCase().includes(q))
+          );
+      }
+      throw error;
+    }
   },
 };
