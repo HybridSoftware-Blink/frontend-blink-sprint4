@@ -18,19 +18,35 @@
 
     <template #cell-actions="{ item }">
       <div class="flex gap-2 justify-end">
-        <BaseButton size="sm" variant="primary" @click="$emit('edit', item)">
-          Editar
-        </BaseButton>
-        <BaseButton size="sm" variant="tertiary" @click="$emit('delete', item)">
-          Eliminar
-        </BaseButton>
+        <button
+          @click="$emit('view', item)"
+          class="p-2 bg-blue-600 text-white hover:bg-blue-700 rounded-lg transition-colors"
+          title="Ver"
+        >
+          <EyeIcon class="w-5 h-5" />
+        </button>
+        <button
+          @click="$emit('edit', item)"
+          class="p-2 bg-green-600 text-white hover:bg-green-700 rounded-lg transition-colors"
+          title="Editar"
+        >
+          <PencilIcon class="w-5 h-5" />
+        </button>
+        <button
+          @click="$emit('delete', item)"
+          class="p-2 bg-red-600 text-white hover:bg-red-700 rounded-lg transition-colors"
+          title="Eliminar"
+        >
+          <TrashIcon class="w-5 h-5" />
+        </button>
       </div>
     </template>
   </BaseTable>
 </template>
 
 <script setup lang="ts">
-import { BaseTable, BaseButton } from '../base';
+import { BaseTable } from '../base';
+import { EyeIcon, PencilIcon, TrashIcon } from '@heroicons/vue/24/outline';
 import type { User } from '../../types/user.types';
 import type { TableColumn } from '../base/BaseTable.vue';
 
@@ -45,6 +61,7 @@ withDefaults(defineProps<Props>(), {
 });
 
 defineEmits<{
+  view: [user: User];
   edit: [user: User];
   delete: [user: User];
 }>();

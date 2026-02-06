@@ -44,6 +44,7 @@
           <UserTable
             :users="users"
             :loading="loading"
+            @view="openViewModal"
             @edit="openEditModal"
             @delete="openDeleteModal"
           />
@@ -102,6 +103,74 @@
             @confirm="handleDelete"
             @close="closeDeleteModal"
           />
+
+          <!-- Modal de Visualización de Usuario -->
+          <Teleport to="body">
+            <Transition name="modal">
+              <div
+                v-if="showViewModal"
+                class="fixed inset-0 z-50 overflow-y-auto"
+                aria-labelledby="modal-title"
+                role="dialog"
+                aria-modal="true"
+              >
+                <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                  <!-- Overlay -->
+                  <div
+                    class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+                    @click="closeViewModal"
+                  />
+
+                  <!-- Center modal -->
+                  <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+                  <!-- Modal panel -->
+                  <div
+                    class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+                  >
+                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                      <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+                        Detalles del Usuario
+                      </h3>
+                      <div v-if="viewingUser" class="space-y-4">
+                        <div class="border-b pb-4">
+                          <p class="text-sm font-medium text-gray-500">Nombre</p>
+                          <p class="text-base text-gray-900">{{ viewingUser.name }}</p>
+                        </div>
+                        <div class="border-b pb-4">
+                          <p class="text-sm font-medium text-gray-500">Email</p>
+                          <p class="text-base text-gray-900">{{ viewingUser.email }}</p>
+                        </div>
+                        <div class="border-b pb-4">
+                          <p class="text-sm font-medium text-gray-500">Teléfono</p>
+                          <p class="text-base text-gray-900">{{ viewingUser.phone }}</p>
+                        </div>
+                        <div class="border-b pb-4">
+                          <p class="text-sm font-medium text-gray-500">Rol</p>
+                          <span class="inline-flex px-2 py-1 text-xs leading-5 font-semibold rounded-full"
+                            :class="viewingUser.role === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-green-100 text-green-800'">
+                            {{ viewingUser.role }}
+                          </span>
+                        </div>
+                        <div>
+                          <p class="text-sm font-medium text-gray-500">Fecha de Registro</p>
+                          <p class="text-base text-gray-900">{{ formatDate(viewingUser.created_at) }}</p>
+                        </div>
+                      </div>
+                      <div class="flex justify-end space-x-3 pt-6 border-t mt-6">
+                        <BaseButton type="button" variant="secondary" @click="closeViewModal">
+                          Cerrar
+                        </BaseButton>
+                        <BaseButton type="button" variant="primary" @click="switchToEdit">
+                          Editar Usuario
+                        </BaseButton>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Transition>
+          </Teleport>
         </div>
       </AppLayout>
     </template>
@@ -129,7 +198,9 @@ const searchQuery = ref('');
 // Modales
 const showUserModal = ref(false);
 const showDeleteModal = ref(false);
+const showViewModal = ref(false);
 const editingUser = ref<User | null>(null);
+const viewingUser = ref<User | null>(null);
 const userToDelete = ref<User | null>(null);
 
 // Errores del formulario
@@ -198,6 +269,26 @@ const openEditModal = (user: User) => {
   editingUser.value = user;
   formErrors.value = {};
   showUserModal.value = true;
+};
+
+// Abrir modal de visualización
+const openViewModal = (user: User) => {
+  viewingUser.value = user;
+  showViewModal.value = true;
+};
+
+// Cerrar modal de visualización
+const closeViewModal = () => {
+  showViewModal.value = false;
+  viewingUser.value = null;
+};
+
+// Cambiar a edición desde visualización
+const switchToEdit = () => {
+  if (viewingUser.value) {
+    closeViewModal();
+    openEditModal(viewingUser.value);
+  }
 };
 
 // Cerrar modal de usuario
@@ -281,6 +372,16 @@ const handleDelete = async () => {
 };
 
 // Cargar usuarios al montar
+const formatDate = (date: string): string => {
+  return new Date(date).toLocaleDateString('es-ES', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+};
+
 onMounted(() => {
   loadUsers();
 });
