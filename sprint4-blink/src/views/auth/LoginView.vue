@@ -3,6 +3,7 @@ import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { authService } from '../../services/auth.service';
 import type { LoginCredentials } from '../../types/auth.types';
+import { validateLoginCredentials, type ValidationErrors } from '../../utils/userValidation';
 import BaseInput from '../../components/base/BaseInput.vue';
 import BaseButton from '../../components/base/BaseButton.vue';
 import BaseCard from '../../components/base/BaseCard.vue';
@@ -20,13 +21,29 @@ const form = reactive<LoginCredentials>({
 
 const loading = ref(false);
 const fieldErrors = ref<Record<string, string[]>>({});
+const validationErrors = ref<ValidationErrors>({});
 const showPassword = ref(false);
+
+/**
+ * Valida el formulario antes de enviar
+ */
+const validateForm = (): boolean => {
+    validationErrors.value = validateLoginCredentials(form.email, form.password);
+    return Object.keys(validationErrors.value).length === 0;
+};
 
 /**
  * Maneja el envío del formulario de login
  */
 const handleLogin = async () => {
+    // Validación en cliente
+    if (!validateForm()) {
+        toast.error('Por favor, corrige los errores en el formulario');
+        return;
+    }
+
     fieldErrors.value = {};
+    validationErrors.value = {};
     loading.value = true;
 
     try {
@@ -48,7 +65,7 @@ const handleLogin = async () => {
 };
 
 const getFieldError = (field: string): string => {
-    return fieldErrors.value[field]?.[0] || '';
+    return validationErrors.value[field as keyof ValidationErrors] || fieldErrors.value[field]?.[0] || '';
 };
 
 const togglePasswordVisibility = () => {

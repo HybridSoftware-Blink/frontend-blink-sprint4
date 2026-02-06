@@ -166,3 +166,87 @@ export function validateUserForm(
 export function hasValidationErrors(errors: ValidationErrors): boolean {
   return Object.values(errors).some(error => error !== undefined && error !== null && error !== '');
 }
+
+/**
+ * Valida credenciales de login
+ */
+export function validateLoginCredentials(email: string, password: string): ValidationErrors {
+  const errors: ValidationErrors = {};
+
+  // Validar email
+  if (!email || !email.trim()) {
+    errors.email = 'El email es requerido';
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    errors.email = 'El email no es válido';
+  }
+
+  // Validar contraseña
+  if (!password || !password.trim()) {
+    errors.password = 'La contraseña es requerida';
+  } else if (password.length < 8) {
+    errors.password = 'La contraseña debe tener al menos 8 caracteres';
+  }
+
+  return errors;
+}
+
+/**
+ * Valida datos de registro
+ */
+export function validateRegisterData(
+  name: string,
+  email: string,
+  phone: string,
+  password: string,
+  passwordConfirmation: string
+): ValidationErrors {
+  const errors: ValidationErrors = {};
+
+  // Validar nombre
+  if (!name || !name.trim()) {
+    errors.name = 'El nombre es requerido';
+  } else if (name.trim().length < 2) {
+    errors.name = 'El nombre debe tener al menos 2 caracteres';
+  } else if (name.trim().length > 100) {
+    errors.name = 'El nombre no puede exceder 100 caracteres';
+  }
+
+  // Validar email
+  if (!email || !email.trim()) {
+    errors.email = 'El email es requerido';
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    errors.email = 'El email no es válido';
+  } else if (email.length > 255) {
+    errors.email = 'El email no puede exceder 255 caracteres';
+  }
+
+  // Validar teléfono
+  if (!phone || !phone.trim()) {
+    errors.phone = 'El teléfono es requerido';
+  } else if (!/^\+?[\d\s\-()]{7,}$/.test(phone)) {
+    errors.phone = 'El teléfono no es válido';
+  } else {
+    const digitsOnly = phone.replace(/\D/g, '');
+    if (digitsOnly.length < 7) {
+      errors.phone = 'El teléfono debe tener al menos 7 dígitos';
+    }
+  }
+
+  // Validar contraseña
+  if (!password || !password.trim()) {
+    errors.password = 'La contraseña es requerida';
+  } else if (password.length < 8) {
+    errors.password = 'La contraseña debe tener al menos 8 caracteres';
+  } else if (password.length > 255) {
+    errors.password = 'La contraseña no puede exceder 255 caracteres';
+  }
+
+  // Validar confirmación de contraseña
+  if (!passwordConfirmation || !passwordConfirmation.trim()) {
+    errors.password_confirmation = 'La confirmación de contraseña es requerida';
+  } else if (password !== passwordConfirmation) {
+    errors.password_confirmation = 'Las contraseñas no coinciden';
+  }
+
+  return errors;
+}
