@@ -37,7 +37,7 @@ withDefaults(defineProps<Props>(), {
 
 const router = useRouter();
 const isCollapsed = ref(true);
-const { user, loadUser, clearAvatar } = useUser();
+const { loadUser, clearAvatar } = useUser();
 
 const toggleSidebar = () => {
   isCollapsed.value = !isCollapsed.value;
