@@ -1,41 +1,34 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { authService } from '../../services/auth.service';
-import type { User } from '../../types/auth.types';
+import { useUser } from '../../composables/useUser';
 import { useToast } from '../../composables/useToast';
 import Sidebar from '../../components/layout/Sidebar.vue';
 import Navbar from '../../components/layout/Navbar.vue';
 
 const router = useRouter();
 const toast = useToast();
-const user = ref<User | null>(null);
+const { user, loadUser, clearAvatar } = useUser();
 const isCollapsed = ref(true);
+const isLoading = ref(true);
 
 const toggleSidebar = () => {
   isCollapsed.value = !isCollapsed.value;
 };
 
 onMounted(async () => {
-  // Cargar usuario local (UI rápida) y validar token contra backend
-  user.value = authService.getUser();
-
   try {
-    const me = await authService.getCurrentUser();
-    user.value = me;
-    authService.setUser(me);
-  } catch (_err) {
+    await loadUser();
+  } catch (err) {
     toast.error('Tu sesión ha caducado. Vuelve a iniciar sesión.');
-    await authService.logout();
     router.push('/login');
+  } finally {
+    isLoading.value = false;
   }
 });
 
-/**
- * Cierra la sesión del usuario
- */
 const handleLogout = async () => {
-  await authService.logout();
+  clearAvatar();
   router.push('/login');
 };
 </script>
@@ -56,7 +49,12 @@ const handleLogout = async () => {
 
       <!-- Contenido principal -->
       <main class="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="bg-white rounded-lg shadow-lg p-8">
+        <div v-if="isLoading" class="bg-white rounded-lg shadow-lg p-8">
+          <div class="flex justify-center items-center h-40">
+            <div class="text-gray-500">Cargando...</div>
+          </div>
+        </div>
+        <div v-else class="bg-white rounded-lg shadow-lg p-8">
           <h2 class="text-3xl font-bold text-gray-900 mb-4">
             ¡Bienvenido al Dashboard!
           </h2>
@@ -67,10 +65,10 @@ const handleLogout = async () => {
                 Información del Usuario
               </h3>
               <div class="bg-gray-50 rounded-lg p-4 space-y-2">
-                <p><span class="font-medium">Nombre:</span> {{ user?.name }}</p>
-                <p><span class="font-medium">Email:</span> {{ user?.email }}</p>
-                <p><span class="font-medium">Teléfono:</span> {{ user?.phone }}</p>
-                <p><span class="font-medium">Rol:</span> {{ user?.role }}</p>
+                <p><span class="font-medium">Nombre:</span> {{ user?.name || '-' }}</p>
+                <p><span class="font-medium">Email:</span> {{ user?.email || '-' }}</p>
+                <p><span class="font-medium">Teléfono:</span> {{ user?.phone || '-' }}</p>
+                <p><span class="font-medium">Rol:</span> {{ user?.role || '-' }}</p>
               </div>
             </div>
           </div>

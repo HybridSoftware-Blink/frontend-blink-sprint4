@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { BaseButton } from '../base';
+import { computed } from 'vue';
+import { useUser } from '../../composables/useUser';
 
 interface Props {
     title?: string;
@@ -7,7 +9,7 @@ interface Props {
     showLogoutButton?: boolean;
 }
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
     title: '',
     showMenuButton: true,
     showLogoutButton: true,
@@ -18,13 +20,31 @@ const emit = defineEmits<{
     logout: [];
 }>();
 
+const { user, avatarUrl, clearAvatar } = useUser();
+
 const handleMenuClick = () => {
     emit('toggleMenu');
 };
 
 const handleLogoutClick = () => {
+    clearAvatar();
     emit('logout');
 };
+
+// Iniciales del nombre del usuario
+const userInitials = computed(() => {
+    if (!user.value?.name) return '';
+    return user.value.name
+        .split(' ')
+        .slice(0, 2)
+        .map(word => word.charAt(0).toUpperCase())
+        .join('');
+});
+
+// Nombre del usuario actual
+const displayName = computed(() => {
+    return user.value?.name;
+});
 </script>
 
 <template>
@@ -46,10 +66,27 @@ const handleLogoutClick = () => {
                 </h1>
             </div>
 
-            <!-- Logout button -->
-            <BaseButton v-if="showLogoutButton" @click="handleLogoutClick" variant="tertiary" size="sm">
-                Cerrar Sesión
-            </BaseButton>
+            <!-- User name and Logout button -->
+            <div class="flex items-center gap-6">
+                <div v-if="displayName" class="flex items-center gap-3 pr-4 border-r border-gray-200">
+                    <!-- Avatar con gradiente o imagen -->
+                    <div v-if="avatarUrl" class="w-10 h-10 rounded-full overflow-hidden shadow-md flex-shrink-0">
+                        <img :src="avatarUrl" alt="Avatar" class="w-full h-full object-cover" />
+                    </div>
+                    <div v-else class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-md flex-shrink-0">
+                        <span class="text-sm font-bold text-white">{{ userInitials }}</span>
+                    </div>
+                    <!-- User name -->
+                    <div class="flex flex-col">
+                        <span class="text-base font-bold text-gray-900">
+                            {{ displayName }}
+                        </span>
+                    </div>
+                </div>
+                <BaseButton v-if="showLogoutButton" @click="handleLogoutClick" variant="tertiary" size="sm">
+                    Cerrar Sesión
+                </BaseButton>
+            </div>
         </div>
     </nav>
 </template>

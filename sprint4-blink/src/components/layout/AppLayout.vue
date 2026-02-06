@@ -20,9 +20,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { authService } from '../../services/auth.service';
+import { useUser } from '../../composables/useUser';
 import Navbar from './Navbar.vue';
 import Sidebar from './Sidebar.vue';
 
@@ -36,12 +37,22 @@ withDefaults(defineProps<Props>(), {
 
 const router = useRouter();
 const isCollapsed = ref(true);
+const { user, loadUser, clearAvatar } = useUser();
 
 const toggleSidebar = () => {
   isCollapsed.value = !isCollapsed.value;
 };
 
+onMounted(async () => {
+  try {
+    await loadUser();
+  } catch (_err) {
+    // Ignorar error - el usuario verá mensajes de toast si es necesario
+  }
+});
+
 const handleLogout = async () => {
+  clearAvatar();
   await authService.logout();
   router.push('/login');
 };

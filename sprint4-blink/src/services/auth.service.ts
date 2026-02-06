@@ -58,15 +58,24 @@ export const authService = {
   async logout(): Promise<void> {
     try {
       await apiClient.post('/v1/auth/logout');
-    } catch (error) {
-      console.error('Error al cerrar sesión:', error);
     } finally {
       this.clearAuth();
     }
   },
 
   async getCurrentUser(): Promise<User> {
-    return await apiClient.get<User>('/v1/auth/me');
+    const response = await apiClient.get<any>('/v1/auth/me');
+    const data = response?.data ?? response;
+    return {
+      id: data.id || data.user_id,
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      role: data.role,
+      email_verified_at: data.email_verified_at,
+      created_at: data.created_at,
+      updated_at: data.updated_at,
+    } as User;
   },
 
   setToken(token: string): void {
