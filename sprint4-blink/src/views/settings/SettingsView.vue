@@ -140,6 +140,7 @@ import BaseButton from '../../components/base/BaseButton.vue'
 const {
   isCollapsed,
   avatarUrl,
+  fileInput,
   toggleSidebar,
   handleLogout,
   handleAvatarClick,
@@ -147,4 +148,6 @@ const {
   handlePersonalInfoSubmit,
   handleDeleteAccount
 } = useSettings()
+
+void fileInput
 </script>
