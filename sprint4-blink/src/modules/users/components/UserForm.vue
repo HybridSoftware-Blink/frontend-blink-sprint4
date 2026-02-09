@@ -21,12 +21,13 @@
       <p v-if="(errors as any).role" class="text-sm text-red-600">{{ formatError((errors as any).role) }}</p>
     </div>
 
-    <BaseInput v-model="formData.password" :label="$t('users.form.password')" type="password" :placeholder="$t('users.form.passwordPlaceholder')"
-      :error="formatError((errors as any).password)" :required="!isEditing" />
+    <BaseInput v-model="formData.password" :label="$t('users.form.password')" :placeholder="$t('users.form.passwordPlaceholder')"
+      :error="formatError((errors as any).password)" :required="!isEditing"
+      :type="showPassword ? 'text' : 'password'" :showPasswordToggle="true" @togglePassword="toggleShowPassword" />
 
-    <BaseInput v-model="formData.password_confirmation" :label="$t('users.form.passwordConfirmation')" type="password"
+    <BaseInput v-model="formData.password_confirmation" :label="$t('users.form.passwordConfirmation')"
       :placeholder="$t('users.form.passwordPlaceholder')" :error="formatError((errors as any).password_confirmation || passwordMismatchError)"
-      :required="!isEditing && !!formData.password" />
+      :required="!isEditing && !!formData.password" :type="showPasswordConfirmation ? 'text' : 'password'" :showPasswordToggle="true" @togglePassword="toggleShowPasswordConfirmation" />
 
     <div class="flex justify-end space-x-3 pt-4">
       <BaseButton type="button" variant="secondary" @click="$emit('cancel')">
@@ -112,6 +113,17 @@ watch(
 );
 
 const { passwordMismatchError, onPhoneKeydown, onPhonePaste } = useUserForm(formData);
+
+const showPassword = ref(false);
+const showPasswordConfirmation = ref(false);
+
+const toggleShowPassword = () => {
+  showPassword.value = !showPassword.value;
+};
+
+const toggleShowPasswordConfirmation = () => {
+  showPasswordConfirmation.value = !showPasswordConfirmation.value;
+};
 
 const handleSubmit = () => {
   if (passwordMismatchError.value) return;
