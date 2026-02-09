@@ -12,7 +12,7 @@ export const authService = {
 
     if (!token) {
       throw {
-        message: 'Respuesta de login inválida: falta token',
+        message: 'errors.invalidLoginResponse',
         errors: {},
       };
     }

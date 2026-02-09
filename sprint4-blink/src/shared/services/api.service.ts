@@ -27,7 +27,7 @@ axiosInstance.interceptors.response.use(
     if (error.response) {
       // Error server
       throw {
-        message: error.response.data?.message || 'Error en la petición',
+        message: error.response.data?.message || 'errors.requestFailed',
         errors: error.response.data?.errors || {},
         status: error.response.status,
       } as ApiError & { status: number };
@@ -35,7 +35,7 @@ axiosInstance.interceptors.response.use(
     
     // Error de red o otros
     throw {
-      message: 'Error de conexión con el servidor',
+      message: 'errors.serverConnection',
       errors: {},
     } as ApiError;
   }

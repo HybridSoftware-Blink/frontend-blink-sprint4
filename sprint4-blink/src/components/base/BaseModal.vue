@@ -100,7 +100,7 @@
                   :loading="loading"
                   class="w-full sm:w-auto sm:ml-3"
                 >
-                  {{ confirmText }}
+                  {{ resolvedConfirmText }}
                 </BaseButton>
                 <BaseButton
                   type="button"
@@ -109,7 +109,7 @@
                   :disabled="loading"
                   class="mt-3 w-full sm:mt-0 sm:w-auto"
                 >
-                  {{ cancelText }}
+                  {{ resolvedCancelText }}
                 </BaseButton>
               </div>
             </div>
@@ -122,6 +122,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { BaseButton } from '../base';
 
 interface Props {
@@ -136,10 +137,13 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   type: 'info',
-  confirmText: 'Confirmar',
-  cancelText: 'Cancelar',
   loading: false,
 });
+
+const { t } = useI18n();
+
+const resolvedConfirmText = computed(() => props.confirmText ?? t('common.confirm'));
+const resolvedCancelText = computed(() => props.cancelText ?? t('common.cancel'));
 
 defineEmits<{
   confirm: [];

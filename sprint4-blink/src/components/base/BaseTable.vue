@@ -17,12 +17,12 @@
       <tbody class="bg-white divide-y divide-gray-200">
         <tr v-if="loading">
           <td :colspan="columns.length" class="px-6 py-4 text-center text-sm text-gray-500">
-            {{ loadingText }}
+            {{ resolvedLoadingText }}
           </td>
         </tr>
         <tr v-else-if="data.length === 0">
           <td :colspan="columns.length" class="px-6 py-4 text-center text-sm text-gray-500">
-            {{ emptyText }}
+            {{ resolvedEmptyText }}
           </td>
         </tr>
         <tr v-else v-for="(item, index) in paginatedData" :key="getItemKey(item, index)" class="hover:bg-gray-50">
@@ -48,7 +48,7 @@
           :disabled="pagination.current_page === 1"
           variant="secondary"
         >
-          Anterior
+          {{ t('table.previous') }}
         </BaseButton>
         <BaseButton
           @click="handlePageChange(pagination.current_page + 1)"
@@ -56,23 +56,17 @@
           variant="secondary"
           class="ml-3"
         >
-          Siguiente
+          {{ t('table.next') }}
         </BaseButton>
       </div>
       <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
         <div>
           <p class="text-sm text-gray-700">
-            Mostrando
-            <span class="font-medium">{{ pagination.from }}</span>
-            a
-            <span class="font-medium">{{ pagination.to }}</span>
-            de
-            <span class="font-medium">{{ pagination.total }}</span>
-            resultados
+            {{ t('table.showing', { from: pagination.from, to: pagination.to, total: pagination.total }) }}
           </p>
         </div>
         <div>
-          <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+          <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" :aria-label="t('table.paginationLabel')">
             <BaseButton
               @click="handlePageChange(pagination.current_page - 1)"
               :disabled="pagination.current_page === 1"
@@ -80,7 +74,7 @@
               size="sm"
               class="rounded-l-md rounded-r-none"
             >
-              <span class="sr-only">Anterior</span>
+              <span class="sr-only">{{ t('table.previous') }}</span>
               ‹
             </BaseButton>
             <BaseButton
@@ -100,7 +94,7 @@
               size="sm"
               class="rounded-r-md rounded-l-none"
             >
-              <span class="sr-only">Siguiente</span>
+              <span class="sr-only">{{ t('table.next') }}</span>
               ›
             </BaseButton>
           </nav>
@@ -112,6 +106,7 @@
 
 <script setup lang="ts" generic="T extends Record<string, any>">
 import { computed, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import BaseButton from './BaseButton.vue';
 
 export interface TableColumn {
@@ -143,12 +138,15 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   data: () => [],
   loading: false,
-  loadingText: 'Cargando...',
-  emptyText: 'No hay datos para mostrar',
   itemKey: 'id',
   perPage: 5,
   enablePagination: true,
 });
+
+const { t } = useI18n();
+
+const resolvedLoadingText = computed(() => props.loadingText ?? t('table.loading'));
+const resolvedEmptyText = computed(() => props.emptyText ?? t('table.empty'));
 
 const currentPage = ref(1);
 

@@ -1,6 +1,6 @@
 <template>
-  <BaseTable :columns="columns" :data="users" :loading="loading" loadingText="Cargando usuarios..."
-    emptyText="No hay usuarios para mostrar">
+  <BaseTable :columns="columns" :data="users" :loading="loading" :loadingText="$t('users.loading')"
+    :emptyText="$t('users.empty')">
     <template #cell-name="{ value }">
       <div class="text-sm font-medium text-gray-900">{{ value }}</div>
     </template>
@@ -8,7 +8,7 @@
     <template #cell-role="{ value }">
       <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
         :class="value === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-green-100 text-green-800'">
-        {{ value }}
+        {{ value ? $t(`roles.${value}`) : '' }}
       </span>
     </template>
 
@@ -21,21 +21,21 @@
         <button
           @click="$emit('view', item)"
           class="p-2 bg-blue-600 text-white hover:bg-blue-700 rounded-lg transition-colors"
-          title="Ver"
+          :title="$t('common.view')"
         >
           <EyeIcon class="w-5 h-5" />
         </button>
         <button
           @click="$emit('edit', item)"
           class="p-2 bg-green-600 text-white hover:bg-green-700 rounded-lg transition-colors"
-          title="Editar"
+          :title="$t('common.edit')"
         >
           <PencilIcon class="w-5 h-5" />
         </button>
         <button
           @click="$emit('delete', item)"
           class="p-2 bg-red-600 text-white hover:bg-red-700 rounded-lg transition-colors"
-          title="Eliminar"
+          :title="$t('common.delete')"
         >
           <TrashIcon class="w-5 h-5" />
         </button>
@@ -49,6 +49,8 @@ import { BaseTable } from '@/components/base';
 import { EyeIcon, PencilIcon, TrashIcon } from '@heroicons/vue/24/outline';
 import type { User } from '@/modules/users/types/user.types';
 import type { TableColumn } from '@/components/base/BaseTable.vue';
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 interface Props {
   users?: User[];
@@ -60,27 +62,40 @@ withDefaults(defineProps<Props>(), {
   loading: false,
 });
 
+const { t, locale } = useI18n();
+
 defineEmits<{
   view: [user: User];
   edit: [user: User];
   delete: [user: User];
 }>();
 
-const columns: TableColumn[] = [
+const columns = computed<TableColumn[]>(() => [
   { key: 'id', label: 'ID', align: 'left' },
-  { key: 'name', label: 'Nombre', align: 'left' },
-  { key: 'email', label: 'Email', align: 'left' },
-  { key: 'phone', label: 'Teléfono', align: 'left' },
-  { key: 'role', label: 'Rol', align: 'left' },
-  { key: 'created_at', label: 'Fecha de Registro', align: 'left' },
-  { key: 'actions', label: 'Acciones', align: 'right' },
-];
+  { key: 'name', label: t('users.table.name'), align: 'left' },
+  { key: 'email', label: t('users.table.email'), align: 'left' },
+  { key: 'phone', label: t('dashboard.user.phone'), align: 'left' },
+  { key: 'role', label: t('dashboard.user.role'), align: 'left' },
+  { key: 'created_at', label: t('users.table.createdAt'), align: 'left' },
+  { key: 'actions', label: t('users.table.actions'), align: 'right' },
+]);
 
-const formatDate = (date: string): string => {
-  return new Date(date).toLocaleDateString('es-ES', {
+const dateFormatter = computed(() => {
+  const localeMap: Record<string, string> = {
+    ca: 'ca-ES',
+    es: 'es-ES',
+    en: 'en-GB',
+  };
+  const intlLocale = localeMap[String(locale.value)] ?? 'ca-ES';
+
+  return new Intl.DateTimeFormat(intlLocale, {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
   });
+});
+
+const formatDate = (date: string): string => {
+  return dateFormatter.value.format(new Date(date));
 };
 </script>

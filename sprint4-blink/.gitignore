@@ -41,3 +41,37 @@ pnpm-debug.log*
 # Sistema operativo
 .DS_Store
 Thumbs.db
+
+# More OS / thumbnails
+ehthumbs.db
+Desktop.ini
+
+# Temporary files
+*.tmp
+*.temp
+
+# Coverage / test reports
+.nyc_output/
+coverage-report/
+
+# Storybook
+storybook-static/
+
+# Build outputs (some tools)
+build/
+.output/
+
+# SSL / keys
+*.pem
+*.key
+*.p12
+*.crt
+
+# JetBrains workspace files
+*.iml
+
+# Misc caches
+.sass-cache/
+.cache/
+.parcel-cache/
+

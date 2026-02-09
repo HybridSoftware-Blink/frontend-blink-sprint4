@@ -5,6 +5,7 @@ import { authRoutes } from '../modules/auth/routes';
 import { dashboardRoutes } from '../modules/dashboard/routes';
 import { settingsRoutes } from '../modules/settings/routes';
 import { usersRoutes } from '../modules/users/routes';
+import { i18n } from '@/i18n';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -38,7 +39,9 @@ router.beforeEach((to, _from, next) => {
   const requiresAuth = to.meta.requiresAuth;
 
   // Actualizar título de la página
-  document.title = `${to.meta.title || 'Blink'} | Blink`;
+  const titleKey = to.meta.titleKey as string | undefined;
+  const pageTitle = titleKey ? i18n.global.t(titleKey) : i18n.global.t('app.name');
+  document.title = `${pageTitle} | ${i18n.global.t('app.name')}`;
 
   // Si la ruta requiere autenticación
   if (requiresAuth && !isAuthenticated) {

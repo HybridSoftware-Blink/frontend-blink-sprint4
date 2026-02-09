@@ -10,9 +10,11 @@ import BaseCard from '@/components/base/BaseCard.vue';
 import AuthBackground from '@/modules/auth/components/AuthBackground.vue';
 import AuthLogo from '@/modules/auth/components/AuthLogo.vue';
 import { useToast } from '@/shared/composables/useToast';
+import { useI18n } from 'vue-i18n';
 
 const router = useRouter();
 const toast = useToast();
+const { t } = useI18n();
 
 const form = reactive<RegisterData>({
     name: '',
@@ -49,7 +51,7 @@ const validateForm = (): boolean => {
 const handleRegister = async () => {
     // Validación en cliente
     if (!validateForm()) {
-        toast.error('Por favor, corrige los errores en el formulario');
+        toast.error(t('validation.fixFormErrors'));
         return;
     }
 
@@ -60,7 +62,7 @@ const handleRegister = async () => {
     try {
         const response = await authService.register(form);
 
-        toast.success(`¡Cuenta creada! Bienvenido/a ${response.user?.name ?? 'a Blink'}`);
+        toast.success(t('auth.register.success', { name: response.user?.name ?? t('app.name') }));
 
      
         authService.clearAuth();
@@ -68,9 +70,13 @@ const handleRegister = async () => {
     } catch (err: any) {
         if (err.errors) {
             fieldErrors.value = err.errors;
-            toast.error('Por favor, corrige los errores en el formulario');
+            toast.error(t('validation.fixFormErrors'));
         } else {
-            toast.error(err.message || 'Error al registrarse. Por favor, intenta de nuevo.');
+            const msg = err?.message;
+            const translated = typeof msg === 'string' && (msg.startsWith('errors.') || msg.startsWith('validation.'))
+                ? t(msg)
+                : msg;
+            toast.error(translated || t('auth.register.genericError'));
         }
     } finally {
         loading.value = false;
@@ -79,6 +85,12 @@ const handleRegister = async () => {
 
 const getFieldError = (field: string): string => {
     return validationErrors.value[field as keyof ValidationErrors] || fieldErrors.value[field]?.[0] || '';
+};
+
+const formatError = (error: string): string => {
+    if (!error) return '';
+    if (error.startsWith('validation.') || error.startsWith('errors.')) return t(error);
+    return error;
 };
 
 const togglePasswordVisibility = () => {
@@ -97,44 +109,44 @@ const togglePasswordConfirmationVisibility = () => {
 
             <div class="text-center mb-8">
                 <h1 class="text-3xl font-bold text-gray-900 mb-2">
-                    Create your Blink account
+                    {{ $t('auth.register.title') }}
                 </h1>
                 <p class="text-gray-600">
-                    Already have an account?
+                    {{ $t('auth.register.haveAccount') }}
                     <router-link to="/login" class="text-green-600 hover:text-green-700 font-medium">
-                        Sign in
+                        {{ $t('auth.register.goLogin') }}
                     </router-link>
                 </p>
             </div>
 
             <form @submit.prevent="handleRegister" class="space-y-5">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <BaseInput v-model="form.name" type="text" label="Full name" placeholder="Your name" icon="user"
-                        :required="true" :disabled="loading" :error="getFieldError('name')" />
+                    <BaseInput v-model="form.name" type="text" :label="$t('auth.register.nameLabel')" :placeholder="$t('auth.register.namePlaceholder')" icon="user"
+                        :required="true" :disabled="loading" :error="formatError(getFieldError('name'))" />
 
-                    <BaseInput v-model="form.phone" type="tel" label="Phone" placeholder="+34 600 000 000" icon="phone"
-                        :required="true" :disabled="loading" :error="getFieldError('phone')" />
+                    <BaseInput v-model="form.phone" type="tel" :label="$t('auth.register.phoneLabel')" :placeholder="$t('auth.register.phonePlaceholder')" icon="phone"
+                        :required="true" :disabled="loading" :error="formatError(getFieldError('phone'))" />
 
                     <div class="md:col-span-2">
-                        <BaseInput v-model="form.email" type="email" label="Email address" placeholder="example@email.com"
-                            icon="email" :required="true" :disabled="loading" :error="getFieldError('email')" />
+                        <BaseInput v-model="form.email" type="email" :label="$t('auth.register.emailLabel')" :placeholder="$t('auth.register.emailPlaceholder')"
+                            icon="email" :required="true" :disabled="loading" :error="formatError(getFieldError('email'))" />
                     </div>
 
-                    <BaseInput v-model="form.password" :type="showPassword ? 'text' : 'password'" label="Password"
-                        placeholder="••••••••" icon="password" :required="true" :disabled="loading"
-                        :error="getFieldError('password')" :show-password-toggle="true"
+                    <BaseInput v-model="form.password" :type="showPassword ? 'text' : 'password'" :label="$t('auth.register.passwordLabel')"
+                        :placeholder="$t('auth.register.passwordPlaceholder')" icon="password" :required="true" :disabled="loading"
+                        :error="formatError(getFieldError('password'))" :show-password-toggle="true"
                         @toggle-password="togglePasswordVisibility" />
 
                     <BaseInput v-model="form.password_confirmation"
-                        :type="showPasswordConfirmation ? 'text' : 'password'" label="Confirm password"
-                        placeholder="••••••••" icon="password" :required="true" :disabled="loading"
-                        :error="getFieldError('password_confirmation')" :show-password-toggle="true"
+                        :type="showPasswordConfirmation ? 'text' : 'password'" :label="$t('auth.register.passwordConfirmationLabel')"
+                        :placeholder="$t('auth.register.passwordPlaceholder')" icon="password" :required="true" :disabled="loading"
+                        :error="formatError(getFieldError('password_confirmation'))" :show-password-toggle="true"
                         @toggle-password="togglePasswordConfirmationVisibility" />
 
                     <div class="md:col-span-2">
                         <BaseButton type="submit" :disabled="loading" :loading="loading" full-width>
-                            <span v-if="!loading">Create account</span>
-                            <span v-else>Loading...</span>
+                            <span v-if="!loading">{{ $t('auth.register.cta') }}</span>
+                            <span v-else>{{ $t('auth.register.loading') }}</span>
                         </BaseButton>
                     </div>
                 </div>

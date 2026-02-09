@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import blinkLogo from '@/assets/blink-logo.png';
+import { useI18n } from 'vue-i18n';
 
 defineProps<{
   size?: 'sm' | 'md' | 'lg';
@@ -10,13 +11,15 @@ const sizeClasses = {
   md: 'h-24',
   lg: 'h-32',
 };
+
+const { t } = useI18n();
 </script>
 
 <template>
   <div class="flex justify-center mb-6">
     <img 
       :src="blinkLogo" 
-      alt="Blink Logo" 
+      :alt="t('common.logoAlt', { app: t('app.name') })" 
       :class="[sizeClasses[size || 'md'], 'w-auto object-contain', 'shadow-none']"
     />
   </div>

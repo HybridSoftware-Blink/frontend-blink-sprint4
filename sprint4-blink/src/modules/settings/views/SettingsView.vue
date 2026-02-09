@@ -6,7 +6,7 @@
 
     <div class="flex min-w-0 flex-1 flex-col">
       <Navbar 
-        title="Configuración" 
+        :title="$t('settings.title')" 
         @toggle-menu="toggleSidebar"
         @logout="handleLogout"
       />
@@ -17,8 +17,8 @@
           <!-- Personal Information Section -->
           <div class="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
             <div>
-              <h2 class="text-base/7 font-semibold text-gray-900 dark:text-white">Información Personal</h2>
-              <p class="mt-1 text-sm/6 text-gray-500 dark:text-gray-400">Gestiona tu información personal, contraseña y configuración de cuenta.</p>
+              <h2 class="text-base/7 font-semibold text-gray-900 dark:text-white">{{ $t('settings.personalInfo') }}</h2>
+              <p class="mt-1 text-sm/6 text-gray-500 dark:text-gray-400">{{ $t('settings.personalInfoDesc') }}</p>
             </div>
 
             <div class="md:col-span-2 space-y-10">
@@ -28,7 +28,7 @@
                     <div class="col-span-full flex items-center gap-x-8">
                     <img
                       :src="avatarUrl || userLogo"
-                      alt="Avatar de usuario"
+                      :alt="$t('settings.userAvatarAlt')"
                       class="h-14 w-14 flex-none rounded-full bg-gray-100 object-cover ring-1 ring-gray-200 dark:bg-gray-800 dark:ring-white/10"
                     />
                     <div>
@@ -44,14 +44,14 @@
                         @click="handleAvatarClick"
                         class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs inset-ring-1 inset-ring-gray-300 hover:bg-gray-100 dark:bg-white/10 dark:text-white dark:shadow-none dark:inset-ring-white/5 dark:hover:bg-white/20"
                       >
-                        Cambiar avatar
+                        {{ $t('settings.changeAvatar') }}
                       </button>
-                      <p class="mt-2 text-xs/5 text-gray-500 dark:text-gray-400">JPG, GIF o PNG. 1MB máx.</p>
+                      <p class="mt-2 text-xs/5 text-gray-500 dark:text-gray-400">{{ $t('settings.avatarHelp') }}</p>
                     </div>
                   </div>
 
                   <div class="sm:col-span-3">
-                    <label for="first-name" class="block text-sm/6 font-medium text-gray-900 dark:text-white">Nombre</label>
+                    <label for="first-name" class="block text-sm/6 font-medium text-gray-900 dark:text-white">{{ $t('settings.firstName') }}</label>
                     <div class="mt-2">
                       <input 
                         v-model="firstName"
@@ -65,7 +65,7 @@
                   </div>
 
                   <div class="sm:col-span-3">
-                    <label for="last-name" class="block text-sm/6 font-medium text-gray-900 dark:text-white">Apellidos</label>
+                    <label for="last-name" class="block text-sm/6 font-medium text-gray-900 dark:text-white">{{ $t('settings.lastName') }}</label>
                     <div class="mt-2">
                       <input 
                         v-model="lastName"
@@ -79,7 +79,7 @@
                   </div>
 
                   <div class="col-span-full">
-                    <label for="email" class="block text-sm/6 font-medium text-gray-900 dark:text-white">Correo electrónico</label>
+                    <label for="email" class="block text-sm/6 font-medium text-gray-900 dark:text-white">{{ $t('settings.email') }}</label>
                     <div class="mt-2">
                       <input 
                         v-model="email"
@@ -93,7 +93,7 @@
                   </div>
 
                   <div class="col-span-full">
-                    <label for="current-password" class="block text-sm/6 font-medium text-gray-900 dark:text-white">Contraseña actual</label>
+                    <label for="current-password" class="block text-sm/6 font-medium text-gray-900 dark:text-white">{{ $t('settings.currentPassword') }}</label>
                     <div class="mt-2">
                       <input 
                         v-model="currentPassword"
@@ -109,20 +109,19 @@
 
                 <div class="mt-8 flex">
                   <BaseButton type="submit" variant="primary" size="sm">
-                    Guardar cambios
+                    {{ $t('settings.saveChanges') }}
                   </BaseButton>
                 </div>
               </form>
 
               <div class="pt-10 border-t border-gray-200 dark:border-white/10">
-                <h3 class="text-base/7 font-semibold text-gray-900 dark:text-white">Eliminar cuenta</h3>
+                <h3 class="text-base/7 font-semibold text-gray-900 dark:text-white">{{ $t('settings.deleteAccount') }}</h3>
                 <p class="mt-1 text-sm/6 text-gray-500 dark:text-gray-400">
-                  ¿Ya no quieres usar nuestro servicio? Puedes eliminar tu cuenta aquí. Esta acción no es reversible. 
-                  Toda la información relacionada con esta cuenta se eliminará permanentemente.
+                  {{ $t('settings.deleteAccountDesc') }}
                 </p>
                 <form class="mt-6" @submit.prevent="handleDeleteAccount">
                   <BaseButton type="submit" variant="tertiary" size="sm">
-                    Sí, eliminar mi cuenta
+                    {{ $t('settings.deleteAccountCta') }}
                   </BaseButton>
                 </form>
               </div>

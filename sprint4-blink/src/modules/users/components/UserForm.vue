@@ -1,39 +1,39 @@
 <template>
   <form @submit.prevent="handleSubmit" class="space-y-4">
-    <BaseInput v-model="formData.name" label="Nombre" type="text" placeholder="Nombre completo" :error="errors.name"
-      required />
+    <BaseInput v-model="formData.name" :label="$t('users.form.name')" type="text" :placeholder="$t('users.form.namePlaceholder')"
+      :error="formatError((errors as any).name)" required />
 
-    <BaseInput v-model="formData.email" label="Email" type="email" placeholder="correo@ejemplo.com"
-      :error="errors.email" required />
+    <BaseInput v-model="formData.email" :label="$t('users.form.email')" type="email" :placeholder="$t('users.form.emailPlaceholder')"
+      :error="formatError((errors as any).email)" required />
 
-    <BaseInput v-model="formData.phone" label="Teléfono" type="tel" placeholder="+34 600 000 000"
-      :error="errors.phone" @keydown="onPhoneKeydown" @paste="onPhonePaste" required />
+    <BaseInput v-model="formData.phone" :label="$t('users.form.phone')" type="tel" :placeholder="$t('users.form.phonePlaceholder')"
+      :error="formatError((errors as any).phone)" @keydown="onPhoneKeydown" @paste="onPhonePaste" required />
     <div class="space-y-2">
       <label class="block text-sm font-medium text-gray-700">
-        Rol
+        {{ $t('users.form.role') }}
       </label>
       <select v-model="formData.role"
         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         required>
-        <option value="user">Usuario</option>
-        <option value="admin">Administrador</option>
+        <option value="user">{{ $t('roles.user') }}</option>
+        <option value="admin">{{ $t('roles.admin') }}</option>
       </select>
-      <p v-if="errors.role" class="text-sm text-red-600">{{ errors.role }}</p>
+      <p v-if="(errors as any).role" class="text-sm text-red-600">{{ formatError((errors as any).role) }}</p>
     </div>
 
-    <BaseInput v-model="formData.password" label="Contraseña" type="password" placeholder="••••••••"
-      :error="errors.password" :required="!isEditing" />
+    <BaseInput v-model="formData.password" :label="$t('users.form.password')" type="password" :placeholder="$t('users.form.passwordPlaceholder')"
+      :error="formatError((errors as any).password)" :required="!isEditing" />
 
-    <BaseInput v-model="formData.password_confirmation" label="Confirmar Contraseña" type="password"
-      placeholder="••••••••" :error="errors.password_confirmation || passwordMismatchError"
+    <BaseInput v-model="formData.password_confirmation" :label="$t('users.form.passwordConfirmation')" type="password"
+      :placeholder="$t('users.form.passwordPlaceholder')" :error="formatError((errors as any).password_confirmation || passwordMismatchError)"
       :required="!isEditing && !!formData.password" />
 
     <div class="flex justify-end space-x-3 pt-4">
       <BaseButton type="button" variant="secondary" @click="$emit('cancel')">
-        Cancelar
+        {{ $t('common.cancel') }}
       </BaseButton>
       <BaseButton type="submit" :loading="loading" :disabled="!!passwordMismatchError">
-        {{ isEditing ? 'Actualizar' : 'Crear' }} Usuario
+        {{ isEditing ? $t('users.actions.updateUser') : $t('users.actions.createUser') }}
       </BaseButton>
     </div>
   </form>
@@ -45,6 +45,7 @@ import { BaseInput, BaseButton } from '@/components/base';
 import type { User, CreateUserData, UpdateUserData } from '@/modules/users/types/user.types';
 import { useUserForm } from '@/modules/users/composables/useUserForm';
 import type { ValidationErrors } from '@/modules/users/utils/userValidation';
+import { useI18n } from 'vue-i18n';
 
 interface Props {
   user?: User | null;
@@ -62,6 +63,14 @@ const emit = defineEmits<{
   submit: [data: CreateUserData | UpdateUserData];
   cancel: [];
 }>();
+
+const { t } = useI18n();
+
+const formatError = (error: string): string => {
+  if (!error) return '';
+  if (error.startsWith('validation.') || error.startsWith('errors.')) return t(error);
+  return error;
+};
 
 const isEditing = ref(!!props.user);
 

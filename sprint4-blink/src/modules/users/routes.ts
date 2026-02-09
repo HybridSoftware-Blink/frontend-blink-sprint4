@@ -7,7 +7,7 @@ export const usersRoutes: RouteRecordRaw[] = [
     component: () => import('./views/UsersView.vue'),
     meta: {
       requiresAuth: true,
-      title: 'Gestión de Usuarios',
+      titleKey: 'users.title',
     },
   },
 ];

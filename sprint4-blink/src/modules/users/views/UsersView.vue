@@ -1,19 +1,19 @@
 <template>
-  <AppLayout title="Gestión de Usuarios">
+  <AppLayout :title="$t('users.title')">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <!-- Header -->
           <div class="mb-8">
             <div class="flex justify-between items-center">
               <div>
                 <p class="mt-2 text-sm text-gray-600">
-                  Administra los usuarios del sistema
+                  {{ $t('users.description') }}
                 </p>
               </div>
               <BaseButton @click="openCreateModal" variant="primary">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>
-                Nuevo Usuario
+                {{ $t('users.actions.newUser') }}
               </BaseButton>
             </div>
           </div>
@@ -25,7 +25,7 @@
                 <BaseInput
                   v-model="searchQuery"
                   type="text"
-                  placeholder="Buscar por nombre o email..."
+                  :placeholder="$t('users.searchPlaceholder')"
                   @input="handleSearch"
                 />
               </div>
@@ -33,7 +33,7 @@
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                 </svg>
-                Actualizar
+                {{ $t('common.refresh') }}
               </BaseButton>
             </div>
           </div>
@@ -75,7 +75,7 @@
                   >
                     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                       <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
-                        {{ editingUser ? 'Editar Usuario' : 'Crear Nuevo Usuario' }}
+                        {{ editingUser ? $t('users.actions.editUser') : $t('users.actions.createNewUser') }}
                       </h3>
                       <UserForm
                         :user="editingUser"
@@ -94,11 +94,11 @@
           <!-- Modal de Confirmación de Eliminación -->
           <BaseModal
             :show="showDeleteModal"
-            title="Eliminar Usuario"
-            :message="`¿Estás seguro de que deseas eliminar al usuario ${userToDelete?.name}? Esta acción no se puede deshacer.`"
+            :title="$t('users.modal.deleteTitle')"
+            :message="$t('users.modal.deleteMessage', { name: userToDelete?.name ?? '' })"
             type="danger"
-            confirm-text="Eliminar"
-            cancel-text="Cancelar"
+            :confirm-text="$t('common.delete')"
+            :cancel-text="$t('common.cancel')"
             :loading="deleting"
             @confirm="handleDelete"
             @close="closeDeleteModal"
@@ -130,39 +130,39 @@
                   >
                     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                       <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
-                        Detalles del Usuario
+                        {{ $t('users.modal.detailsTitle') }}
                       </h3>
                       <div v-if="viewingUser" class="space-y-4">
                         <div class="border-b pb-4">
-                          <p class="text-sm font-medium text-gray-500">Nombre</p>
+                          <p class="text-sm font-medium text-gray-500">{{ $t('dashboard.user.name') }}</p>
                           <p class="text-base text-gray-900">{{ viewingUser.name }}</p>
                         </div>
                         <div class="border-b pb-4">
-                          <p class="text-sm font-medium text-gray-500">Email</p>
+                          <p class="text-sm font-medium text-gray-500">{{ $t('dashboard.user.email') }}</p>
                           <p class="text-base text-gray-900">{{ viewingUser.email }}</p>
                         </div>
                         <div class="border-b pb-4">
-                          <p class="text-sm font-medium text-gray-500">Teléfono</p>
+                          <p class="text-sm font-medium text-gray-500">{{ $t('dashboard.user.phone') }}</p>
                           <p class="text-base text-gray-900">{{ viewingUser.phone }}</p>
                         </div>
                         <div class="border-b pb-4">
-                          <p class="text-sm font-medium text-gray-500">Rol</p>
+                          <p class="text-sm font-medium text-gray-500">{{ $t('dashboard.user.role') }}</p>
                           <span class="inline-flex px-2 py-1 text-xs leading-5 font-semibold rounded-full"
                             :class="viewingUser.role === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-green-100 text-green-800'">
-                            {{ viewingUser.role }}
+                            {{ $t(`roles.${viewingUser.role}`) }}
                           </span>
                         </div>
                         <div>
-                          <p class="text-sm font-medium text-gray-500">Fecha de Registro</p>
+                          <p class="text-sm font-medium text-gray-500">{{ $t('users.table.createdAt') }}</p>
                           <p class="text-base text-gray-900">{{ formatDate(viewingUser.created_at) }}</p>
                         </div>
                       </div>
                       <div class="flex justify-end space-x-3 pt-6 border-t mt-6">
                         <BaseButton type="button" variant="secondary" @click="closeViewModal">
-                          Cerrar
+                          {{ $t('common.close') }}
                         </BaseButton>
                         <BaseButton type="button" variant="primary" @click="switchToEdit">
-                          Editar Usuario
+                          {{ $t('users.actions.editUser') }}
                         </BaseButton>
                       </div>
                     </div>
@@ -176,7 +176,7 @@
     </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { BaseButton, BaseInput, BaseModal } from '@/components/base';
 import AppLayout from '@/layouts/AppLayout.vue';
 import UserTable from '@/modules/users/components/UserTable.vue';
@@ -185,8 +185,16 @@ import { userService } from '@/modules/users/services/user.service';
 import type { User, CreateUserData, UpdateUserData } from '@/modules/users/types/user.types';
 import { useToast } from '@/shared/composables/useToast';
 import { validateUserForm, type ValidationErrors } from '@/modules/users/utils/userValidation';
+import { useI18n } from 'vue-i18n';
 
 const toast = useToast();
+const { t, te, locale } = useI18n();
+
+const translateErrorMessage = (message: unknown, fallback: string) => {
+  const msg = typeof message === 'string' ? message : '';
+  if (msg && te(msg)) return t(msg);
+  return msg || fallback;
+};
 
 // Estado
 const users = ref<User[]>([]);
@@ -219,7 +227,7 @@ const loadUsers = async () => {
       users.value = [];
     }
   } catch (error: any) {
-    toast.error(error.message || 'Error al cargar usuarios');
+    toast.error(translateErrorMessage(error?.message, t('users.errors.load')));
   } finally {
     loading.value = false;
   }
@@ -237,10 +245,10 @@ const handleSearch = () => {
         users.value = results;
       } catch (error: any) {
         if (error.status === 404) {
-          toast.error('Endpoint de búsqueda no disponible. Recarga para ver todos los usuarios.');
+          toast.error(t('users.errors.searchEndpointUnavailable'));
           loadUsers();
         } else {
-          toast.error(error.message || 'Error al buscar usuarios');
+          toast.error(translateErrorMessage(error?.message, t('users.errors.search')));
         }
       } finally {
         loading.value = false;
@@ -326,10 +334,10 @@ const handleSubmit = async (data: CreateUserData | UpdateUserData) => {
   try {
     if (editingUser.value) {
       await userService.updateUser(editingUser.value.id, data as UpdateUserData);
-      toast.success('Usuario actualizado correctamente');
+      toast.success(t('users.toast.updated'));
     } else {
       await userService.createUser(data as CreateUserData);
-      toast.success('Usuario creado correctamente');
+      toast.success(t('users.toast.created'));
     }
     
     closeUserModal();
@@ -341,7 +349,7 @@ const handleSubmit = async (data: CreateUserData | UpdateUserData) => {
         return acc;
       }, {} as Record<string, string>);
     }
-    toast.error(error.message || 'Error al guardar usuario');
+    toast.error(translateErrorMessage(error?.message, t('users.errors.save')));
   } finally {
     submitting.value = false;
   }
@@ -354,13 +362,13 @@ const handleDelete = async () => {
   deleting.value = true;
   try {
     await userService.deleteUser(userToDelete.value.id);
-    toast.success('Usuario eliminado correctamente');
+    toast.success(t('users.toast.deleted'));
     closeDeleteModal();
     await loadUsers();
   } catch (error: any) {
     const errorMsg = error.status === 404 
-      ? 'Usuario no encontrado. Puede que ya haya sido eliminado.'
-      : error.message || 'Error al eliminar usuario';
+      ? t('users.errors.notFound')
+      : (error.message || t('users.errors.delete'));
     toast.error(errorMsg);
     if (error.status === 404) {
       closeDeleteModal();
@@ -371,15 +379,25 @@ const handleDelete = async () => {
   }
 };
 
-// Cargar usuarios al montar
-const formatDate = (date: string): string => {
-  return new Date(date).toLocaleDateString('es-ES', {
+const dateFormatter = computed(() => {
+  const localeMap: Record<string, string> = {
+    ca: 'ca-ES',
+    es: 'es-ES',
+    en: 'en-GB',
+  };
+  const intlLocale = localeMap[String(locale.value)] ?? 'ca-ES';
+
+  return new Intl.DateTimeFormat(intlLocale, {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
   });
+});
+
+const formatDate = (date: string): string => {
+  return dateFormatter.value.format(new Date(date));
 };
 
 onMounted(() => {

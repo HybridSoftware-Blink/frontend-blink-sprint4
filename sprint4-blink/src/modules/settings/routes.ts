@@ -7,7 +7,7 @@ export const settingsRoutes: RouteRecordRaw[] = [
     component: () => import('./views/SettingsView.vue'),
     meta: {
       requiresAuth: true,
-      title: 'Configuración',
+      titleKey: 'settings.title',
     },
   },
 ];

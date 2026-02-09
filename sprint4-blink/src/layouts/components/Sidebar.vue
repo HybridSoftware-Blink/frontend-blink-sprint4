@@ -2,7 +2,7 @@
   <div :class="sidebarClasses">
     <!-- HEADER -->
     <div class="flex h-20 shrink-0 items-center justify-center">
-      <img :class="logoClasses" :src="blinkLogo" alt="Blink" />
+      <img :class="logoClasses" :src="blinkLogo" :alt="t('common.logoAlt', { app: t('app.name') })" />
     </div>
 
     <!-- NAV -->
@@ -12,20 +12,20 @@
         <!-- CLIENTE SECTION -->
         <li class="w-full">
           <div v-if="!isCollapsed" class="text-xs/6 font-semibold text-gray-400 px-2 mb-2">
-            Cliente
+            {{ t('nav.sections.client') }}
           </div>
           <ul role="list" class="space-y-1 flex flex-col items-center">
-            <li v-for="item in clienteNavigation" :key="item.name" class="w-full flex justify-center">
+            <li v-for="item in clienteNavigation" :key="item.nameKey" class="w-full flex justify-center">
               <button
                 v-if="item.href === '#'"
                 :disabled="true"
-                :title="isCollapsed ? item.name : undefined"
+                :title="isCollapsed ? t(item.nameKey) : undefined"
                 :class="getItemClasses(item)"
               >
                 <component :is="item.icon" class="size-6 shrink-0" aria-hidden="true" />
 
                 <span v-if="!isCollapsed" class="truncate">
-                  {{ item.name }}
+                  {{ t(item.nameKey) }}
                 </span>
 
                 <span v-if="!isCollapsed && item.count"
@@ -40,13 +40,13 @@
               <RouterLink
                 v-else
                 :to="item.href"
-                :title="isCollapsed ? item.name : undefined"
+                :title="isCollapsed ? t(item.nameKey) : undefined"
                 :class="getItemClasses(item)"
               >
                 <component :is="item.icon" class="size-6 shrink-0" aria-hidden="true" />
 
                 <span v-if="!isCollapsed" class="truncate">
-                  {{ item.name }}
+                  {{ t(item.nameKey) }}
                 </span>
 
                 <span v-if="!isCollapsed && item.count"
@@ -64,20 +64,20 @@
         <!-- ADMIN SECTION -->
         <li class="w-full">
           <div v-if="!isCollapsed" class="text-xs/6 font-semibold text-gray-400 px-2 mb-2">
-            Admin
+            {{ t('nav.sections.admin') }}
           </div>
           <ul role="list" class="space-y-1 flex flex-col items-center">
-            <li v-for="item in adminNavigation" :key="item.name" class="w-full flex justify-center">
+            <li v-for="item in adminNavigation" :key="item.nameKey" class="w-full flex justify-center">
               <button
                 v-if="item.href === '#'"
                 :disabled="true"
-                :title="isCollapsed ? item.name : undefined"
+                :title="isCollapsed ? t(item.nameKey) : undefined"
                 :class="getItemClasses(item)"
               >
                 <component :is="item.icon" class="size-6 shrink-0" aria-hidden="true" />
 
                 <span v-if="!isCollapsed" class="truncate">
-                  {{ item.name }}
+                  {{ t(item.nameKey) }}
                 </span>
 
                 <!-- Badge expandido -->
@@ -94,13 +94,13 @@
               <RouterLink
                 v-else
                 :to="item.href"
-                :title="isCollapsed ? item.name : undefined"
+                :title="isCollapsed ? t(item.nameKey) : undefined"
                 :class="getItemClasses(item)"
               >
                 <component :is="item.icon" class="size-6 shrink-0" aria-hidden="true" />
 
                 <span v-if="!isCollapsed" class="truncate">
-                  {{ item.name }}
+                  {{ t(item.nameKey) }}
                 </span>
 
                 <!-- Badge expandido -->
@@ -125,6 +125,7 @@
 <script setup lang="ts">
 import { computed, type Component } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import {
   ChartPieIcon,
   Cog6ToothIcon,
@@ -137,7 +138,7 @@ import {
 import blinkLogo from '@/assets/blink-logo.png'
 
 type NavItem = {
-  name: string
+  nameKey: string
   href: string
   icon: Component
   count?: string
@@ -148,6 +149,7 @@ const props = defineProps<{
 }>()
 
 const route = useRoute()
+const { t } = useI18n()
 
 const sidebarClasses = computed(() => [
   props.isCollapsed ? 'w-20 px-3' : 'w-72 px-6',
@@ -178,19 +180,19 @@ const getItemClasses = (item: NavItem) => {
   return classes.join(' ')
 }
 
-const clienteNavigation: NavItem[] = [
-  { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
-  { name: 'Mapa', href: '#', icon: MapPinIcon },
-  { name: 'Tickets', href: '#', icon: TicketIcon },
-  { name: 'Reservas', href: '#', icon: ChartPieIcon },
-  { name: 'Configuración', href: '/settings', icon: Cog6ToothIcon },
-]
+const clienteNavigation = computed<NavItem[]>(() => [
+  { nameKey: 'nav.dashboard', href: '/dashboard', icon: HomeIcon },
+  { nameKey: 'nav.map', href: '#', icon: MapPinIcon },
+  { nameKey: 'nav.tickets', href: '#', icon: TicketIcon },
+  { nameKey: 'nav.bookings', href: '#', icon: ChartPieIcon },
+  { nameKey: 'nav.settings', href: '/settings', icon: Cog6ToothIcon },
+])
 
-const adminNavigation: NavItem[] = [
-  { name: 'Usuarios', href: '/users', icon: UsersIcon },
-  { name: 'Vehículos', href: '#', icon: TruckIcon, count: '12' },
-  { name: 'Reservas', href: '#', icon: ChartPieIcon },
-  { name: 'Geofencing', href: '#', icon: MapPinIcon, count: '20+' },
-  { name: 'Tickets', href: '#', icon: TicketIcon },
-]
+const adminNavigation = computed<NavItem[]>(() => [
+  { nameKey: 'nav.users', href: '/users', icon: UsersIcon },
+  { nameKey: 'nav.vehicles', href: '#', icon: TruckIcon, count: '12' },
+  { nameKey: 'nav.bookings', href: '#', icon: ChartPieIcon },
+  { nameKey: 'nav.geofencing', href: '#', icon: MapPinIcon, count: '20+' },
+  { nameKey: 'nav.tickets', href: '#', icon: TicketIcon },
+])
 </script>

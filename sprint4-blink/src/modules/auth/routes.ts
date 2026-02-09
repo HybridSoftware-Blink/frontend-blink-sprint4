@@ -7,7 +7,7 @@ export const authRoutes: RouteRecordRaw[] = [
     component: () => import('./views/LoginView.vue'),
     meta: {
       requiresAuth: false,
-      title: 'Iniciar Sesión',
+      titleKey: 'auth.login.title',
     },
   },
   {
@@ -16,7 +16,7 @@ export const authRoutes: RouteRecordRaw[] = [
     component: () => import('./views/RegisterView.vue'),
     meta: {
       requiresAuth: false,
-      title: 'Registro',
+      titleKey: 'auth.register.title',
     },
   },
 ];

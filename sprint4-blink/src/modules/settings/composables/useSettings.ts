@@ -4,13 +4,21 @@ import { authService } from '@/modules/auth/services/auth.service'
 import { useUser } from '@/modules/auth/composables/useUser'
 import { useToast } from '@/shared/composables/useToast'
 import { apiClient } from '@/shared/services/api.service'
+import { useI18n } from 'vue-i18n'
 
 export function useSettings() {
   const router = useRouter()
   const toast = useToast()
+  const { t, te } = useI18n()
   const isCollapsed = ref(true)
   const { user, loadUser, updateAvatar, updateUser, avatarUrl, clearAvatar } = useUser()
   const fileInput = ref<HTMLInputElement | null>(null)
+
+  const translateErrorMessage = (message: unknown, fallback: string) => {
+    const msg = typeof message === 'string' ? message : ''
+    if (msg && te(msg)) return t(msg)
+    return msg || fallback
+  }
 
   // Form fields
   const firstName = ref('')
@@ -33,7 +41,7 @@ export function useSettings() {
         email.value = user.value.email
       }
     } catch (_err) {
-      toast.error('Tu sesión ha caducado. Vuelve a iniciar sesión.')
+      toast.error(t('auth.sessionExpired'))
       await authService.logout()
       router.push('/login')
     }
@@ -56,12 +64,12 @@ export function useSettings() {
     if (!file) return
     
     if (file.size > 1024 * 1024) {
-      toast.error('El archivo es demasiado grande. Máximo 1MB.')
+      toast.error(t('settings.validation.fileTooLarge'))
       return
     }
     
     if (!['image/jpeg', 'image/gif', 'image/png'].includes(file.type)) {
-      toast.error('Solo se permiten archivos JPG, GIF o PNG.')
+      toast.error(t('settings.validation.invalidFileType'))
       return
     }
     
@@ -69,7 +77,7 @@ export function useSettings() {
     reader.onload = (e) => {
       const newAvatarUrl = e.target?.result as string
       updateAvatar(newAvatarUrl)
-      toast.success('Avatar actualizado')
+      toast.success(t('settings.toast.avatarUpdated'))
     }
     reader.readAsDataURL(file)
   }
@@ -77,7 +85,7 @@ export function useSettings() {
   const handlePersonalInfoSubmit = async () => {
     try {
       if (!user.value?.id) {
-        toast.error('No se pudo obtener la información del usuario')
+        toast.error(t('settings.errors.userInfoUnavailable'))
         return
       }
 
@@ -108,15 +116,15 @@ export function useSettings() {
       }
       updateUser(updatedUser)
 
-      toast.success('Información personal guardada correctamente')
+      toast.success(t('settings.toast.personalInfoSaved'))
       currentPassword.value = '' // Clear password field
     } catch (error: any) {
-      toast.error(error?.message || 'Error al actualizar la información')
+      toast.error(translateErrorMessage(error?.message, t('settings.errors.updateInfo')))
     }
   }
 
   const handleDeleteAccount = () => {
-    toast.error('Esta acción no se puede deshacer')
+    toast.error(t('settings.toast.deleteWarning'))
   }
 
   return {

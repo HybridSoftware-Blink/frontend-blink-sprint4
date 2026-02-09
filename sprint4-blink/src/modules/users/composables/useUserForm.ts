@@ -5,7 +5,7 @@ export function useUserForm(formData: Ref<CreateUserData>) {
   const passwordMismatchError = computed(() => {
     if (!formData.value.password && !formData.value.password_confirmation) return '';
     if (formData.value.password !== formData.value.password_confirmation) {
-      return 'Las contraseñas no coinciden';
+      return 'validation.passwordMismatch';
     }
     return '';
   });
