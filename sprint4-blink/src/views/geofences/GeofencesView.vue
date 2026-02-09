@@ -34,15 +34,18 @@
           </div>
 
           <div class="flex flex-1 gap-6 min-h-0">
-              <div class="w-80 bg-gray-50 rounded-md border border-gray-200 p-4 min-h-0 flex flex-col">
-                <div class="flex items-center justify-between mb-3">
-                  <h3 class="font-semibold">Geofences</h3>
-                  <BaseButton size="sm" variant="secondary" @click="showForm = !showForm">
-                    {{ showForm ? 'Cancelar' : 'Nuevo' }}
-                  </BaseButton>
-                </div>
-
-                <div v-if="showForm" class="mb-4">
+              <CrudList
+                :items="geofences"
+                :pageSize="pageSize"
+                :showForm="showForm"
+                item-key="geofence_id"
+                title="Geofences"
+                @toggle-create="showForm = !showForm"
+                @select="selectGeofence"
+                @delete="deleteGeofence"
+                @page-changed="(p) => currentPage = p"
+              >
+                <template #form>
                   <BaseInput v-model="form.name" label="Nombre" placeholder="Nombre del geofence" />
 
                   <label class="block text-sm font-medium text-gray-700 mt-2">Tipo</label>
@@ -61,41 +64,11 @@
                     <BaseButton size="sm" variant="primary" @click="submitForm">Guardar</BaseButton>
                     <BaseButton size="sm" variant="tertiary" @click="resetForm">Limpiar</BaseButton>
                   </div>
-                </div>
-
-                <div class="overflow-auto flex-1">
-                  <ul class="space-y-2 p-1">
-                    <li v-for="g in paginatedGeofences" :key="g.geofence_id" class="flex items-center justify-between">
-                      <div class="flex-1">
-                        <button
-                          @click="selectGeofence(g)"
-                          class="w-full text-left p-2 rounded hover:bg-white/50"
-                        >
-                          <div class="font-medium">{{ g.name }}</div>
-                          <div class="text-xs text-gray-500">ID: {{ g.geofence_id }}</div>
-                        </button>
-                      </div>
-                      <div class="ml-2">
-                        <BaseButton size="sm" variant="tertiary" @click="deleteGeofence(g)" title="Eliminar">
-                          <TrashIcon class="w-4 h-4" />
-                        </BaseButton>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-
-                <div class="mt-2 flex items-center justify-between text-sm">
-                  <div class="text-gray-600">Mostrando {{ startItem }}-{{ endItem }} de {{ geofences.length }}</div>
-                  <div class="flex items-center gap-2">
-                    <button :disabled="currentPage===1" @click="prevPage" class="px-2 py-1 bg-gray-100 rounded disabled:opacity-50">Prev</button>
-                    <button v-for="p in pages" :key="p" @click="goToPage(p)" :class="['px-2 py-1 rounded', p===currentPage? 'bg-blue-600 text-white' : 'bg-gray-100']">{{ p }}</button>
-                    <button :disabled="currentPage===totalPages" @click="nextPage" class="px-2 py-1 bg-gray-100 rounded disabled:opacity-50">Next</button>
-                  </div>
-                </div>
-              </div>
+                </template>
+              </CrudList>
 
             <div class="flex-1 min-h-0">
-              <div id="map" class="h-full w-full rounded-md border border-gray-200 bg-gray-50"></div>
+              <MapLibreMap ref="mapRef" :geofences="geofences" @map-click="onMapClick" />
             </div>
           </div>
         </BaseCard>
@@ -114,8 +87,8 @@ import { authService } from '../../services/auth.service'
 import { useToast } from '../../composables/useToast'
 import { geofenceService } from '../../services/geofence.service'
 import type { Geofence } from '../../types/geofence.types'
-import L from 'leaflet'
-import 'leaflet/dist/leaflet.css'
+import MapLibreMap from '../../components/layout/MapLibreMap.vue'
+import CrudList from '../../components/layout/CrudList.vue'
 import { TrashIcon } from '@heroicons/vue/24/outline'
 
 const router = useRouter()
@@ -125,9 +98,7 @@ const geofences = ref<Geofence[]>([])
 const selected = ref<Geofence | null>(null)
 const showForm = ref(false)
 const form = ref<Partial<Geofence>>({ name: '', type: '', radius: 50, polygon_coordinates: null })
-let map: L.Map | null = null
-let markersLayer: L.LayerGroup | null = null
-let selectedMarker: L.Marker | null = null
+const mapRef = ref<any>(null)
 // Pagination
 const pageSize = 10
 const currentPage = ref(1)
@@ -159,6 +130,13 @@ watch(geofences, () => {
   if (currentPage.value > totalPages.value) currentPage.value = totalPages.value
 })
 
+async function loadGeofences() {
+  try {
+    geofences.value = await geofenceService.list()
+  } catch (err: any) {
+    toast.error(err?.message || 'Error cargando geofences')
+  }
+}
 onMounted(async () => {
   user.value = authService.getUser()
   try {
@@ -169,101 +147,16 @@ onMounted(async () => {
     toast.error('Tu sesión ha caducado. Vuelve a iniciar sesión.')
     await authService.logout()
     router.push('/login')
+    return
   }
-    await loadGeofences()
-    initMap()
+
+  await loadGeofences()
 })
 
-const handleLogout = async () => {
-  await authService.logout()
-  router.push('/login')
-}
-
-function createGeofence() {
-  alert('Crear Geofence - implementar formulario')
-}
-
-async function loadGeofences() {
-  try {
-    geofences.value = await geofenceService.list()
-  } catch (err: any) {
-    toast.error(err?.message || 'Error cargando geofences')
-  }
-}
-
-function initMap() {
-  // Initialize map
-  map = L.map('map').setView([0, 0], 2)
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors',
-  }).addTo(map)
-
-  markersLayer = L.layerGroup().addTo(map)
-  renderGeofences()
-
-  // click to choose coordinates when creating
-  map.on('click', (e: L.LeafletMouseEvent) => {
-    if (!showForm.value) return
-    const { lat, lng } = e.latlng
-    form.value.center_latitude = lat
-    form.value.center_longitude = lng
-
-    if (selectedMarker) {
-      selectedMarker.setLatLng([lat, lng])
-    } else {
-      selectedMarker = L.marker([lat, lng]).addTo(map!)
-    }
-  })
-}
-
-function renderGeofences() {
-  if (!map || !markersLayer) return
-  markersLayer.clearLayers()
-
-  if (geofences.value.length === 0) return
-
-  const bounds: L.LatLngBoundsExpression[] = []
-
-  geofences.value.forEach((g) => {
-    if (g.center_latitude != null && g.center_longitude != null) {
-      const lat = Number(g.center_latitude)
-      const lng = Number(g.center_longitude)
-      const marker = L.circle([lat, lng], {
-        radius: g.radius ?? 50,
-        color: '#3b82f6',
-        fillOpacity: 0.2,
-      }).bindPopup(`<strong>${g.name}</strong>`)
-      marker.addTo(markersLayer!)
-      bounds.push([lat, lng])
-    }
-    // If polygon_coordinates exist (assumed GeoJSON or array of coords), try to draw polygon
-    if (g.polygon_coordinates) {
-      try {
-        const coords = typeof g.polygon_coordinates === 'string'
-          ? JSON.parse(g.polygon_coordinates)
-          : g.polygon_coordinates
-
-        // Expect array of [lat, lng] pairs or GeoJSON-like structure
-        if (Array.isArray(coords) && coords.length > 0) {
-          const latlngs = coords.map((c: any) => [Number(c[0]), Number(c[1])])
-          const poly = L.polygon(latlngs, { color: '#f97316', fillOpacity: 0.1 }).bindPopup(`<strong>${g.name}</strong>`)
-          poly.addTo(markersLayer!)
-          bounds.push(latlngs[0])
-        }
-      } catch (e) {
-        // ignore parse errors
-      }
-    }
-  })
-
-  if (bounds.length > 0 && map) {
-    map.fitBounds(bounds as any)
-  }
-}
+// map rendering is handled by `MapLibreMap` component
 
 function selectGeofence(g: Geofence) {
   selected.value = g
-  // populate form for editing
   form.value = {
     geofence_id: g.geofence_id,
     name: g.name,
@@ -275,15 +168,11 @@ function selectGeofence(g: Geofence) {
   }
   showForm.value = true
 
-  if (g.center_latitude != null && g.center_longitude != null && map) {
+  if (g.center_latitude != null && g.center_longitude != null) {
     const lat = Number(g.center_latitude)
     const lng = Number(g.center_longitude)
-    if (selectedMarker) {
-      selectedMarker.setLatLng([lat, lng])
-    } else {
-      selectedMarker = L.marker([lat, lng]).addTo(map!)
-    }
-    map.setView([lat, lng], 14)
+    try { mapRef.value?.setSelectedMarker(lng, lat) } catch (e) {}
+    try { mapRef.value?.flyTo(lng, lat, 14) } catch (e) {}
   }
 }
 
@@ -291,10 +180,12 @@ function resetForm() {
   form.value = { name: '', type: '', radius: 50, polygon_coordinates: null }
   showForm.value = false
   selected.value = null
-  if (selectedMarker && map) {
-    map.removeLayer(selectedMarker)
-    selectedMarker = null
-  }
+  try { mapRef.value?.removeSelectedMarker() } catch (e) {}
+}
+
+function onMapClick(p: { lng: number; lat: number }) {
+  form.value.center_latitude = p.lat
+  form.value.center_longitude = p.lng
 }
 
 async function submitForm() {
@@ -313,7 +204,6 @@ async function submitForm() {
       toast && toast.success && toast.success('Geofence creado')
     }
     await loadGeofences()
-    renderGeofences()
     resetForm()
   } catch (err: any) {
     toast.error(err?.message || 'Error creando geofence')
@@ -325,7 +215,6 @@ async function deleteGeofence(g: Geofence) {
   try {
     await geofenceService.delete(g.geofence_id)
     await loadGeofences()
-    renderGeofences()
     toast && (toast as any).success && (toast as any).success('Geofence eliminado')
   } catch (err: any) {
     toast.error(err?.message || 'Error al eliminar')
