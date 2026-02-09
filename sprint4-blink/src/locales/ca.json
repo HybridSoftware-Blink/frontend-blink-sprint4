@@ -179,6 +179,9 @@
     "empty": "No hi ha dades per mostrar",
     "loading": "Carregant..."
   },
+  "filters": {
+    "clear": "Eliminar filtres"
+  },
   "validation": {
     "fixFormErrors": "Per favor, corregeix els errors del formulari.",
     "name": {

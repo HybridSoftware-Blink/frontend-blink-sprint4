@@ -22,6 +22,41 @@ const options = computed<LocaleOption[]>(() => [
   { value: 'en', labelKey: 'language.en' },
 ]);
 
+const flagSvgs: Record<string, string> = {
+  ca: `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid slice" width="100%" height="100%">
+      <rect width="24" height="24" fill="#FFDD00" />
+      <rect y="2" width="24" height="3" fill="#D90016" />
+      <rect y="7" width="24" height="3" fill="#D90016" />
+      <rect y="12" width="24" height="3" fill="#D90016" />
+      <rect y="17" width="24" height="3" fill="#D90016" />
+    </svg>
+  `,
+  es: `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid slice" width="100%" height="100%">
+      <rect width="24" height="24" fill="#C60B1E" />
+      <rect y="6" width="24" height="12" fill="#FFC400" />
+    </svg>
+  `,
+  en: `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" preserveAspectRatio="xMidYMid slice" width="100%" height="100%">
+      <rect width="60" height="30" fill="#012169" />
+      <!-- white diagonals -->
+      <path d="M0 0 L60 30 M60 0 L0 30" stroke="#fff" stroke-width="6" />
+      <!-- red diagonals -->
+      <path d="M0 0 L60 30 M60 0 L0 30" stroke="#C8102E" stroke-width="4" />
+      <!-- white cross -->
+      <rect x="24" width="12" height="30" fill="#fff" />
+      <rect y="9" width="60" height="12" fill="#fff" />
+      <!-- red cross -->
+      <rect x="26" width="8" height="30" fill="#C8102E" />
+      <rect y="11" width="60" height="8" fill="#C8102E" />
+    </svg>
+  `,
+};
+
+const flagFor = (loc: SupportedLocale) => flagSvgs[String(loc)] || '';
+
 const toggle = () => {
   open.value = !open.value;
 };
@@ -54,8 +89,8 @@ const select = (value: SupportedLocale) => {
       @click="toggle"
       @blur="close"
     >
-      <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-100 text-xs font-bold text-gray-700">
-        {{ String(currentLocale).toUpperCase() }}
+      <span class="inline-flex items-center gap-2">
+        <span class="h-6 w-6 rounded-full overflow-hidden bg-white flag-svg" aria-hidden="true" v-html="flagFor(currentLocale)"></span>
       </span>
       <span class="hidden sm:inline">{{ t(`language.${currentLocale}`) }}</span>
       <svg class="h-4 w-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -82,10 +117,10 @@ const select = (value: SupportedLocale) => {
         @mousedown.prevent
         @click="select(opt.value)"
       >
-        <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-100 text-xs font-bold text-gray-700">
-          {{ String(opt.value).toUpperCase() }}
+        <span class="inline-flex items-center gap-2">
+          <span class="h-6 w-6 rounded-full overflow-hidden bg-white flag-svg" aria-hidden="true" v-html="flagFor(opt.value)"></span>
         </span>
-        <span>{{ t(opt.labelKey) }}</span>
+        <span class="ml-2">{{ t(opt.labelKey) }}</span>
       </button>
     </div>
   </div>

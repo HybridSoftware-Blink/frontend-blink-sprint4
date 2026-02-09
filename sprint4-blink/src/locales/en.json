@@ -179,6 +179,9 @@
     "empty": "No data to display",
     "loading": "Loading..."
   },
+  "filters": {
+    "clear": "Clear filters"
+  },
   "validation": {
     "fixFormErrors": "Please fix the form errors.",
     "name": {
