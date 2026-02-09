@@ -1,102 +1,102 @@
 # Blink — Frontend (Vue 3 + Vite)
 
-## Nom i Descripció
+## Name and description
 
-Blink és una interfície web moderna desenvolupada amb Vue 3 i Vite per gestionar usuaris, autenticació i dades administratives. Està concebuda com a frontend desacoblat que consumeix una API REST (per exemple, un backend en Laravel). L'objectiu és proporcionar una base escalable, accessible i fàcilment extensible per a panells interns i dashboards administratius.
+Blink is a modern web interface built with Vue 3 and Vite for managing users, authentication, and administrative data. It is designed as a decoupled frontend that consumes a REST API (for example, a Laravel backend). The goal is to provide a scalable, accessible, and easily extensible foundation for internal admin panels and dashboards.
 
-## Característiques
+## Features
 
-- Autenticació: inici de sessió, registre i tancament de sessió amb gestió de tokens.
-- Gestió d'usuaris: llistat, cerca, creació, edició i eliminació d'usuaris.
-- Dashboard amb vistes i indicadors principals.
-- Panell d'ajustos per a la configuració de l'usuari i de l'aplicació.
-- Components reutilitzables: botons, targetes, inputs, modals i taules.
-- Sistema de notificacions (toasts) i gestió centralitzada d'errors.
-- Validació de formularis i feedback per millorar l'experiència d'usuari.
+- Authentication: sign in, sign up, and sign out with token management.
+- User management: list, search, create, edit, and delete users.
+- Dashboard with main views and key indicators.
+- Settings panel for user and application configuration.
+- Reusable components: buttons, cards, inputs, modals, and tables.
+- Notification system (toasts) and centralized error handling.
+- Form validation and UX feedback.
 
-## Tecnologies utilitzades
+## Technologies
 
 - Vue 3
 - Vite
 - TypeScript
 - Tailwind CSS
-- Axios o fetch per a crides a l'API (configurat a `src/shared/services/api.service.ts`)
-- Estructura modular per dominis (auth, users, dashboard, settings)
+- Axios or fetch for API requests (configured in `src/shared/services/api.service.ts`)
+- Modular, domain-based project structure (auth, users, dashboard, settings)
 
-## Instal·lació (desenvolupament)
+## Installation (development)
 
-1. Clonar el repositori:
+1. Clone the repository:
 
 ```bash
 git clone <REPO_URL>
 cd sprint4-blink
 ```
 
-2. Instal·lar dependències:
+2. Install dependencies:
 
 ```bash
 npm install
 ```
 
-3. Configurar variables d'entorn:
+3. Configure environment variables:
 
-Copia el fitxer d'exemple i ajusta la URL de l'API:
+Copy the example file and adjust the API URL:
 
 ```bash
 cp .env.example .env.local
-# Edita .env.local i estableix VITE_API_URL
+# Edit .env.local and set VITE_API_URL
 ```
 
-Exemple (desenvolupament):
+Example (development):
 
 ```
 VITE_API_URL=/api
 ```
 
-O, si el backend està en local:
+Or, if your backend runs locally:
 
 ```
 VITE_API_URL=http://localhost:8001/api
 ```
 
-4. Executar en mode desenvolupament:
+4. Run in development mode:
 
 ```bash
 npm run dev
 ```
 
-5. Compilar per producció:
+5. Build for production:
 
 ```bash
 npm run build
 ```
 
-## Ús ràpid
+## Quick start
 
-1. Obre l'aplicació a l'URL que indiqui Vite (per defecte `http://localhost:5173`).
-2. Registra't o inicia sessió des de la pantalla d'autenticació.
-3. Accedeix al Dashboard per veure mètriques i al mòdul d'Usuaris per administrar registres.
-4. Utilitza el panell d'Ajustos per modificar preferències d'usuari.
+1. Open the app at the URL reported by Vite (default `http://localhost:5173`).
+2. Sign up or sign in from the authentication screen.
+3. Visit the Dashboard to view metrics and the Users module to manage records.
+4. Use the Settings panel to change user preferences.
 
-Quan s'inicia sessió, el token s'emmagatzema localment (per exemple a `localStorage`) i s'envia a les peticions com `Authorization: Bearer <token>`.
+When signing in, the token is stored locally (for example in `localStorage`) and sent with requests as `Authorization: Bearer <token>`.
 
-## Estructura del projecte
+## Project structure
 
-Resum de carpetes i fitxers rellevants:
+Summary of relevant folders and files:
 
-- `index.html` — entrada HTML.
-- `src/main.ts` — arrencada de l'aplicació.
-- `src/App.vue` — component arrel.
-- `src/style.css` — estils globals (Tailwind configurat a `tailwind.config.js`).
-- `src/router/index.ts` — definició de rutes.
-- `src/layouts/` — layouts de l'aplicació (AppLayout, Navbar, Sidebar).
-- `src/components/base/` — components base reutilitzables (BaseButton, BaseCard, BaseInput, BaseModal, BaseTable, BaseToast).
-- `src/modules/` — carpetes per domini:
-  - `auth/` — rutes, vistes, serveis i composables relacionats amb autenticació.
-  - `dashboard/` — vistes del panell principal.
-  - `users/` — components (UserTable, UserForm), serveis i validadors.
-  - `settings/` — vistes i composables per a ajustos.
-- `src/shared/` — serveis compartits (`api.service.ts`), composables (`useToast.ts`) i utilitats.
-- `public/` — actius estàtics.
+- `index.html` — HTML entry.
+- `src/main.ts` — application bootstrap.
+- `src/App.vue` — root component.
+- `src/style.css` — global styles (Tailwind configured in `tailwind.config.js`).
+- `src/router/index.ts` — route definitions.
+- `src/layouts/` — application layouts (AppLayout, Navbar, Sidebar).
+- `src/components/base/` — base reusable components (BaseButton, BaseCard, BaseInput, BaseModal, BaseTable, BaseToast).
+- `src/modules/` — domain folders:
+  - `auth/` — routes, views, services and composables related to authentication.
+  - `dashboard/` — main panel views.
+  - `users/` — components (UserTable, UserForm), services and validators.
+  - `settings/` — views and composables for settings.
+- `src/shared/` — shared services (`api.service.ts`), composables (`useToast.ts`) and utilities.
+- `public/` — static assets.
 
-Aquesta estructura facilita treballar per dominis i mantenir components reutilitzables.
+This structure makes it easy to work by domain and keep reusable components.
