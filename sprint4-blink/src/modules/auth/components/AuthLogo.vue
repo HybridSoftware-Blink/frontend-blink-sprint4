@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import blinkLogo from '@/assets/blink-logo.png';
+
 defineProps<{
   size?: 'sm' | 'md' | 'lg';
 }>();
@@ -13,7 +15,7 @@ const sizeClasses = {
 <template>
   <div class="flex justify-center mb-6">
     <img 
-      src="../../assets/blink-logo.png" 
+      :src="blinkLogo" 
       alt="Blink Logo" 
       :class="[sizeClasses[size || 'md'], 'w-auto object-contain', 'shadow-none']"
     />

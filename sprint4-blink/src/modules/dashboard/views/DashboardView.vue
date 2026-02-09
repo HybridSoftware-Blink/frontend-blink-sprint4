@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { useUser } from '../../composables/useUser';
-import { useToast } from '../../composables/useToast';
-import Sidebar from '../../components/layout/Sidebar.vue';
-import Navbar from '../../components/layout/Navbar.vue';
+import { useUser } from '@/modules/auth/composables/useUser';
+import { useToast } from '@/shared/composables/useToast';
+import { authService } from '@/modules/auth/services/auth.service';
+import Sidebar from '@/layouts/components/Sidebar.vue';
+import Navbar from '@/layouts/components/Navbar.vue';
 
 const router = useRouter();
 const toast = useToast();
@@ -29,6 +30,7 @@ onMounted(async () => {
 
 const handleLogout = async () => {
   clearAvatar();
+  await authService.logout();
   router.push('/login');
 };
 </script>

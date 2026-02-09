@@ -45,10 +45,10 @@
 </template>
 
 <script setup lang="ts">
-import { BaseTable } from '../base';
+import { BaseTable } from '@/components/base';
 import { EyeIcon, PencilIcon, TrashIcon } from '@heroicons/vue/24/outline';
-import type { User } from '../../types/user.types';
-import type { TableColumn } from '../base/BaseTable.vue';
+import type { User } from '@/modules/users/types/user.types';
+import type { TableColumn } from '@/components/base/BaseTable.vue';
 
 interface Props {
   users?: User[];

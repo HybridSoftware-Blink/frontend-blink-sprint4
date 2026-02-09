@@ -1,57 +1,20 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import type { RouteRecordRaw } from 'vue-router';
-import { authService } from '../services/auth.service';
+import { authService } from '../modules/auth/services/auth.service';
+import { authRoutes } from '../modules/auth/routes';
+import { dashboardRoutes } from '../modules/dashboard/routes';
+import { settingsRoutes } from '../modules/settings/routes';
+import { usersRoutes } from '../modules/users/routes';
 
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
     redirect: '/login',
   },
-  {
-    path: '/login',
-    name: 'Login',
-    component: () => import('../views/auth/LoginView.vue'),
-    meta: {
-      requiresAuth: false,
-      title: 'Iniciar Sesión',
-    },
-  },
-  {
-    path: '/register',
-    name: 'Register',
-    component: () => import('../views/auth/RegisterView.vue'),
-    meta: {
-      requiresAuth: false,
-      title: 'Registro',
-    },
-  },
-  {
-    path: '/dashboard',
-    name: 'Dashboard',
-    component: () => import('../views/dashboard/DashboardView.vue'),
-    meta: {
-      requiresAuth: true,
-      title: 'Dashboard',
-    },
-  },
-  {
-    path: '/settings',
-    name: 'Settings',
-    component: () => import('../views/settings/SettingsView.vue'),
-    meta: {
-      requiresAuth: true,
-      title: 'Configuración',
-    },
-  },
-  {
-    path: '/users',
-    name: 'Users',
-    component: () => import('../views/users/UsersView.vue'),
-    meta: {
-      requiresAuth: true,
-      title: 'Gestión de Usuarios',
-    },
-  },
+  ...authRoutes,
+  ...dashboardRoutes,
+  ...settingsRoutes,
+  ...usersRoutes,
   {
     path: '/:pathMatch(.*)*',
     redirect: '/login',

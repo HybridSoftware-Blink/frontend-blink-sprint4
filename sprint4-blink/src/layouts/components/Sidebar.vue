@@ -134,7 +134,7 @@ import {
   TruckIcon,
   UsersIcon,
 } from '@heroicons/vue/24/outline'
-import blinkLogo from '../../assets/blink-logo.png'
+import blinkLogo from '@/assets/blink-logo.png'
 
 type NavItem = {
   name: string

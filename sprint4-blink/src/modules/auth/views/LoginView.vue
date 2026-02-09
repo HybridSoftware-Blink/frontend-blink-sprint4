@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
-import { authService } from '../../services/auth.service';
-import type { LoginCredentials } from '../../types/auth.types';
-import { validateLoginCredentials, type ValidationErrors } from '../../utils/userValidation';
-import BaseInput from '../../components/base/BaseInput.vue';
-import BaseButton from '../../components/base/BaseButton.vue';
-import BaseCard from '../../components/base/BaseCard.vue';
-import AuthBackground from '../../components/auth/AuthBackground.vue';
-import AuthLogo from '../../components/auth/AuthLogo.vue';
-import { useToast } from '../../composables/useToast';
+import { authService } from '@/modules/auth/services/auth.service';
+import type { LoginCredentials } from '@/modules/auth/types/auth.types';
+import { validateLoginCredentials, type ValidationErrors } from '@/modules/auth/utils/authValidation';
+import BaseInput from '@/components/base/BaseInput.vue';
+import BaseButton from '@/components/base/BaseButton.vue';
+import BaseCard from '@/components/base/BaseCard.vue';
+import AuthBackground from '@/modules/auth/components/AuthBackground.vue';
+import AuthLogo from '@/modules/auth/components/AuthLogo.vue';
+import { useToast } from '@/shared/composables/useToast';
 
 const router = useRouter();
 const toast = useToast();

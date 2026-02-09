@@ -41,10 +41,10 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import { BaseInput, BaseButton } from '../base';
-import type { User, CreateUserData, UpdateUserData } from '../../types/user.types';
-import { useUserForm } from '../../composables/useUserForm';
-import type { ValidationErrors } from '../../utils/userValidation';
+import { BaseInput, BaseButton } from '@/components/base';
+import type { User, CreateUserData, UpdateUserData } from '@/modules/users/types/user.types';
+import { useUserForm } from '@/modules/users/composables/useUserForm';
+import type { ValidationErrors } from '@/modules/users/utils/userValidation';
 
 interface Props {
   user?: User | null;

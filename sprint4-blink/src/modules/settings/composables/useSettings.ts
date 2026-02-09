@@ -1,15 +1,22 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { authService } from '../services/auth.service'
-import { useUser } from './useUser'
-import { useToast } from './useToast'
+import { authService } from '@/modules/auth/services/auth.service'
+import { useUser } from '@/modules/auth/composables/useUser'
+import { useToast } from '@/shared/composables/useToast'
+import { apiClient } from '@/shared/services/api.service'
 
 export function useSettings() {
   const router = useRouter()
   const toast = useToast()
   const isCollapsed = ref(true)
-  const { loadUser, updateAvatar, avatarUrl, clearAvatar } = useUser()
+  const { user, loadUser, updateAvatar, updateUser, avatarUrl, clearAvatar } = useUser()
   const fileInput = ref<HTMLInputElement | null>(null)
+
+  // Form fields
+  const firstName = ref('')
+  const lastName = ref('')
+  const email = ref('')
+  const currentPassword = ref('')
 
   const toggleSidebar = () => {
     isCollapsed.value = !isCollapsed.value
@@ -18,6 +25,13 @@ export function useSettings() {
   onMounted(async () => {
     try {
       await loadUser()
+      // Load user data into form fields
+      if (user.value) {
+        const nameParts = user.value.name.split(' ')
+        firstName.value = nameParts[0] || ''
+        lastName.value = nameParts.slice(1).join(' ') || ''
+        email.value = user.value.email
+      }
     } catch (_err) {
       toast.error('Tu sesión ha caducado. Vuelve a iniciar sesión.')
       await authService.logout()
@@ -53,15 +67,52 @@ export function useSettings() {
     
     const reader = new FileReader()
     reader.onload = (e) => {
-      const avatarUrl = e.target?.result as string
-      updateAvatar(avatarUrl)
+      const newAvatarUrl = e.target?.result as string
+      updateAvatar(newAvatarUrl)
       toast.success('Avatar actualizado')
     }
     reader.readAsDataURL(file)
   }
 
-  const handlePersonalInfoSubmit = () => {
-    toast.success('Información personal guardada correctamente')
+  const handlePersonalInfoSubmit = async () => {
+    try {
+      if (!user.value?.id) {
+        toast.error('No se pudo obtener la información del usuario')
+        return
+      }
+
+      // Build the full name
+      const fullName = `${firstName.value} ${lastName.value}`.trim()
+      
+      // Prepare the data to update
+      const updateData: any = {
+        name: fullName,
+        email: email.value,
+        phone: user.value.phone, // Mantener el teléfono actual
+      }
+
+      // Only include password if provided
+      if (currentPassword.value) {
+        updateData.password = currentPassword.value
+        updateData.password_confirmation = currentPassword.value
+      }
+
+      // Call API to update user
+      await apiClient.put(`/v1/users/${user.value.id}`, updateData)
+      
+      // Update local user data
+      const updatedUser = {
+        ...user.value,
+        name: fullName,
+        email: email.value,
+      }
+      updateUser(updatedUser)
+
+      toast.success('Información personal guardada correctamente')
+      currentPassword.value = '' // Clear password field
+    } catch (error: any) {
+      toast.error(error?.message || 'Error al actualizar la información')
+    }
   }
 
   const handleDeleteAccount = () => {
@@ -72,6 +123,10 @@ export function useSettings() {
     isCollapsed,
     avatarUrl,
     fileInput,
+    firstName,
+    lastName,
+    email,
+    currentPassword,
     toggleSidebar,
     handleLogout,
     handleAvatarClick,

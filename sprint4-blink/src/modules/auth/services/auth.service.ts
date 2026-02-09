@@ -1,4 +1,4 @@
-import { apiClient } from './api.service';
+import { apiClient } from '@/shared/services/api.service';
 import type { LoginCredentials, RegisterData, AuthResponse, User } from '../types/auth.types';
 
 const AUTH_TOKEN_KEY = 'auth_token';

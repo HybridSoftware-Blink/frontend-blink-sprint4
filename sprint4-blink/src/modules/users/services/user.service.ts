@@ -1,4 +1,4 @@
-import { apiClient } from './api.service';
+import { apiClient } from '@/shared/services/api.service';
 import type { 
   User, 
   CreateUserData, 

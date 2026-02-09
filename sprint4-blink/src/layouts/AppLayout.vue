@@ -22,10 +22,10 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { authService } from '../../services/auth.service';
-import { useUser } from '../../composables/useUser';
-import Navbar from './Navbar.vue';
-import Sidebar from './Sidebar.vue';
+import { authService } from '@/modules/auth/services/auth.service';
+import { useUser } from '@/modules/auth/composables/useUser';
+import Navbar from './components/Navbar.vue';
+import Sidebar from './components/Sidebar.vue';
 
 interface Props {
   title?: string;

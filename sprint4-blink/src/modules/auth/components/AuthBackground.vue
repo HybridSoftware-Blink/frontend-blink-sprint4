@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import backgroundVideo from '@/assets/blackground.mp4';
+
 withDefaults(
   defineProps<{
     showLogo?: boolean;
@@ -19,7 +21,7 @@ withDefaults(
       playsinline
       class="absolute inset-0 w-full h-full object-cover"
     >
-      <source src="../../assets/blackground.mp4" type="video/mp4">
+      <source :src="backgroundVideo" type="video/mp4">
     </video>
     
     <!-- Contenido -->

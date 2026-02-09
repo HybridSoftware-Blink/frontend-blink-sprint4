@@ -54,6 +54,7 @@
                     <label for="first-name" class="block text-sm/6 font-medium text-gray-900 dark:text-white">Nombre</label>
                     <div class="mt-2">
                       <input 
+                        v-model="firstName"
                         type="text" 
                         name="first-name" 
                         id="first-name" 
@@ -67,6 +68,7 @@
                     <label for="last-name" class="block text-sm/6 font-medium text-gray-900 dark:text-white">Apellidos</label>
                     <div class="mt-2">
                       <input 
+                        v-model="lastName"
                         type="text" 
                         name="last-name" 
                         id="last-name" 
@@ -80,6 +82,7 @@
                     <label for="email" class="block text-sm/6 font-medium text-gray-900 dark:text-white">Correo electrónico</label>
                     <div class="mt-2">
                       <input 
+                        v-model="email"
                         id="email" 
                         name="email" 
                         type="email" 
@@ -93,6 +96,7 @@
                     <label for="current-password" class="block text-sm/6 font-medium text-gray-900 dark:text-white">Contraseña actual</label>
                     <div class="mt-2">
                       <input 
+                        v-model="currentPassword"
                         id="current-password" 
                         name="current_password" 
                         type="password" 
@@ -131,16 +135,20 @@
 </template>
 
 <script setup lang="ts">
-import { useSettings } from '../../composables/useSettings'
-import Sidebar from '../../components/layout/Sidebar.vue'
-import Navbar from '../../components/layout/Navbar.vue'
-import userLogo from '../../assets/user_logo.png'
-import BaseButton from '../../components/base/BaseButton.vue'
+import { useSettings } from '@/modules/settings/composables/useSettings'
+import Sidebar from '@/layouts/components/Sidebar.vue'
+import Navbar from '@/layouts/components/Navbar.vue'
+import userLogo from '@/assets/user_logo.png'
+import BaseButton from '@/components/base/BaseButton.vue'
 
 const {
   isCollapsed,
   avatarUrl,
   fileInput,
+  firstName,
+  lastName,
+  email,
+  currentPassword,
   toggleSidebar,
   handleLogout,
   handleAvatarClick,

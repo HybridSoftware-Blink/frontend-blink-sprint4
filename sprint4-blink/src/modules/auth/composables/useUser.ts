@@ -44,15 +44,6 @@ export function useUser() {
     localStorage.removeItem(AVATAR_KEY);
   };
 
-  const getUserInitials = computed(() => {
-    if (!user.value?.name) return '';
-    return user.value.name
-      .split(' ')
-      .slice(0, 2)
-      .map(word => word.charAt(0).toUpperCase())
-      .join('');
-  });
-
   return {
     user: computed(() => user.value),
     avatarUrl: computed(() => avatarUrl.value),
@@ -61,6 +52,5 @@ export function useUser() {
     updateUser,
     getCurrentUser,
     clearAvatar,
-    getUserInitials,
   };
 }

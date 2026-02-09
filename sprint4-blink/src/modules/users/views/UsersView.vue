@@ -177,14 +177,14 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { BaseButton, BaseInput, BaseModal } from '../../components/base';
-import AppLayout from '../../components/layout/AppLayout.vue';
-import UserTable from '../../components/users/UserTable.vue';
-import UserForm from '../../components/users/UserForm.vue';
-import { userService } from '../../services/user.service';
-import type { User, CreateUserData, UpdateUserData } from '../../types/user.types';
-import { useToast } from '../../composables/useToast';
-import { validateUserForm, type ValidationErrors } from '../../utils/userValidation';
+import { BaseButton, BaseInput, BaseModal } from '@/components/base';
+import AppLayout from '@/layouts/AppLayout.vue';
+import UserTable from '@/modules/users/components/UserTable.vue';
+import UserForm from '@/modules/users/components/UserForm.vue';
+import { userService } from '@/modules/users/services/user.service';
+import type { User, CreateUserData, UpdateUserData } from '@/modules/users/types/user.types';
+import { useToast } from '@/shared/composables/useToast';
+import { validateUserForm, type ValidationErrors } from '@/modules/users/utils/userValidation';
 
 const toast = useToast();
 

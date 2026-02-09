@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { BaseButton } from '../base';
+import { BaseButton } from '@/components/base';
 import { computed } from 'vue';
-import { useUser } from '../../composables/useUser';
+import { useUser } from '@/modules/auth/composables/useUser';
 
 interface Props {
     title?: string;
