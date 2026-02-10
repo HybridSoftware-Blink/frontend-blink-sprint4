@@ -5,6 +5,7 @@ import { authRoutes } from '../modules/auth/routes';
 import { dashboardRoutes } from '../modules/dashboard/routes';
 import { settingsRoutes } from '../modules/settings/routes';
 import { usersRoutes } from '../modules/users/routes';
+import { vehiclesRoutes } from '../modules/vehicles/routes.ts';
 import { i18n } from '@/i18n';
 
 const routes: RouteRecordRaw[] = [
@@ -16,6 +17,7 @@ const routes: RouteRecordRaw[] = [
   ...dashboardRoutes,
   ...settingsRoutes,
   ...usersRoutes,
+  ...vehiclesRoutes,
   {
     path: '/:pathMatch(.*)*',
     redirect: '/login',
@@ -58,7 +60,7 @@ router.beforeEach((to, _from, next) => {
   }
 
   // Permitir navegación
-  next();
+  next(); 
 });
 
 export default router;

@@ -11,6 +11,8 @@ interface Props {
   error?: string;
   icon?: 'email' | 'password' | 'search' | 'user' | 'phone';
   showPasswordToggle?: boolean;
+  min?: number;
+  max?: number;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -86,8 +88,18 @@ const updateValue = (event: Event) => {
       </div>
 
       <!-- Input -->
-      <input :id="inputId" :type="type" :value="modelValue" :placeholder="placeholder" :required="required"
-        :disabled="disabled" :class="inputClasses" @input="updateValue" v-on="$attrs" />
+      <input
+        :id="inputId"
+        :type="type"
+        :value="modelValue"
+        :placeholder="placeholder"
+        :required="required"
+        :disabled="disabled"
+        :min="min"
+        :max="max"
+        :class="inputClasses"
+        @input="updateValue"
+      />
 
       <!-- Toggle password visibility -->
       <button v-if="showPasswordToggle" type="button" @click="emit('togglePassword')"

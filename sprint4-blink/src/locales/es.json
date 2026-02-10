@@ -119,6 +119,101 @@
     "deleteAccountDesc": "¿Ya no quieres usar nuestro servicio? Puedes eliminar tu cuenta aquí. Esta acción no es reversible. Toda la información relacionada con esta cuenta se eliminará permanentemente.",
     "deleteAccountCta": "Sí, eliminar mi cuenta"
   },
+  "vehicles": {
+    "title": "Gestión de vehículos",
+    "description": "Administra los vehículos del sistema",
+    "searchPlaceholder": "Buscar por matrícula, marca o modelo...",
+    "loading": "Cargando vehículos...",
+    "empty": "No hay vehículos para mostrar",
+    "table": {
+      "licensePlate": "Matrícula",
+      "brandModel": "Marca y modelo",
+      "color": "Color",
+      "status": "Estado",
+      "battery": "Batería",
+      "createdAt": "Fecha de registro",
+      "actions": "Acciones"
+    },
+    "form": {
+      "licensePlate": "Matrícula",
+      "licensePlatePlaceholder": "ABC1234",
+      "brand": "Marca",
+      "brandPlaceholder": "Tesla, BMW, etc.",
+      "model": "Modelo",
+      "modelPlaceholder": "Model S, i3, etc.",
+      "year": "Año",
+      "yearPlaceholder": "2024",
+      "color": "Color",
+      "colorPlaceholder": "Negro, Blanco, Rojo, etc.",
+      "status": "Estado",
+      "batteryLevel": "Nivel de batería (%)",
+      "batteryLevelPlaceholder": "0-100"
+    },
+    "status": {
+      "available": "Disponible",
+      "in_use": "En uso",
+      "maintenance": "Mantenimiento",
+      "inactive": "Inactivo"
+    },
+    "colors": {
+      "White": "Blanco",
+      "Black": "Negro",
+      "Gray": "Gris",
+      "Silver": "Plata",
+      "Beige": "Beige",
+      "Brown": "Marrón",
+      "Red": "Rojo",
+      "Orange": "Naranja",
+      "Yellow": "Amarillo",
+      "Gold": "Oro",
+      "Pink": "Rosa",
+      "Burgundy": "Burdeos",
+      "Green": "Verde",
+      "Teal": "Turquesa",
+      "Blue": "Azul",
+      "Navy": "Azul marino",
+      "Purple": "Púrpura",
+      "Violet": "Violeta"
+    },
+    "modal": {
+      "deleteTitle": "Eliminar vehículo",
+      "deleteMessage": "¿Estás seguro de que quieres eliminar el vehículo con matrícula {plate}? Esta acción no se puede deshacer.",
+      "detailsTitle": "Detalles del vehículo"
+    },
+    "actions": {
+      "newVehicle": "Nuevo vehículo",
+      "createNewVehicle": "Crear nuevo vehículo",
+      "editVehicle": "Editar vehículo",
+      "create": "Crear vehículo",
+      "update": "Actualizar vehículo"
+    },
+    "toast": {
+      "created": "Vehículo creado correctamente",
+      "updated": "Vehículo actualizado correctamente",
+      "deleted": "Vehículo eliminado correctamente"
+    },
+    "errors": {
+      "load": "Error al cargar vehículos",
+      "searchEndpointUnavailable": "El endpoint de búsqueda no está disponible. Recarga para ver todos los vehículos.",
+      "search": "Error al buscar vehículos",
+      "save": "Error al guardar el vehículo",
+      "delete": "Error al eliminar el vehículo",
+      "notFound": "Vehículo no encontrado. Puede que ya haya sido eliminado."
+    },
+    "validation": {
+      "licensePlateRequired": "La matrícula es obligatoria",
+      "licensePlateLength": "La matrícula debe tener entre 6 y 10 caracteres",
+      "brandRequired": "La marca es obligatoria",
+      "brandLength": "La marca debe tener al menos 2 caracteres",
+      "modelRequired": "El modelo es obligatorio",
+      "modelLength": "El modelo debe tener al menos 2 caracteres",
+      "yearRequired": "El año es obligatorio",
+      "yearRange": "El año debe estar entre 1900 y el año actual",
+      "colorRequired": "El color es obligatorio",
+      "statusRequired": "El estado es obligatorio",
+      "batteryLevelRange": "El nivel de batería debe estar entre 0 y 100"
+    }
+  },
   "users": {
     "title": "Gestión de usuarios",
     "description": "Administra los usuarios del sistema",

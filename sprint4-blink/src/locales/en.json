@@ -119,6 +119,101 @@
     "deleteAccountDesc": "No longer want to use our service? You can delete your account here. This action cannot be undone. All information related to this account will be permanently deleted.",
     "deleteAccountCta": "Yes, delete my account"
   },
+  "vehicles": {
+    "title": "Vehicle management",
+    "description": "Manage system vehicles",
+    "searchPlaceholder": "Search by license plate, brand or model...",
+    "loading": "Loading vehicles...",
+    "empty": "No vehicles to display",
+    "table": {
+      "licensePlate": "License Plate",
+      "brandModel": "Brand & Model",
+      "color": "Color",
+      "status": "Status",
+      "battery": "Battery",
+      "createdAt": "Created at",
+      "actions": "Actions"
+    },
+    "form": {
+      "licensePlate": "License Plate",
+      "licensePlatePlaceholder": "ABC1234",
+      "brand": "Brand",
+      "brandPlaceholder": "Tesla, BMW, etc.",
+      "model": "Model",
+      "modelPlaceholder": "Model S, i3, etc.",
+      "year": "Year",
+      "yearPlaceholder": "2024",
+      "color": "Color",
+      "colorPlaceholder": "Black, White, Red, etc.",
+      "status": "Status",
+      "batteryLevel": "Battery Level (%)",
+      "batteryLevelPlaceholder": "0-100"
+    },
+    "status": {
+      "available": "Available",
+      "in_use": "In Use",
+      "maintenance": "Maintenance",
+      "inactive": "Inactive"
+    },
+    "colors": {
+      "White": "White",
+      "Black": "Black",
+      "Gray": "Gray",
+      "Silver": "Silver",
+      "Beige": "Beige",
+      "Brown": "Brown",
+      "Red": "Red",
+      "Orange": "Orange",
+      "Yellow": "Yellow",
+      "Gold": "Gold",
+      "Pink": "Pink",
+      "Burgundy": "Burgundy",
+      "Green": "Green",
+      "Teal": "Teal",
+      "Blue": "Blue",
+      "Navy": "Navy",
+      "Purple": "Purple",
+      "Violet": "Violet"
+    },
+    "modal": {
+      "deleteTitle": "Delete vehicle",
+      "deleteMessage": "Are you sure you want to delete the vehicle with license plate {plate}? This action cannot be undone.",
+      "detailsTitle": "Vehicle details"
+    },
+    "actions": {
+      "newVehicle": "New vehicle",
+      "createNewVehicle": "Create new vehicle",
+      "editVehicle": "Edit vehicle",
+      "create": "Create vehicle",
+      "update": "Update vehicle"
+    },
+    "toast": {
+      "created": "Vehicle created successfully",
+      "updated": "Vehicle updated successfully",
+      "deleted": "Vehicle deleted successfully"
+    },
+    "errors": {
+      "load": "Error loading vehicles",
+      "searchEndpointUnavailable": "Search endpoint is not available. Reload to see all vehicles.",
+      "search": "Error searching vehicles",
+      "save": "Error saving vehicle",
+      "delete": "Error deleting vehicle",
+      "notFound": "Vehicle not found. It may have already been deleted."
+    },
+    "validation": {
+      "licensePlateRequired": "License plate is required",
+      "licensePlateLength": "License plate must be between 6 and 10 characters",
+      "brandRequired": "Brand is required",
+      "brandLength": "Brand must be at least 2 characters",
+      "modelRequired": "Model is required",
+      "modelLength": "Model must be at least 2 characters",
+      "yearRequired": "Year is required",
+      "yearRange": "Year must be between 1900 and current year",
+      "colorRequired": "Color is required",
+      "statusRequired": "Status is required",
+      "batteryLevelRange": "Battery level must be between 0 and 100"
+    }
+  },
   "users": {
     "title": "User management",
     "description": "Manage system users",

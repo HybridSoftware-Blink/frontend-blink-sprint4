@@ -119,6 +119,101 @@
     "deleteAccountDesc": "Ja no vols utilitzar el nostre servei? Pots eliminar el teu compte ací. Aquesta acció no és reversible. Tota la informació relacionada amb aquest compte s’eliminarà permanentment.",
     "deleteAccountCta": "Sí, eliminar el meu compte"
   },
+  "vehicles": {
+    "title": "Gestió de vehicles",
+    "description": "Administra els vehicles del sistema",
+    "searchPlaceholder": "Busca per matrícula, marca o model...",
+    "loading": "Carregant vehicles...",
+    "empty": "No hi ha vehicles per mostrar",
+    "table": {
+      "licensePlate": "Matrícula",
+      "brandModel": "Marca i model",
+      "color": "Color",
+      "status": "Estat",
+      "battery": "Bateria",
+      "createdAt": "Data de registre",
+      "actions": "Accions"
+    },
+    "form": {
+      "licensePlate": "Matrícula",
+      "licensePlatePlaceholder": "ABC1234",
+      "brand": "Marca",
+      "brandPlaceholder": "Tesla, BMW, etc.",
+      "model": "Model",
+      "modelPlaceholder": "Model S, i3, etc.",
+      "year": "Any",
+      "yearPlaceholder": "2024",
+      "color": "Color",
+      "colorPlaceholder": "Negre, Blanc, Vermell, etc.",
+      "status": "Estat",
+      "batteryLevel": "Nivell de bateria (%)",
+      "batteryLevelPlaceholder": "0-100"
+    },
+    "status": {
+      "available": "Disponible",
+      "in_use": "En ús",
+      "maintenance": "Manteniment",
+      "inactive": "Inactiu"
+    },
+    "colors": {
+      "White": "Blanc",
+      "Black": "Negre",
+      "Gray": "Gris",
+      "Silver": "Plata",
+      "Beige": "Beix",
+      "Brown": "Marró",
+      "Red": "Vermell",
+      "Orange": "Taronja",
+      "Yellow": "Groc",
+      "Gold": "Or",
+      "Pink": "Rosa",
+      "Burgundy": "Borgonya",
+      "Green": "Verd",
+      "Teal": "Turquesa",
+      "Blue": "Blau",
+      "Navy": "Blau marí",
+      "Purple": "Porpra",
+      "Violet": "Violeta"
+    },
+    "modal": {
+      "deleteTitle": "Eliminar vehicle",
+      "deleteMessage": "Estàs segur que vols eliminar el vehicle amb matrícula {plate}? Aquesta acció no es pot desfer.",
+      "detailsTitle": "Detalls del vehicle"
+    },
+    "actions": {
+      "newVehicle": "Nou vehicle",
+      "createNewVehicle": "Crear nou vehicle",
+      "editVehicle": "Editar vehicle",
+      "create": "Crear vehicle",
+      "update": "Actualitzar vehicle"
+    },
+    "toast": {
+      "created": "Vehicle creat correctament",
+      "updated": "Vehicle actualitzat correctament",
+      "deleted": "Vehicle eliminat correctament"
+    },
+    "errors": {
+      "load": "Error en carregar vehicles",
+      "searchEndpointUnavailable": "L'endpoint de cerca no està disponible. Recarrega per veure tots els vehicles.",
+      "search": "Error en buscar vehicles",
+      "save": "Error en guardar el vehicle",
+      "delete": "Error en eliminar el vehicle",
+      "notFound": "Vehicle no trobat. Potser ja ha sigut eliminat."
+    },
+    "validation": {
+      "licensePlateRequired": "La matrícula és obligatòria",
+      "licensePlateLength": "La matrícula ha de tenir entre 6 i 10 caràcters",
+      "brandRequired": "La marca és obligatòria",
+      "brandLength": "La marca ha de tenir com a mínim 2 caràcters",
+      "modelRequired": "El model és obligatori",
+      "modelLength": "El model ha de tenir com a mínim 2 caràcters",
+      "yearRequired": "L'any és obligatori",
+      "yearRange": "L'any ha de ser entre 1900 i l'any actual",
+      "colorRequired": "El color és obligatori",
+      "statusRequired": "L'estat és obligatori",
+      "batteryLevelRange": "El nivell de bateria ha de ser entre 0 i 100"
+    }
+  },
   "users": {
     "title": "Gestió d’usuaris",
     "description": "Administra els usuaris del sistema",
