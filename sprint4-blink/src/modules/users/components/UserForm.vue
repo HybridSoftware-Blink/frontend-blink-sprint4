@@ -30,12 +30,13 @@
 
     <!-- Row 3: Password and Confirmation -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <BaseInput v-model="formData.password" :label="$t('users.form.password')" type="password" :placeholder="$t('users.form.passwordPlaceholder')"
-        :error="formatError((errors as any).password)" :required="!isEditing" />
+      <BaseInput v-model="formData.password" :label="$t('users.form.password')" :placeholder="$t('users.form.passwordPlaceholder')"
+        :error="formatError((errors as any).password)" :required="!isEditing"
+        :type="showPassword ? 'text' : 'password'" :showPasswordToggle="true" @togglePassword="toggleShowPassword" />
 
-      <BaseInput v-model="formData.password_confirmation" :label="$t('users.form.passwordConfirmation')" type="password"
+      <BaseInput v-model="formData.password_confirmation" :label="$t('users.form.passwordConfirmation')"
         :placeholder="$t('users.form.passwordPlaceholder')" :error="formatError((errors as any).password_confirmation || passwordMismatchError)"
-        :required="!isEditing && !!formData.password" />
+        :required="!isEditing && !!formData.password" :type="showPasswordConfirmation ? 'text' : 'password'" :showPasswordToggle="true" @togglePassword="toggleShowPasswordConfirmation" />
     </div>
 
     <div class="flex justify-end space-x-3 pt-4">
@@ -122,6 +123,17 @@ watch(
 );
 
 const { passwordMismatchError, onPhoneKeydown, onPhonePaste } = useUserForm(formData);
+
+const showPassword = ref(false);
+const showPasswordConfirmation = ref(false);
+
+const toggleShowPassword = () => {
+  showPassword.value = !showPassword.value;
+};
+
+const toggleShowPasswordConfirmation = () => {
+  showPasswordConfirmation.value = !showPasswordConfirmation.value;
+};
 
 const handleSubmit = () => {
   if (passwordMismatchError.value) return;
