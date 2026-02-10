@@ -9,6 +9,30 @@ import type {
 // LocalStorage key per guardar els nivells de bateria
 const BATTERY_STORAGE_KEY = 'vehicle_battery_levels';
 
+/**
+ * Generates a deterministic battery level for a vehicle based on its ID.
+ * 
+ * The formula ensures:
+ * - Battery levels are consistent for the same vehicle ID
+ * - Range is between 20% and 100% (avoiding very low batteries)
+ * - Values are evenly distributed using modulo arithmetic
+ * 
+ * Formula breakdown:
+ * - Base: 20 (minimum battery level)
+ * - Range span: 81 (0-80 added to base 20, giving final range of 20-100)
+ * - Multiplier: 17 (prime number for better distribution)
+ * 
+ * @param vehicleId - The unique identifier of the vehicle
+ * @returns Battery level between 20 and 100
+ */
+const generateInitialBatteryLevel = (vehicleId: number): number => {
+  const BASE_LEVEL = 20;
+  const BATTERY_RANGE_SPAN = 81;
+  const DISTRIBUTION_MULTIPLIER = 17;
+  
+  return BASE_LEVEL + (vehicleId * DISTRIBUTION_MULTIPLIER) % BATTERY_RANGE_SPAN;
+};
+
 // Funcions auxiliars per gestionar battery_level
 const getBatteryLevels = (): Record<number, number> => {
   try {
@@ -54,7 +78,7 @@ export const vehicleService = {
           batteryLevel = storedLevel;
         } else {
           // Generar valor inicial consistent
-          batteryLevel = 20 + (vehicleId * 17) % 81;
+          batteryLevel = generateInitialBatteryLevel(vehicleId);
           // Guardar el valor inicial
           saveBatteryLevel(vehicleId, batteryLevel);
         }
@@ -150,7 +174,7 @@ export const vehicleService = {
         if (storedLevel !== undefined) {
           batteryLevel = storedLevel;
         } else {
-          batteryLevel = 20 + (vehicleId * 17) % 81;
+          batteryLevel = generateInitialBatteryLevel(vehicleId);
           saveBatteryLevel(vehicleId, batteryLevel);
         }
       }
