@@ -19,7 +19,7 @@ const BATTERY_STORAGE_KEY = 'vehicle_battery_levels';
  * 
  * Formula breakdown:
  * - Base: 20 (minimum battery level)
- * - Range: 81 (gives us 20-100, which is an 81-point range)
+ * - Range span: 81 (0-80 added to base 20, giving final range of 20-100)
  * - Multiplier: 17 (prime number for better distribution)
  * 
  * @param vehicleId - The unique identifier of the vehicle
@@ -27,10 +27,10 @@ const BATTERY_STORAGE_KEY = 'vehicle_battery_levels';
  */
 const generateInitialBatteryLevel = (vehicleId: number): number => {
   const BASE_LEVEL = 20;
-  const RANGE = 81;
+  const BATTERY_RANGE_SPAN = 81;
   const DISTRIBUTION_MULTIPLIER = 17;
   
-  return BASE_LEVEL + (vehicleId * DISTRIBUTION_MULTIPLIER) % RANGE;
+  return BASE_LEVEL + (vehicleId * DISTRIBUTION_MULTIPLIER) % BATTERY_RANGE_SPAN;
 };
 
 // Funcions auxiliars per gestionar battery_level
