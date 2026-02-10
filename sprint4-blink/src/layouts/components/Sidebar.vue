@@ -190,7 +190,7 @@ const clienteNavigation = computed<NavItem[]>(() => [
 
 const adminNavigation = computed<NavItem[]>(() => [
   { nameKey: 'nav.users', href: '/users', icon: UsersIcon },
-  { nameKey: 'nav.vehicles', href: '#', icon: TruckIcon, count: '12' },
+  { nameKey: 'nav.vehicles', href: '/vehicles', icon: TruckIcon },
   { nameKey: 'nav.bookings', href: '#', icon: ChartPieIcon },
   { nameKey: 'nav.geofencing', href: '#', icon: MapPinIcon, count: '20+' },
   { nameKey: 'nav.tickets', href: '#', icon: TicketIcon },
