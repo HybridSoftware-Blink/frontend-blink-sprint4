@@ -61,7 +61,7 @@
             <div
               v-if="formData.color"
               class="size-6 rounded-full border-2 border-gray-300"
-              :style="{ backgroundColor: getColorHex(formData.color) }"
+              :style="{ backgroundColor: getVehicleColorCode(formData.color) }"
             />
             <span :class="formData.color ? 'text-gray-900' : 'text-gray-400'">
               {{ formData.color ? t(`vehicles.colors.${formData.color}`) : t('vehicles.form.colorPlaceholder') }}
@@ -91,9 +91,13 @@
                 v-for="colorOption in colorOptions"
                 :key="colorOption.value"
                 type="button"
+                tabindex="0"
                 @click.stop="selectColor(colorOption.value)"
+                @keydown.enter.prevent="selectColor(colorOption.value)"
+                @keydown.space.prevent="selectColor(colorOption.value)"
                 class="relative group"
                 :title="colorOption.label"
+                :aria-label="t(`vehicles.colors.${colorOption.value}`)"
               >
                 <div
                   class="size-10 rounded-full border-2 transition-all hover:scale-110"
@@ -168,9 +172,13 @@
               v-for="statusOption in statusOptions"
               :key="statusOption.value"
               type="button"
+              tabindex="0"
               @click.stop="selectStatus(statusOption.value)"
+              @keydown.enter.prevent="selectStatus(statusOption.value)"
+              @keydown.space.prevent="selectStatus(statusOption.value)"
               class="w-full px-4 py-2 text-left hover:bg-gray-100 transition-colors flex items-center justify-between"
               :class="formData.status === statusOption.value ? 'bg-purple-50 text-purple-700' : 'text-gray-900'"
+              :aria-label="t(`vehicles.status.${statusOption.value}`)"
             >
               <span>{{ t(`vehicles.status.${statusOption.value}`) }}</span>
               <svg
@@ -233,6 +241,7 @@ import { computed, reactive, watch, ref, onMounted, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { BaseInput, BaseButton } from '@/components/base';
 import type { CreateVehicleData, Vehicle } from '../types/vehicle.types';
+import { getVehicleColorCode } from '../utils/vehicleColors';
 import type { ValidationErrors } from '@/shared/utils/validators';
 
 interface Props {
@@ -313,12 +322,6 @@ const batteryLevelModel = computed({
     }
   },
 });
-
-// Funció per obtenir el codi hexadecimal d'un color
-const getColorHex = (colorName: string): string => {
-  const color = colorOptions.find(c => c.value === colorName);
-  return color?.hex || '#6B7280';
-};
 
 // Funció per seleccionar un color i tancar el popup
 const selectColor = (colorValue: string) => {

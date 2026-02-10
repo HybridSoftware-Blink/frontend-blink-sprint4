@@ -7,7 +7,7 @@ export const vehiclesRoutes: RouteRecordRaw[] = [
     component: () => import('./views/VehiclesView.vue'),
     meta: {
       requiresAuth: true,
-      title: 'vehicles.title',
+      titleKey: 'vehicles.title',
     },
   },
 ];

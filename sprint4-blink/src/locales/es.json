@@ -208,7 +208,7 @@
       "modelRequired": "El modelo es obligatorio",
       "modelLength": "El modelo debe tener al menos 2 caracteres",
       "yearRequired": "El año es obligatorio",
-      "yearRange": "El año debe estar entre 1900 y el año actual",
+      "yearRange": "El año debe estar entre 2000 y el año siguiente",
       "colorRequired": "El color es obligatorio",
       "statusRequired": "El estado es obligatorio",
       "batteryLevelRange": "El nivel de batería debe estar entre 0 y 100"

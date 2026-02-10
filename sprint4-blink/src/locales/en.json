@@ -208,7 +208,7 @@
       "modelRequired": "Model is required",
       "modelLength": "Model must be at least 2 characters",
       "yearRequired": "Year is required",
-      "yearRange": "Year must be between 1900 and current year",
+      "yearRange": "Year must be between 2000 and next year",
       "colorRequired": "Color is required",
       "statusRequired": "Status is required",
       "batteryLevelRange": "Battery level must be between 0 and 100"

@@ -143,7 +143,7 @@
                       <div class="flex items-center gap-2 mt-1">
                         <div
                           class="size-6 rounded-full border-2 border-gray-300"
-                          :style="{ backgroundColor: getColorCode(viewingVehicle.color) }"
+                          :style="{ backgroundColor: getVehicleColorCode(viewingVehicle.color) }"
                           :title="$t(`vehicles.colors.${viewingVehicle.color}`)"
                         />
                         <p class="text-base text-gray-900">{{ $t(`vehicles.colors.${viewingVehicle.color}`) }}</p>
@@ -152,7 +152,7 @@
                     <div class="border-b pb-4">
                       <p class="text-sm font-medium text-gray-500">{{ $t('vehicles.table.status') }}</p>
                       <span class="inline-flex px-2 py-1 text-xs leading-5 font-semibold rounded-full"
-                        :class="getStatusClasses(viewingVehicle.status)">
+                        :class="getVehicleStatusClasses(viewingVehicle.status)">
                         {{ $t(`vehicles.status.${viewingVehicle.status}`) }}
                       </span>
                     </div>
@@ -192,7 +192,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed, watch } from 'vue';
+import { ref, onMounted, onUnmounted, watch } from 'vue';
 import { BaseButton, BaseInput, BaseModal } from '@/components/base';
 import AppLayout from '@/layouts/AppLayout.vue';
 import VehicleTable from '@/modules/vehicles/components/VehicleTable.vue';
@@ -201,11 +201,20 @@ import { vehicleService } from '@/modules/vehicles/services/vehicle.service';
 import type { Vehicle, CreateVehicleData, UpdateVehicleData } from '@/modules/vehicles/types/vehicle.types';
 import { useToast } from '@/shared/composables/useToast';
 import { validateVehicleForm } from '@/modules/vehicles/utils/vehicleValidation';
+import { getVehicleColorCode, getBatteryColorClass, getVehicleStatusClasses } from '@/modules/vehicles/utils/vehicleColors';
+import { useDateFormatter } from '@/modules/vehicles/composables/useDateFormatter';
 import type { ValidationErrors } from '@/shared/utils/validators';
 import { useI18n } from 'vue-i18n';
 
 const toast = useToast();
-const { t, te, locale } = useI18n();
+const { t, te } = useI18n();
+const { formatDate } = useDateFormatter({
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+});
 
 const translateErrorMessage = (message: unknown, fallback: string) => {
   const msg = typeof message === 'string' ? message : '';
@@ -272,6 +281,11 @@ watch(searchQuery, (newQuery) => {
       vehicles.value = allVehicles.value;
     }
   }, 300);
+});
+
+// Netejar timeout quan es desmunta el component
+onUnmounted(() => {
+  clearTimeout(searchTimeout);
 });
 
 // Refrescar vehículos
@@ -392,68 +406,6 @@ const handleDelete = async () => {
   } finally {
     deleting.value = false;
   }
-};
-
-const getStatusClasses = (status: string) => {
-  const classes: Record<string, string> = {
-    available: 'bg-green-100 text-green-800',
-    in_use: 'bg-blue-100 text-blue-800',
-    maintenance: 'bg-yellow-100 text-yellow-800',
-    inactive: 'bg-gray-100 text-gray-800',
-  };
-  return classes[status] || 'bg-gray-100 text-gray-800';
-};
-
-const getBatteryColorClass = (level: number) => {
-  if (level > 60) return 'bg-green-500';
-  if (level > 30) return 'bg-yellow-500';
-  return 'bg-red-500';
-};
-
-const getColorCode = (colorName: string): string => {
-  const colorMap: Record<string, string> = {
-    'White': '#FFFFFF',
-    'Black': '#000000',
-    'Gray': '#6B7280',
-    'Silver': '#C0C0C0',
-    'Beige': '#D4A574',
-    'Brown': '#92400E',
-    'Red': '#DC2626',
-    'Orange': '#EA580C',
-    'Yellow': '#EAB308',
-    'Gold': '#F59E0B',
-    'Pink': '#EC4899',
-    'Burgundy': '#881337',
-    'Green': '#16A34A',
-    'Teal': '#14B8A6',
-    'Blue': '#2563EB',
-    'Navy': '#1E3A8A',
-    'Purple': '#9333EA',
-    'Violet': '#7C3AED',
-  };
-
-  return colorMap[colorName] || '#6B7280';
-};
-
-const dateFormatter = computed(() => {
-  const localeMap: Record<string, string> = {
-    ca: 'ca-ES',
-    es: 'es-ES',
-    en: 'en-GB',
-  };
-  const intlLocale = localeMap[String(locale.value)] ?? 'ca-ES';
-
-  return new Intl.DateTimeFormat(intlLocale, {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-});
-
-const formatDate = (date: string): string => {
-  return dateFormatter.value.format(new Date(date));
 };
 
 onMounted(() => {

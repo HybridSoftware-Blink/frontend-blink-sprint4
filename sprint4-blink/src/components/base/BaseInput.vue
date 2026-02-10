@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
+defineOptions({
+  inheritAttrs: false,
+});
+
 interface Props {
   modelValue: string | number;
   type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search';
@@ -98,6 +102,7 @@ const updateValue = (event: Event) => {
         :min="min"
         :max="max"
         :class="inputClasses"
+        v-bind="$attrs"
         @input="updateValue"
       />
 

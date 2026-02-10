@@ -208,7 +208,7 @@
       "modelRequired": "El model és obligatori",
       "modelLength": "El model ha de tenir com a mínim 2 caràcters",
       "yearRequired": "L'any és obligatori",
-      "yearRange": "L'any ha de ser entre 1900 i l'any actual",
+      "yearRange": "L'any ha de ser entre 2000 i l'any següent",
       "colorRequired": "El color és obligatori",
       "statusRequired": "L'estat és obligatori",
       "batteryLevelRange": "El nivell de bateria ha de ser entre 0 i 100"
