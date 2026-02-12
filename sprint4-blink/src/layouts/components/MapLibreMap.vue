@@ -140,34 +140,38 @@ function renderVehicles() {
       // Crear element HTML amb imatge del cotxe
       const el = document.createElement('div')
       el.style.cursor = 'pointer'
-      el.style.width = '48px'
-      el.style.height = '48px'
+      el.style.width = '40px'
+      el.style.height = '40px'
       el.style.position = 'relative'
+      el.style.display = 'flex'
+      el.style.alignItems = 'center'
+      el.style.justifyContent = 'center'
       
-      // Cercle de fons amb el color del vehicle
-      const circle = document.createElement('div')
-      circle.style.width = '48px'
-      circle.style.height = '48px'
-      circle.style.borderRadius = '50%'
-      circle.style.backgroundColor = vehicleColor
-      circle.style.border = `2px solid #000`
-      circle.style.boxShadow = '0 2px 8px rgba(0,0,0,0.3)'
-      circle.style.display = 'flex'
-      circle.style.alignItems = 'center'
-      circle.style.justifyContent = 'center'
-      circle.style.position = 'relative'
-      
-      // Imatge del cotxe amb filtre per fer-la blanca
+      // Imatge del cotxe amb el color del vehicle aplicat
       const img = document.createElement('img')
       img.src = '/car.png'
       img.alt = 'car'
-      img.style.width = '28px'
-      img.style.height = '28px'
+      img.style.width = '40px'
+      img.style.height = '40px'
       img.style.objectFit = 'contain'
-      img.style.filter = 'brightness(0) invert(1)'
+      img.style.filter = `drop-shadow(0 2px 4px rgba(0,0,0,0.3))`
       
-      circle.appendChild(img)
-      el.appendChild(circle)
+      // Wrapper per aplicar el color
+      const colorWrapper = document.createElement('div')
+      colorWrapper.style.width = '40px'
+      colorWrapper.style.height = '40px'
+      colorWrapper.style.backgroundColor = vehicleColor
+      colorWrapper.style.maskImage = 'url(/car.png)'
+      colorWrapper.style.maskSize = 'contain'
+      colorWrapper.style.maskRepeat = 'no-repeat'
+      colorWrapper.style.maskPosition = 'center'
+      colorWrapper.style.webkitMaskImage = 'url(/car.png)'
+      colorWrapper.style.webkitMaskSize = 'contain'
+      colorWrapper.style.webkitMaskRepeat = 'no-repeat'
+      colorWrapper.style.webkitMaskPosition = 'center'
+      colorWrapper.style.filter = 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))'
+      
+      el.appendChild(colorWrapper)
       
       const m = new maplibregl.Marker({ element: el, anchor: 'center' })
         .setLngLat([lng, lat])
