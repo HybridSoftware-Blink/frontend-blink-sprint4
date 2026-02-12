@@ -38,6 +38,13 @@
       "admin": "Admin"
     }
   },
+  "map": {
+    "title": "Mapa de vehicles",
+    "description": "Visualitza la ubicació dels vehicles en temps real",
+    "errors": {
+      "loadVehicles": "Error en carregar els vehicles al mapa"
+    }
+  },
   "auth": {
     "sessionExpired": "La teua sessió ha caducat. Torna a iniciar sessió.",
     "login": {
@@ -212,6 +219,13 @@
       "colorRequired": "El color és obligatori",
       "statusRequired": "L'estat és obligatori",
       "batteryLevelRange": "El nivell de bateria ha de ser entre 0 i 100"
+    },
+    "map": {
+      "title": "Mapa de vehicles",
+      "viewOnMap": "Veure al mapa",
+      "location": "Ubicació",
+      "noLocation": "Sense ubicació disponible",
+      "loading": "Carregant mapa..."
     }
   },
   "users": {

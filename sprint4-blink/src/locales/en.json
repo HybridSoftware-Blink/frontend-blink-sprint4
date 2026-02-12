@@ -38,6 +38,13 @@
       "admin": "Admin"
     }
   },
+  "map": {
+    "title": "Vehicle map",
+    "description": "View vehicle locations in real-time",
+    "errors": {
+      "loadVehicles": "Error loading vehicles on the map"
+    }
+  },
   "auth": {
     "sessionExpired": "Your session has expired. Please sign in again.",
     "login": {
@@ -212,6 +219,13 @@
       "colorRequired": "Color is required",
       "statusRequired": "Status is required",
       "batteryLevelRange": "Battery level must be between 0 and 100"
+    },
+    "map": {
+      "title": "Vehicle map",
+      "viewOnMap": "View on map",
+      "location": "Location",
+      "noLocation": "No location available",
+      "loading": "Loading map..."
     }
   },
   "users": {

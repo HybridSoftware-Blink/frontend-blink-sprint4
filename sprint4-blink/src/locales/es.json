@@ -38,6 +38,13 @@
       "admin": "Admin"
     }
   },
+  "map": {
+    "title": "Mapa de vehículos",
+    "description": "Visualiza la ubicación de los vehículos en tiempo real",
+    "errors": {
+      "loadVehicles": "Error al cargar los vehículos en el mapa"
+    }
+  },
   "auth": {
     "sessionExpired": "Tu sesión ha caducado. Vuelve a iniciar sesión.",
     "login": {
@@ -212,6 +219,13 @@
       "colorRequired": "El color es obligatorio",
       "statusRequired": "El estado es obligatorio",
       "batteryLevelRange": "El nivel de batería debe estar entre 0 y 100"
+    },
+    "map": {
+      "title": "Mapa de vehículos",
+      "viewOnMap": "Ver en el mapa",
+      "location": "Ubicación",
+      "noLocation": "Sin ubicación disponible",
+      "loading": "Cargando mapa..."
     }
   },
   "users": {
