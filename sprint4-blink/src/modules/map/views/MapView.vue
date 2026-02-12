@@ -1,11 +1,18 @@
 <template>
   <AppLayout :title="$t('map.title')">
-    <div class="h-[calc(100vh-5rem)] overflow-hidden">
+    <div class="h-[calc(100vh-5rem)] overflow-hidden relative">
+      <VehicleDetailsSidebar
+        :show="showSidebar"
+        :vehicle="selectedVehicle"
+        @close="closeSidebar"
+      />
+      
       <MapLibreMap
         ref="mapRef"
         :vehicles="vehiclesWithLocation"
         :showGeofences="false"
         @loaded="onMapLoaded"
+        @vehicle-click="handleVehicleClick"
       />
     </div>
   </AppLayout>
@@ -14,12 +21,14 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import AppLayout from '@/layouts/AppLayout.vue';
-import MapLibreMap from '@/layouts/components/MapLibreMap.vue';
+import MapLibreMap from '@/modules/map/components/MapLibreMap.vue';
+import VehicleDetailsSidebar from '@/modules/vehicles/components/VehicleDetailsSidebar.vue';
 import { vehicleService } from '@/modules/vehicles/services/vehicle.service';
 import { useVehicleLocation } from '@/modules/vehicles/composables/useVehicleLocation';
 import { getVehicleColorCode } from '@/modules/vehicles/utils/vehicleColors';
 import { useToast } from '@/shared/composables/useToast';
 import { useI18n } from 'vue-i18n';
+import type { Vehicle } from '@/modules/vehicles/types/vehicle.types';
 
 const { t } = useI18n();
 const toast = useToast();
@@ -27,6 +36,8 @@ const mapRef = ref<InstanceType<typeof MapLibreMap>>();
 const { addRandomLocations } = useVehicleLocation();
 const vehiclesWithLocation = ref<any[]>([]);
 const loading = ref(false);
+const showSidebar = ref(false);
+const selectedVehicle = ref<Vehicle | null>(null);
 
 const loadVehicles = async () => {
   try {
@@ -58,6 +69,16 @@ const onMapLoaded = () => {
       mapRef.value?.fitToAllVehicles();
     }, 500);
   }
+};
+
+const handleVehicleClick = (vehicle: Vehicle) => {
+  selectedVehicle.value = vehicle;
+  showSidebar.value = true;
+};
+
+const closeSidebar = () => {
+  showSidebar.value = false;
+  selectedVehicle.value = null;
 };
 
 onMounted(() => {

@@ -6,15 +6,16 @@
 import { ref, onMounted, watch } from 'vue'
 import maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
+import carIcon from '@/assets/car.png'
 
 const props = defineProps({
   geofences: { type: Array, default: () => [] },
   vehicles: { type: Array, default: () => [] },
   showGeofences: { type: Boolean, default: true },
-  styleUrl: { type: String, default: () => import.meta.env.VITE_MAPTILER_STYLE_URL || '' },
-  apiKey: { type: String, default: () => import.meta.env.VITE_MAPTILER_KEY || '' },
+  styleUrl: { type: String, default: 'https://api.maptiler.com/maps/streets-v2/style.json' },
+  apiKey: { type: String, default: 'xFOOOovCrF7CKH7a7krQ' },
 })
-const emit = defineEmits(['map-click', 'loaded'])
+const emit = defineEmits(['map-click', 'loaded', 'vehicle-click'])
 
 const container = ref<HTMLDivElement | null>(null)
 let map: any = null
@@ -22,6 +23,7 @@ let markers: any[] = [] // geofence markers
 let vehicleMarkers: any[] = []
 let selectedMarker: any = null
 const internalVehicles = ref<any[]>(props.vehicles || [])
+const vehicleMap = new Map() // Per mantenir referència als vehicles per ID
 
 function buildStyleWithKey() {
   const s = (props.styleUrl || '').replace(/\?key=.*$/, '')
@@ -128,8 +130,13 @@ function renderVehicles() {
   clearVehicleMarkers()
   if (!internalVehicles.value || internalVehicles.value.length === 0) return
 
+  // Guardar vehicles en el Map per ID
+  vehicleMap.clear()
+
   internalVehicles.value.forEach((v: any) => {
     if (v.latitude == null || v.longitude == null) return
+    vehicleMap.set(v.id, v)
+
     try {
       const lat = Number(v.latitude)
       const lng = Number(v.longitude)
@@ -139,51 +146,186 @@ function renderVehicles() {
       
       // Crear element HTML amb imatge del cotxe
       const el = document.createElement('div')
+      el.className = 'vehicle-marker'
       el.style.cursor = 'pointer'
       el.style.width = '40px'
       el.style.height = '40px'
-      el.style.position = 'relative'
+      el.style.position = 'absolute'
       el.style.display = 'flex'
       el.style.alignItems = 'center'
       el.style.justifyContent = 'center'
-      
-      // Imatge del cotxe amb el color del vehicle aplicat
-      const img = document.createElement('img')
-      img.src = '/car.png'
-      img.alt = 'car'
-      img.style.width = '40px'
-      img.style.height = '40px'
-      img.style.objectFit = 'contain'
-      img.style.filter = `drop-shadow(0 2px 4px rgba(0,0,0,0.3))`
+      el.style.pointerEvents = 'auto'
+      el.style.willChange = 'transform'
       
       // Wrapper per aplicar el color
       const colorWrapper = document.createElement('div')
       colorWrapper.style.width = '40px'
       colorWrapper.style.height = '40px'
       colorWrapper.style.backgroundColor = vehicleColor
-      colorWrapper.style.maskImage = 'url(/car.png)'
+      colorWrapper.style.maskImage = `url(${carIcon})`
       colorWrapper.style.maskSize = 'contain'
       colorWrapper.style.maskRepeat = 'no-repeat'
       colorWrapper.style.maskPosition = 'center'
-      colorWrapper.style.webkitMaskImage = 'url(/car.png)'
+      colorWrapper.style.webkitMaskImage = `url(${carIcon})`
       colorWrapper.style.webkitMaskSize = 'contain'
       colorWrapper.style.webkitMaskRepeat = 'no-repeat'
       colorWrapper.style.webkitMaskPosition = 'center'
-      colorWrapper.style.filter = 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))'
+      
+      // Afegir ombra més fosca per al cotxe blanc
+      const isLightColor = vehicleColor.toLowerCase() === '#ffffff' || vehicleColor.toLowerCase() === '#white'
+      if (isLightColor) {
+        colorWrapper.style.filter = 'drop-shadow(0 0 2px rgba(0,0,0,0.8)) drop-shadow(0 2px 4px rgba(0,0,0,0.4))'
+      } else {
+        colorWrapper.style.filter = 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))'
+      }
       
       el.appendChild(colorWrapper)
       
-      const m = new maplibregl.Marker({ element: el, anchor: 'center' })
+      // Afegir event listener per clic
+      el.addEventListener('click', () => {
+        emit('vehicle-click', v)
+      })
+      
+      const m = new maplibregl.Marker({ 
+        element: el, 
+        anchor: 'center'
+      })
         .setLngLat([lng, lat])
-        .setPopup(new maplibregl.Popup({ offset: 30 }).setHTML(`
-          <div style="padding: 4px 8px;">
-            <strong style="font-size: 14px;">${v.brand || ''} ${v.model || ''}</strong><br/>
-            <span style="font-size: 12px; color: #666;">${v.license_plate || ''}</span>
-          </div>
-        `))
         .addTo(map)
       vehicleMarkers.push(m)
-    } catch (e) {}
+    } catch (e) {
+      console.error('Error afegint vehicle al mapa:', e)
+    }
+  })
+
+  // Afegir clustering
+  addVehicleClustering()
+}
+
+function addVehicleClustering() {
+  if (!map) return
+
+  // Crear GeoJSON per als vehicles
+  const features = internalVehicles.value
+    .filter((v: any) => v.latitude != null && v.longitude != null)
+    .map((v: any) => ({
+      type: 'Feature',
+      properties: {
+        id: v.id,
+        count: 1
+      },
+      geometry: {
+        type: 'Point',
+        coordinates: [Number(v.longitude), Number(v.latitude)]
+      }
+    }))
+
+  // Eliminar capes de clustering si existeixen
+  if (map.getLayer('vehicle-clusters')) map.removeLayer('vehicle-clusters')
+  if (map.getLayer('vehicle-cluster-count')) map.removeLayer('vehicle-cluster-count')
+  if (map.getSource('vehicle-clusters-source')) map.removeSource('vehicle-clusters-source')
+
+  // Afegir font amb clustering
+  map.addSource('vehicle-clusters-source', {
+    type: 'geojson',
+    data: {
+      type: 'FeatureCollection',
+      features: features
+    },
+    cluster: true,
+    clusterMaxZoom: 13, // Clustering fins a zoom 13
+    clusterRadius: 60
+  })
+
+  // Capa per als clusters
+  map.addLayer({
+    id: 'vehicle-clusters',
+    type: 'circle',
+    source: 'vehicle-clusters-source',
+    filter: ['has', 'point_count'],
+    paint: {
+      'circle-color': '#3b82f6',
+      'circle-radius': [
+        'step',
+        ['get', 'point_count'],
+        20,  // radi 20 per < 10 vehicles
+        10,
+        30,  // radi 30 per >= 10 vehicles
+        30,
+        40   // radi 40 per >= 30 vehicles
+      ],
+      'circle-stroke-width': 3,
+      'circle-stroke-color': '#ffffff',
+      'circle-opacity': 0.9
+    }
+  })
+
+  // Capa per al text dels clusters
+  map.addLayer({
+    id: 'vehicle-cluster-count',
+    type: 'symbol',
+    source: 'vehicle-clusters-source',
+    filter: ['has', 'point_count'],
+    layout: {
+      'text-field': '{point_count_abbreviated}',
+      'text-font': ['Noto Sans Bold'],
+      'text-size': 16
+    },
+    paint: {
+      'text-color': '#ffffff'
+    }
+  })
+
+  // Amagar/mostrar markers segons el zoom
+  const updateMarkersVisibility = () => {
+    const zoom = map.getZoom()
+    const showMarkers = zoom >= 13
+
+    vehicleMarkers.forEach((marker: any) => {
+      const el = marker.getElement()
+      if (el) {
+        el.style.display = showMarkers ? 'flex' : 'none'
+      }
+    })
+
+    // Amagar/mostrar clusters
+    if (map.getLayer('vehicle-clusters')) {
+      map.setLayoutProperty('vehicle-clusters', 'visibility', showMarkers ? 'none' : 'visible')
+    }
+    if (map.getLayer('vehicle-cluster-count')) {
+      map.setLayoutProperty('vehicle-cluster-count', 'visibility', showMarkers ? 'none' : 'visible')
+    }
+  }
+
+  // Actualitzar visibilitat inicialment i en cada zoom
+  map.on('zoom', updateMarkersVisibility)
+  updateMarkersVisibility()
+
+  // Event per expandir clusters en clic
+  map.on('click', 'vehicle-clusters', (e: any) => {
+    const features = map.queryRenderedFeatures(e.point, {
+      layers: ['vehicle-clusters']
+    })
+    if (features.length === 0) return
+    
+    const clusterId = features[0].properties.cluster_id
+    const source = map.getSource('vehicle-clusters-source')
+    
+    source.getClusterExpansionZoom(clusterId, (err: any, zoom: number) => {
+      if (err) return
+      map.easeTo({
+        center: features[0].geometry.coordinates,
+        zoom: Math.max(zoom, 13) // Zoom mínim 13 per veure els markers
+      })
+    })
+  })
+
+  // Canviar cursor en hover sobre clusters
+  map.on('mouseenter', 'vehicle-clusters', () => {
+    map.getCanvas().style.cursor = 'pointer'
+  })
+  map.on('mouseleave', 'vehicle-clusters', () => {
+    map.getCanvas().style.cursor = ''
   })
 }
 

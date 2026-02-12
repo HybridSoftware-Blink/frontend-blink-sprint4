@@ -162,6 +162,11 @@
       "maintenance": "Maintenance",
       "inactive": "Inactive"
     },
+    "battery": {
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low"
+    },
     "colors": {
       "White": "White",
       "Black": "Black",

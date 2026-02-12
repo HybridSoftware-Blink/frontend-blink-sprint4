@@ -162,6 +162,11 @@
       "maintenance": "Manteniment",
       "inactive": "Inactiu"
     },
+    "battery": {
+      "high": "Alta",
+      "medium": "Mitjana",
+      "low": "Baixa"
+    },
     "colors": {
       "White": "Blanc",
       "Black": "Negre",
