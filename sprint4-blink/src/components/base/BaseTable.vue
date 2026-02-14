@@ -1,6 +1,7 @@
 <template>
-  <div class="overflow-x-auto bg-white rounded-lg shadow">
-    <table class="min-w-full divide-y divide-gray-200">
+  <div class="bg-white rounded-lg shadow">
+    <div class="overflow-x-hidden">
+      <table class="min-w-full divide-y divide-gray-200">
       <thead class="bg-gray-50">
         <tr>
           <th
@@ -39,6 +40,7 @@
         </tr>
       </tbody>
     </table>
+    </div>
     
     <!-- Paginación -->
     <div v-if="pagination && pagination.last_page > 1" class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">

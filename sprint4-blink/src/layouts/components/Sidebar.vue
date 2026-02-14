@@ -134,6 +134,7 @@ import {
   TicketIcon,
   TruckIcon,
   UsersIcon,
+  CalendarIcon,
 } from '@heroicons/vue/24/outline'
 import blinkLogo from '@/assets/blink-logo.png'
 
@@ -191,7 +192,7 @@ const clienteNavigation = computed<NavItem[]>(() => [
 const adminNavigation = computed<NavItem[]>(() => [
   { nameKey: 'nav.users', href: '/users', icon: UsersIcon },
   { nameKey: 'nav.vehicles', href: '#', icon: TruckIcon, count: '12' },
-  { nameKey: 'nav.bookings', href: '#', icon: ChartPieIcon },
+  { nameKey: 'nav.bookings', href: '/reservations', icon: CalendarIcon },
   { nameKey: 'nav.geofencing', href: '#', icon: MapPinIcon, count: '20+' },
   { nameKey: 'nav.tickets', href: '#', icon: TicketIcon },
 ])

@@ -171,6 +171,55 @@
       "notFound": "User not found. It may have already been deleted."
     }
   },
+  "reservations": {
+    "title": "Reservations",
+    "description": "Manage vehicle reservations in the system",
+    "loading": "Loading reservations...",
+    "empty": "No reservations available",
+    "searchPlaceholder": "Search by user, vehicle or location...",
+    "changeStatus": "Change status",
+    "table": {
+      "user": "User",
+      "vehicle": "Vehicle",
+      "startDate": "Start",
+      "endDate": "End",
+      "duration": "Duration",
+      "locations": "Locations",
+      "totalCost": "Total Cost",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "form": {
+      "status": "Status",
+      "pickupLocation": "Pickup location",
+      "dropoffLocation": "Drop-off location"
+    },
+    "status": {
+      "pending": "Pending",
+      "active": "Active",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    },
+    "filters": {
+      "all": "All"
+    },
+    "modal": {
+      "deleteTitle": "Delete Reservation",
+      "deleteMessage": "Are you sure you want to delete reservation #{id}? This action cannot be undone."
+    },
+    "actions": {
+      "editReservation": "Edit Reservation"
+    },
+    "toast": {
+      "statusUpdated": "Reservation status updated successfully",
+      "deleted": "Reservation deleted successfully"
+    },
+    "errors": {
+      "load": "Failed to load reservations",
+      "updateStatus": "Failed to update reservation status",
+      "delete": "Failed to delete reservation"
+    }
+  },
   "table": {
     "previous": "Previous",
     "next": "Next",

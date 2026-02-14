@@ -171,6 +171,55 @@
       "notFound": "Usuario no encontrado. Puede que ya haya sido eliminado."
     }
   },
+  "reservations": {
+    "title": "Reservas",
+    "description": "Gestiona las reservas de vehículos del sistema",
+    "loading": "Cargando reservas...",
+    "empty": "No hay reservas disponibles",
+    "searchPlaceholder": "Buscar por usuario, vehículo o ubicación...",
+    "changeStatus": "Cambiar estado",
+    "table": {
+      "user": "Usuario",
+      "vehicle": "Vehículo",
+      "startDate": "Inicio",
+      "endDate": "Fin",
+      "duration": "Duración",
+      "locations": "Ubicaciones",
+      "totalCost": "Coste Total",
+      "status": "Estado",
+      "actions": "Acciones"
+    },
+    "form": {
+      "status": "Estado",
+      "pickupLocation": "Ubicación de recogida",
+      "dropoffLocation": "Ubicación de entrega"
+    },
+    "status": {
+      "pending": "Pendiente",
+      "active": "Activa",
+      "completed": "Completada",
+      "cancelled": "Cancelada"
+    },
+    "filters": {
+      "all": "Todas"
+    },
+    "modal": {
+      "deleteTitle": "Eliminar Reserva",
+      "deleteMessage": "¿Estás seguro de que deseas eliminar la reserva #{id}? Esta acción no se puede deshacer."
+    },
+    "actions": {
+      "editReservation": "Editar Reserva"
+    },
+    "toast": {
+      "statusUpdated": "Estado de la reserva actualizado correctamente",
+      "deleted": "Reserva eliminada correctamente"
+    },
+    "errors": {
+      "load": "Error al cargar las reservas",
+      "updateStatus": "Error al actualizar el estado de la reserva",
+      "delete": "Error al eliminar la reserva"
+    }
+  },
   "table": {
     "previous": "Anterior",
     "next": "Siguiente",

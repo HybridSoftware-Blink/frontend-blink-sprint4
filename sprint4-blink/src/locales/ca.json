@@ -171,6 +171,95 @@
       "notFound": "Usuari no trobat. Potser ja ha sigut eliminat."
     }
   },
+  "reservations": {
+    "title": "Reserves",
+    "description": "Gestiona les reserves de vehicles del sistema",
+    "loading": "Carregant reserves...",
+    "empty": "No hi ha reserves disponibles",
+    "searchPlaceholder": "Cercar per usuari, vehicle o ubicació...",
+    "changeStatus": "Canviar estat",
+    "table": {
+      "user": "Usuari",
+      "vehicle": "Vehicle",
+      "startDate": "Inici",
+      "endDate": "Fi",
+      "duration": "Duració",
+      "locations": "Ubicacions",
+      "totalCost": "Cost Total",
+      "status": "Estat",
+      "actions": "Accions"
+    },
+    "form": {
+      "status": "Estat",
+      "pickupLocation": "Ubicació de recollida",
+      "dropoffLocation": "Ubicació de retorn"
+    },
+    "status": {
+      "pending": "Pendent",
+      "active": "Activa",
+      "completed": "Completada",
+      "cancelled": "Cancel·lada"
+    },
+    "filters": {
+      "all": "Totes"
+    },
+    "modal": {
+      "deleteTitle": "Eliminar Reserva",
+      "deleteMessage": "Estàs segur que vols eliminar la reserva #{id}? Aquesta acció no es pot desfer."
+    },
+    "actions": {
+      "editReservation": "Editar Reserva"
+    },
+    "toast": {
+      "statusUpdated": "Estat de la reserva actualitzat correctament",
+      "deleted": "Reserva eliminada correctament"
+    },
+    "errors": {
+      "load": "Error en carregar les reserves",
+      "updateStatus": "Error en actualitzar l'estat de la reserva",
+      "delete": "Error en eliminar la reserva"
+    }
+  },
+  "reservations": {
+    "title": "Reserves",
+    "description": "Gestiona les reserves de vehicles del sistema",
+    "loading": "Carregant reserves...",
+    "empty": "No hi ha reserves disponibles",
+    "changeStatus": "Canviar estat",
+    "table": {
+      "user": "Usuari",
+      "vehicle": "Vehicle",
+      "startDate": "Inici",
+      "endDate": "Final",
+      "duration": "Duració",
+      "locations": "Ubicacions",
+      "totalCost": "Cost Total",
+      "status": "Estat",
+      "actions": "Accions"
+    },
+    "status": {
+      "pending": "Pendent",
+      "active": "Activa",
+      "completed": "Completada",
+      "cancelled": "Cancel·lada"
+    },
+    "filters": {
+      "all": "Totes"
+    },
+    "modal": {
+      "deleteTitle": "Eliminar Reserva",
+      "deleteMessage": "Estàs segur que vols eliminar la reserva #{id}? Aquesta acció no es pot desfer."
+    },
+    "toast": {
+      "statusUpdated": "Estat de la reserva actualitzat correctament",
+      "deleted": "Reserva eliminada correctament"
+    },
+    "errors": {
+      "load": "Error en carregar les reserves",
+      "updateStatus": "Error en actualitzar l'estat de la reserva",
+      "delete": "Error en eliminar la reserva"
+    }
+  },
   "table": {
     "previous": "Anterior",
     "next": "Següent",
