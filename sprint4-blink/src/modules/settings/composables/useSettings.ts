@@ -1,9 +1,9 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { authService } from '@/modules/auth/services/auth.service'
+import { authServiceMock as authService } from '@/modules/auth/services/auth.service.mock'
 import { useUser } from '@/modules/auth/composables/useUser'
 import { useToast } from '@/shared/composables/useToast'
-import { apiClient } from '@/shared/services/api.service'
+import { userService } from '@/modules/users/services/user.service.mock'
 import { useI18n } from 'vue-i18n'
 
 export function useSettings() {
@@ -105,16 +105,11 @@ export function useSettings() {
         updateData.password_confirmation = currentPassword.value
       }
 
-      // Call API to update user
-      await apiClient.put(`/v1/users/${user.value.id}`, updateData)
+      // Call user service to update user
+      const updatedUserData = await userService.updateUser(user.value.id, updateData)
       
       // Update local user data
-      const updatedUser = {
-        ...user.value,
-        name: fullName,
-        email: email.value,
-      }
-      updateUser(updatedUser)
+      updateUser(updatedUserData)
 
       toast.success(t('settings.toast.personalInfoSaved'))
       currentPassword.value = '' // Clear password field

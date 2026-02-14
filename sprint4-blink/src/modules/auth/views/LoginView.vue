@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
-import { authService } from '@/modules/auth/services/auth.service';
+import { authServiceMock as authService } from '@/modules/auth/services/auth.service.mock';
 import type { LoginCredentials } from '@/modules/auth/types/auth.types';
 import { validateLoginCredentials, type ValidationErrors } from '@/modules/auth/utils/authValidation';
 import BaseInput from '@/components/base/BaseInput.vue';

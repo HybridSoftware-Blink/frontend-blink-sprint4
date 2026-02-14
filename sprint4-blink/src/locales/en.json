@@ -46,7 +46,7 @@
       "cta": "Sign in",
       "loading": "Loading...",
       "emailLabel": "Email address",
-      "emailPlaceholder": "example@email.com",
+      "emailPlaceholder": "example.email.com",
       "passwordLabel": "Password",
       "passwordPlaceholder": "••••••••",
       "noAccount": "Don’t have an account?",
@@ -67,7 +67,7 @@
       "phoneLabel": "Phone",
       "phonePlaceholder": "+34 600 000 000",
       "emailLabel": "Email address",
-      "emailPlaceholder": "example@email.com",
+      "emailPlaceholder": "example.email.com",
       "passwordLabel": "Password",
       "passwordPlaceholder": "••••••••",
       "passwordConfirmationLabel": "Confirm password",
@@ -135,7 +135,7 @@
       "name": "Name",
       "namePlaceholder": "Full name",
       "email": "Email",
-      "emailPlaceholder": "email@example.com",
+      "emailPlaceholder": "email.example.com",
       "phone": "Phone",
       "phonePlaceholder": "+34 600 000 000",
       "role": "Role",
@@ -182,6 +182,99 @@
   "filters": {
     "clear": "Clear filters"
   },
+  "tickets": {
+    "title": "My Tickets",
+    "description": "Manage your event tickets",
+    "searchPlaceholder": "Search by subject or description...",
+    "loading": "Loading tickets...",
+    "empty": "No tickets to display",
+    "table": {
+      "evento": "Event",
+      "correo": "Email",
+      "asunto": "Subject",
+      "descripcion": "Description",
+      "precio": "Price",
+      "estado": "Status",
+      "usuario": "User",
+      "fechaUsuario": "Date",
+      "fechaCompra": "Purchase date",
+      "createdAt": "Creation date",
+      "actions": "Actions"
+    },
+    "form": {
+      "eventoId": "Event ID",
+      "eventoIdPlaceholder": "Enter event ID",
+      "precio": "Price",
+      "precioPlaceholder": "0.00",
+      "correo": "Email",
+      "correoPlaceholder": "you.example.com",
+      "asunto": "Subject",
+      "asuntoPlaceholder": "Short subject",
+      "fecha": "Date",
+      "fechaPlaceholder": "YYYY-MM-DD",
+      "descripcion": "Description",
+      "descripcionPlaceholder": "Describe the issue or problem"
+    },
+    "estados": {
+      "pendiente": "Pending",
+      "confirmado": "Confirmed",
+      "cancelado": "Cancelled",
+      "usado": "Used"
+    },
+    "modal": {
+      "detailsTitle": "Ticket details"
+    },
+    "actions": {
+      "newTicket": "New ticket",
+      "createNewTicket": "Create new ticket",
+      "createTicket": "Create ticket"
+    },
+    "chat": {
+      "noMessages": "No messages yet. Send your first message to start the conversation.",
+      "admin": "Admin",
+      "you": "You",
+      "messagePlaceholder": "Write your message...",
+      "send": "Send"
+    },
+    "toast": {
+      "created": "Ticket created successfully",
+      "messageSent": "Message sent successfully"
+    },
+    "errors": {
+      "load": "Error loading tickets",
+      "searchEndpointUnavailable": "Search endpoint unavailable. Reload to see all tickets.",
+      "search": "Error searching tickets",
+      "save": "Error saving ticket",
+      "delete": "Error deleting ticket"
+    }
+  },
+  "adminTickets": {
+    "title": "Ticket Management",
+    "description": "Manage all system tickets",
+    "searchPlaceholder": "Search by subject, description or user...",
+    "actions": {
+      "editTicket": "Edit ticket",
+      "reply": "Reply"
+    },
+    "modal": {
+      "detailsTitle": "Ticket details",
+      "deleteTitle": "Delete ticket",
+      "deleteMessage": "Are you sure you want to delete the ticket '{asunto}'? This action cannot be undone."
+    },
+    "chat": {
+      "title": "Ticket conversation",
+      "noMessages": "No messages yet",
+      "admin": "Admin",
+      "messagePlaceholder": "Write your reply...",
+      "replyAs": "Reply as",
+      "send": "Send"
+    },
+    "toast": {
+      "updated": "Ticket updated successfully",
+      "deleted": "Ticket deleted successfully",
+      "messageSent": "Message sent successfully"
+    }
+  },
   "validation": {
     "fixFormErrors": "Please fix the form errors.",
     "name": {
@@ -211,7 +304,15 @@
       "required": "Role is required.",
       "invalid": "Role is invalid."
     },
-    "passwordMismatch": "Passwords do not match."
+    "passwordMismatch": "Passwords do not match.",
+    "ticket": {
+      "eventoRequired": "Event is required.",
+      "eventoInvalid": "Event ID is invalid.",
+      "precioRequired": "Price is required.",
+      "precioInvalid": "Price is invalid.",
+      "precioMax": "Price cannot exceed 999999.99.",
+      "estadoInvalid": "Status is invalid."
+    }
   },
   "errors": {
     "unexpected": "An unexpected error occurred.",

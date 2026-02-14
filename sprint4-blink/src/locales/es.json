@@ -46,7 +46,7 @@
       "cta": "Acceder",
       "loading": "Cargando...",
       "emailLabel": "Correo electrónico",
-      "emailPlaceholder": "ejemplo@correo.com",
+      "emailPlaceholder": "ejemplo.correo.com",
       "passwordLabel": "Contraseña",
       "passwordPlaceholder": "••••••••",
       "noAccount": "¿Aún no tienes cuenta?",
@@ -67,7 +67,7 @@
       "phoneLabel": "Teléfono",
       "phonePlaceholder": "+34 600 000 000",
       "emailLabel": "Correo electrónico",
-      "emailPlaceholder": "ejemplo@correo.com",
+      "emailPlaceholder": "ejemplo.correo.com",
       "passwordLabel": "Contraseña",
       "passwordPlaceholder": "••••••••",
       "passwordConfirmationLabel": "Confirmar contraseña",
@@ -135,7 +135,7 @@
       "name": "Nombre",
       "namePlaceholder": "Nombre completo",
       "email": "Email",
-      "emailPlaceholder": "correo@ejemplo.com",
+      "emailPlaceholder": "correo.ejemplo.com",
       "phone": "Teléfono",
       "phonePlaceholder": "+34 600 000 000",
       "role": "Rol",
@@ -182,6 +182,99 @@
   "filters": {
     "clear": "Eliminar filtros"
   },
+  "tickets": {
+    "title": "Mis Tickets",
+    "description": "Gestiona tus tickets de eventos",
+    "searchPlaceholder": "Buscar por asunto o descripción...",
+    "loading": "Cargando tickets...",
+    "empty": "No hay tickets para mostrar",
+    "table": {
+      "evento": "Evento",
+      "correo": "Correo",
+      "asunto": "Asunto",
+      "descripcion": "Descripción",
+      "precio": "Precio",
+      "estado": "Estado",
+      "usuario": "Usuario",
+      "fechaUsuario": "Fecha",
+      "fechaCompra": "Fecha de compra",
+      "createdAt": "Fecha de creación",
+      "actions": "Acciones"
+    },
+    "form": {
+      "eventoId": "ID de Evento",
+      "eventoIdPlaceholder": "Introduce el ID del evento",
+      "precio": "Precio",
+      "precioPlaceholder": "0.00",
+      "correo": "Correo",
+      "correoPlaceholder": "tu.correo.com",
+      "asunto": "Asunto",
+      "asuntoPlaceholder": "Breve asunto",
+      "fecha": "Fecha",
+      "fechaPlaceholder": "AAAA-MM-DD",
+      "descripcion": "Descripción",
+      "descripcionPlaceholder": "Describe el problema o incidencia"
+    },
+    "estados": {
+      "pendiente": "Pendiente",
+      "confirmado": "Confirmado",
+      "cancelado": "Cancelado",
+      "usado": "Usado"
+    },
+    "modal": {
+      "detailsTitle": "Detalles del ticket"
+    },
+    "actions": {
+      "newTicket": "Nuevo ticket",
+      "createNewTicket": "Crear nuevo ticket",
+      "createTicket": "Crear ticket"
+    },
+    "chat": {
+      "noMessages": "No hay mensajes aún. Envía tu primer mensaje para iniciar la conversación.",
+      "admin": "Administrador",
+      "you": "Tú",
+      "messagePlaceholder": "Escribe tu mensaje...",
+      "send": "Enviar"
+    },
+    "toast": {
+      "created": "Ticket creado correctamente",
+      "messageSent": "Mensaje enviado correctamente"
+    },
+    "errors": {
+      "load": "Error al cargar tickets",
+      "searchEndpointUnavailable": "Endpoint de búsqueda no disponible. Recarga para ver todos los tickets.",
+      "search": "Error al buscar tickets",
+      "save": "Error al guardar ticket",
+      "delete": "Error al eliminar ticket"
+    }
+  },
+  "adminTickets": {
+    "title": "Gestión de Tickets",
+    "description": "Administra todos los tickets del sistema",
+    "searchPlaceholder": "Buscar por asunto, descripción o usuario...",
+    "actions": {
+      "editTicket": "Editar ticket",
+      "reply": "Responder"
+    },
+    "modal": {
+      "detailsTitle": "Detalles del ticket",
+      "deleteTitle": "Eliminar ticket",
+      "deleteMessage": "¿Estás seguro de que deseas eliminar el ticket '{asunto}'? Esta acción no se puede deshacer."
+    },
+    "chat": {
+      "title": "Conversación del ticket",
+      "noMessages": "No hay mensajes aún",
+      "admin": "Administrador",
+      "messagePlaceholder": "Escribe tu respuesta...",
+      "replyAs": "Responder como",
+      "send": "Enviar"
+    },
+    "toast": {
+      "updated": "Ticket actualizado correctamente",
+      "deleted": "Ticket eliminado correctamente",
+      "messageSent": "Mensaje enviado correctamente"
+    }
+  },
   "validation": {
     "fixFormErrors": "Por favor, corrige los errores en el formulario.",
     "name": {
@@ -211,7 +304,15 @@
       "required": "El rol es requerido.",
       "invalid": "El rol no es válido."
     },
-    "passwordMismatch": "Las contraseñas no coinciden."
+    "passwordMismatch": "Las contraseñas no coinciden.",
+    "ticket": {
+      "eventoRequired": "El evento es requerido.",
+      "eventoInvalid": "El ID del evento no es válido.",
+      "precioRequired": "El precio es requerido.",
+      "precioInvalid": "El precio no es válido.",
+      "precioMax": "El precio no puede exceder 999999.99.",
+      "estadoInvalid": "El estado no es válido."
+    }
   },
   "errors": {
     "unexpected": "Ha ocurrido un error inesperado.",

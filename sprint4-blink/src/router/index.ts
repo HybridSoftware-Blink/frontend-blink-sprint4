@@ -1,10 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import type { RouteRecordRaw } from 'vue-router';
-import { authService } from '../modules/auth/services/auth.service';
+import { authServiceMock as authService } from '../modules/auth/services/auth.service.mock';
 import { authRoutes } from '../modules/auth/routes';
 import { dashboardRoutes } from '../modules/dashboard/routes';
 import { settingsRoutes } from '../modules/settings/routes';
 import { usersRoutes } from '../modules/users/routes';
+import { ticketsRoutes } from '../modules/tickets/routes';
 import { i18n } from '@/i18n';
 
 const routes: RouteRecordRaw[] = [
@@ -16,6 +17,7 @@ const routes: RouteRecordRaw[] = [
   ...dashboardRoutes,
   ...settingsRoutes,
   ...usersRoutes,
+  ...ticketsRoutes,
   {
     path: '/:pathMatch(.*)*',
     redirect: '/login',

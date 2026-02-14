@@ -143,7 +143,7 @@ import { BaseButton, BaseInput, BaseModal } from '@/components/base';
 import AppLayout from '@/layouts/AppLayout.vue';
 import UserTable from '@/modules/users/components/UserTable.vue';
 import UserForm from '@/modules/users/components/UserForm.vue';
-import { userService } from '@/modules/users/services/user.service';
+import { userService } from '@/modules/users/services/user.service.mock';
 import type { User, CreateUserData, UpdateUserData } from '@/modules/users/types/user.types';
 import { useToast } from '@/shared/composables/useToast';
 import { validateUserForm, type ValidationErrors } from '@/modules/users/utils/userValidation';

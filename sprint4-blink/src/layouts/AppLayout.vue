@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { authService } from '@/modules/auth/services/auth.service';
+import { authServiceMock as authService } from '@/modules/auth/services/auth.service.mock';
 import { useUser } from '@/modules/auth/composables/useUser';
 import Navbar from './components/Navbar.vue';
 import Sidebar from './components/Sidebar.vue';
