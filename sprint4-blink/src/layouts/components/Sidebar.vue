@@ -185,7 +185,8 @@ const clienteNavigation = computed<NavItem[]>(() => [
   { nameKey: 'nav.dashboard', href: '/dashboard', icon: HomeIcon },
   { nameKey: 'nav.map', href: '#', icon: MapPinIcon },
   { nameKey: 'nav.tickets', href: '#', icon: TicketIcon },
-  { nameKey: 'nav.bookings', href: '#', icon: ChartPieIcon },
+  { nameKey: 'nav.browseVehicles', href: '/browse-vehicles', icon: TruckIcon },
+  { nameKey: 'nav.myCalendar', href: '/my-calendar', icon: CalendarIcon },
   { nameKey: 'nav.settings', href: '/settings', icon: Cog6ToothIcon },
 ])
 

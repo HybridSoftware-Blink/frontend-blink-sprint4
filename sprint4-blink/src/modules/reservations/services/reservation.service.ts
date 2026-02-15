@@ -14,10 +14,26 @@ export const reservationService = {
   },
 
   /**
+   * Crear una nueva reserva
+   */
+  async createReservation(data: Partial<Reservation>): Promise<Reservation> {
+    const response = await apiClient.post<Reservation>('/v1/reservations', data);
+    return response;
+  },
+
+  /**
    * Actualizar el estado de una reserva
    */
   async updateStatus(id: number, data: UpdateReservationStatusData): Promise<Reservation> {
     const response = await apiClient.patch<Reservation>(`/v1/reservations/${id}/status`, data);
+    return response;
+  },
+
+  /**
+   * Actualizar el estado de una reserva (alias)
+   */
+  async updateReservationStatus(id: number, status: string): Promise<Reservation> {
+    const response = await apiClient.patch<Reservation>(`/v1/reservations/${id}/status`, { status });
     return response;
   },
 

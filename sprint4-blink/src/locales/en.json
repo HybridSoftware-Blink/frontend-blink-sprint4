@@ -29,6 +29,8 @@
     "map": "Map",
     "tickets": "Tickets",
     "bookings": "Bookings",
+    "browseVehicles": "Rent Vehicle",
+    "myCalendar": "My Calendar",
     "users": "Users",
     "vehicles": "Vehicles",
     "geofencing": "Geofencing",
@@ -195,6 +197,7 @@
       "dropoffLocation": "Drop-off location"
     },
     "status": {
+      "label": "Status",
       "pending": "Pending",
       "active": "Active",
       "completed": "Completed",
@@ -202,6 +205,14 @@
     },
     "filters": {
       "all": "All"
+    },
+    "actions": {
+      "edit": "Edit",
+      "editReservation": "Edit Reservation",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "close": "Close",
+      "clearFilters": "Clear filters"
     },
     "modal": {
       "deleteTitle": "Delete Reservation",
@@ -218,6 +229,131 @@
       "load": "Failed to load reservations",
       "updateStatus": "Failed to update reservation status",
       "delete": "Failed to delete reservation"
+    }
+  },
+  "vehicles": {
+    "title": "Vehicles",
+    "type": "Type",
+    "seats": "seats",
+    "status": {
+      "available": "Available",
+      "in_use": "In use",
+      "maintenance": "Maintenance",
+      "out_of_service": "Out of service"
+    },
+    "types": {
+      "sedan": "Sedan",
+      "suv": "SUV",
+      "truck": "Truck",
+      "van": "Van",
+      "coupe": "Coupe",
+      "convertible": "Convertible",
+      "hatchback": "Hatchback"
+    },
+    "form": {
+      "licensePlate": "License Plate",
+      "licensePlatePlaceholder": "ABC1234",
+      "brand": "Brand",
+      "brandPlaceholder": "Tesla",
+      "model": "Model",
+      "modelPlaceholder": "Model 3",
+      "year": "Year",
+      "yearPlaceholder": "2024",
+      "type": "Vehicle Type",
+      "capacity": "Capacity",
+      "capacityPlaceholder": "4",
+      "color": "Color",
+      "colorPlaceholder": "Select a color",
+      "status": "Status",
+      "batteryLevel": "Battery Level (%)",
+      "batteryLevelPlaceholder": "85",
+      "pricePerDay": "Price per day (€)",
+      "pricePerDayPlaceholder": "50",
+      "location": "Location",
+      "locationPlaceholder": "Barcelona"
+    },
+    "errors": {
+      "load": "Error loading vehicles"
+    }
+  },
+      "hatchback": "Hatchback"
+    },
+    "errors": {
+      "load": "Failed to load vehicles"
+    }
+  },
+  "bookings": {
+    "myBookings": "My Bookings",
+    "description": "Manage your vehicle bookings",
+    "empty": "You have no bookings",
+    "newBookingDescription": "Create a new vehicle booking",
+    "actions": {
+      "newBooking": "New Booking",
+      "cancel": "Cancel Booking",
+      "confirmCancel": "Confirm Cancellation"
+    },
+    "modal": {
+      "cancelTitle": "Cancel Booking",
+      "cancelMessage": "Are you sure you want to cancel this booking?"
+    },
+    "toast": {
+      "cancelled": "Booking cancelled successfully"
+    },
+    "errors": {
+      "cancel": "Failed to cancel booking"
+    },
+    "browseVehicles": {
+      "title": "Rent Vehicle",
+      "filters": "Search filters",
+      "startDate": "Start date",
+      "endDate": "End date",
+      "startTime": "Start time",
+      "endTime": "End time",
+      "priceRange": "Price range",
+      "search": "Search",
+      "perDay": "day",
+      "bookNow": "Book Now",
+      "noVehicles": "No vehicles available",
+      "noVehiclesDescription": "Try modifying your search filters",
+      "pickupLocation": "Pickup location",
+      "pickupLocationPlaceholder": "E.g: Barcelona Airport",
+      "dropoffLocation": "Drop-off location",
+      "dropoffLocationPlaceholder": "E.g: Barcelona Airport",
+      "totalDays": "Total days",
+      "totalHours": "Total hours",
+      "pricePerDay": "Price per day",
+      "pricePerHour": "Price per hour",
+      "totalCost": "Total Cost",
+      "confirmBooking": "Confirm Booking",
+      "bookingSuccess": "Booking created successfully!",
+      "bookingError": "Failed to create booking",
+      "bookingModal": {
+        "title": "New Booking"
+      },
+      "errors": {
+        "endDateBeforeStart": "End date cannot be before start date",
+        "endTimeBeforeStart": "End time must be after start time"
+      }
+    },
+    "myCalendar": {
+      "title": "My Calendar",
+      "pending": "Pending",
+      "active": "Active",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "more": "more",
+      "monthBookings": "This month's bookings",
+      "noBookingsThisMonth": "You have no bookings this month",
+      "bookingDetails": "Booking Details",
+      "days": {
+        "monday": "Mon",
+        "tuesday": "Tue",
+        "wednesday": "Wed",
+        "thursday": "Thu",
+        "friday": "Fri",
+        "saturday": "Sat",
+        "sunday": "Sun"
+      }
     }
   },
   "table": {

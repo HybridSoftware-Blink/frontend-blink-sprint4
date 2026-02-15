@@ -25,10 +25,12 @@
   },
   "nav": {
     "menu": "Menú",
-    "dashboard": "Dashboard",
+    "dashboard": "Tablero",
     "map": "Mapa",
     "tickets": "Tickets",
     "bookings": "Reservas",
+    "browseVehicles": "Alquilar Vehículo",
+    "myCalendar": "Mi Calendario",
     "users": "Usuarios",
     "vehicles": "Vehículos",
     "geofencing": "Geofencing",
@@ -195,6 +197,7 @@
       "dropoffLocation": "Ubicación de entrega"
     },
     "status": {
+      "label": "Estado",
       "pending": "Pendiente",
       "active": "Activa",
       "completed": "Completada",
@@ -202,6 +205,14 @@
     },
     "filters": {
       "all": "Todas"
+    },
+    "actions": {
+      "edit": "Editar",
+      "editReservation": "Editar Reserva",
+      "delete": "Eliminar",
+      "cancel": "Cancelar",
+      "close": "Cerrar",
+      "clearFilters": "Limpiar filtros"
     },
     "modal": {
       "deleteTitle": "Eliminar Reserva",
@@ -218,6 +229,153 @@
       "load": "Error al cargar las reservas",
       "updateStatus": "Error al actualizar el estado de la reserva",
       "delete": "Error al eliminar la reserva"
+    }
+  },
+  "vehicles": {
+    "title": "Vehículos",
+    "type": "Tipo",
+    "seats": "plazas",
+    "status": {
+      "available": "Disponible",
+      "in_use": "En uso",
+      "maintenance": "Mantenimiento",
+      "out_of_service": "Fuera de servicio"
+    },
+    "types": {
+      "sedan": "Sedán",
+      "suv": "SUV",
+      "truck": "Camión",
+      "van": "Furgoneta",
+      "coupe": "Cupé",
+      "convertible": "Descapotable",
+      "hatchback": "Compacto"
+    },
+    "form": {
+      "licensePlate": "Matrícula",
+      "licensePlatePlaceholder": "ABC1234",
+      "brand": "Marca",
+      "brandPlaceholder": "Tesla",
+      "model": "Modelo",
+      "modelPlaceholder": "Model 3",
+      "year": "Año",
+      "yearPlaceholder": "2024",
+      "type": "Tipo de vehículo",
+      "capacity": "Capacidad",
+      "capacityPlaceholder": "4",
+      "color": "Color",
+      "colorPlaceholder": "Selecciona un color",
+      "status": "Estado",
+      "batteryLevel": "Nivel de batería (%)",
+      "batteryLevelPlaceholder": "85",
+      "pricePerDay": "Precio por día (€)",
+      "pricePerDayPlaceholder": "50",
+      "location": "Ubicación",
+      "locationPlaceholder": "Barcelona"
+    },
+    "errors": {
+      "load": "Error al cargar los vehículos"
+    }
+  },
+      "hatchback": "Compacto"
+    },
+    "form": {
+      "licensePlate": "Matrícula",
+      "licensePlatePlaceholder": "ABC1234",
+      "brand": "Marca",
+      "brandPlaceholder": "Tesla",
+      "model": "Modelo",
+      "modelPlaceholder": "Model 3",
+      "year": "Año",
+      "yearPlaceholder": "2024",
+      "type": "Tipo de vehículo",
+      "capacity": "Capacidad",
+      "capacityPlaceholder": "4",
+      "color": "Color",
+      "colorPlaceholder": "Selecciona un color",
+      "status": "Estado",
+      "batteryLevel": "Nivel de batería (%)",
+      "batteryLevelPlaceholder": "85",
+      "pricePerDay": "Precio por día (€)",
+      "pricePerDayPlaceholder": "50",
+      "location": "Ubicación",
+      "locationPlaceholder": "Barcelona"
+    },
+    "errors": {
+      "load": "Error al cargar los vehículos"
+    }
+  },
+  "bookings": {
+    "myBookings": "Mis Reservas",
+    "description": "Gestiona tus reservas de vehículos",
+    "empty": "No tienes ninguna reserva",
+    "newBookingDescription": "Crea una nueva reserva de vehículo",
+    "actions": {
+      "newBooking": "Nueva Reserva",
+      "cancel": "Cancelar Reserva",
+      "confirmCancel": "Confirmar Cancelación"
+    },
+    "modal": {
+      "cancelTitle": "Cancelar Reserva",
+      "cancelMessage": "¿Estás seguro de que quieres cancelar esta reserva?"
+    },
+    "toast": {
+      "cancelled": "Reserva cancelada correctamente"
+    },
+    "errors": {
+      "cancel": "Error al cancelar la reserva"
+    },
+    "browseVehicles": {
+      "title": "Alquilar Vehículo",
+      "filters": "Filtros de búsqueda",
+      "startDate": "Fecha de inicio",
+      "endDate": "Fecha de finalización",
+      "startTime": "Hora de inicio",
+      "endTime": "Hora de finalización",
+      "priceRange": "Rango de precio",
+      "search": "Buscar",
+      "perDay": "día",
+      "bookNow": "Reservar Ahora",
+      "noVehicles": "No hay vehículos disponibles",
+      "noVehiclesDescription": "Intenta modificar tus filtros de búsqueda",
+      "pickupLocation": "Lugar de recogida",
+      "pickupLocationPlaceholder": "Ej: Aeropuerto de Barcelona",
+      "dropoffLocation": "Lugar de devolución",
+      "dropoffLocationPlaceholder": "Ej: Aeropuerto de Barcelona",
+      "totalDays": "Días totales",
+      "totalHours": "Horas totales",
+      "pricePerDay": "Precio por día",
+      "pricePerHour": "Precio por hora",
+      "totalCost": "Coste Total",
+      "confirmBooking": "Confirmar Reserva",
+      "bookingSuccess": "¡Reserva creada correctamente!",
+      "bookingError": "Error al crear la reserva",
+      "bookingModal": {
+        "title": "Nueva Reserva"
+      },
+      "errors": {
+        "endDateBeforeStart": "La fecha de finalización no puede ser anterior a la fecha de inicio",
+        "endTimeBeforeStart": "La hora de finalización debe ser posterior a la hora de inicio"
+      }
+    },
+    "myCalendar": {
+      "title": "Mi Calendario",
+      "pending": "Pendiente",
+      "active": "Activa",
+      "completed": "Completada",
+      "cancelled": "Cancelada",
+      "more": "más",
+      "monthBookings": "Reservas de este mes",
+      "noBookingsThisMonth": "No tienes reservas este mes",
+      "bookingDetails": "Detalles de la Reserva",
+      "days": {
+        "monday": "L",
+        "tuesday": "M",
+        "wednesday": "X",
+        "thursday": "J",
+        "friday": "V",
+        "saturday": "S",
+        "sunday": "D"
+      }
     }
   },
   "table": {

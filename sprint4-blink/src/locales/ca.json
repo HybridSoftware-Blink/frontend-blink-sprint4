@@ -29,6 +29,8 @@
     "map": "Mapa",
     "tickets": "Tickets",
     "bookings": "Reserves",
+    "browseVehicles": "Llogar Vehicle",
+    "myCalendar": "El Meu Calendari",
     "users": "Usuaris",
     "vehicles": "Vehicles",
     "geofencing": "Geofencing",
@@ -50,8 +52,7 @@
       "passwordLabel": "Contrasenya",
       "passwordPlaceholder": "••••••••",
       "noAccount": "Encara no tens compte?",
-      "goRegister": "Crear compte"
-      ,
+      "goRegister": "Crear compte",
       "forgotPassword": "Has oblidat la contrasenya?",
       "welcome": "Benvingut/da {name}!",
       "genericError": "Error en iniciar sessió. Torna-ho a intentar."
@@ -182,19 +183,15 @@
       "user": "Usuari",
       "vehicle": "Vehicle",
       "startDate": "Inici",
-      "endDate": "Fi",
+      "endDate": "Final",
       "duration": "Duració",
       "locations": "Ubicacions",
       "totalCost": "Cost Total",
       "status": "Estat",
       "actions": "Accions"
     },
-    "form": {
-      "status": "Estat",
-      "pickupLocation": "Ubicació de recollida",
-      "dropoffLocation": "Ubicació de retorn"
-    },
     "status": {
+      "label": "Estat",
       "pending": "Pendent",
       "active": "Activa",
       "completed": "Completada",
@@ -203,12 +200,17 @@
     "filters": {
       "all": "Totes"
     },
+    "actions": {
+      "edit": "Editar",
+      "editReservation": "Editar Reserva",
+      "delete": "Eliminar",
+      "cancel": "Cancel·lar",
+      "close": "Tancar",
+      "clearFilters": "Netejar filtres"
+    },
     "modal": {
       "deleteTitle": "Eliminar Reserva",
       "deleteMessage": "Estàs segur que vols eliminar la reserva #{id}? Aquesta acció no es pot desfer."
-    },
-    "actions": {
-      "editReservation": "Editar Reserva"
     },
     "toast": {
       "statusUpdated": "Estat de la reserva actualitzat correctament",
@@ -220,44 +222,123 @@
       "delete": "Error en eliminar la reserva"
     }
   },
-  "reservations": {
-    "title": "Reserves",
-    "description": "Gestiona les reserves de vehicles del sistema",
-    "loading": "Carregant reserves...",
-    "empty": "No hi ha reserves disponibles",
-    "changeStatus": "Canviar estat",
-    "table": {
-      "user": "Usuari",
-      "vehicle": "Vehicle",
-      "startDate": "Inici",
-      "endDate": "Final",
-      "duration": "Duració",
-      "locations": "Ubicacions",
-      "totalCost": "Cost Total",
-      "status": "Estat",
-      "actions": "Accions"
-    },
+  "vehicles": {
+    "title": "Vehicles",
+    "type": "Tipus",
+    "seats": "places",
     "status": {
+      "available": "Disponible",
+      "in_use": "En ús",
+      "maintenance": "Manteniment",
+      "out_of_service": "Fora de servei"
+    },
+    "types": {
+      "sedan": "Sedan",
+      "suv": "SUV",
+      "truck": "Camió",
+      "van": "Furgoneta",
+      "coupe": "Cupè",
+      "convertible": "Descapotable",
+      "hatchback": "Compacte"
+    },
+    "form": {
+      "licensePlate": "Matrícula",
+      "licensePlatePlaceholder": "ABC1234",
+      "brand": "Marca",
+      "brandPlaceholder": "Tesla",
+      "model": "Model",
+      "modelPlaceholder": "Model 3",
+      "year": "Any",
+      "yearPlaceholder": "2024",
+      "type": "Tipus de vehicle",
+      "capacity": "Capacitat",
+      "capacityPlaceholder": "4",
+      "color": "Color",
+      "colorPlaceholder": "Selecciona un color",
+      "status": "Estat",
+      "batteryLevel": "Nivell de bateria (%)",
+      "batteryLevelPlaceholder": "85",
+      "pricePerDay": "Preu per dia (€)",
+      "pricePerDayPlaceholder": "50",
+      "location": "Ubicació",
+      "locationPlaceholder": "Barcelona"
+    },
+    "errors": {
+      "load": "Error en carregar els vehicles"
+    }
+  },
+  "bookings": {
+    "myBookings": "Les Meves Reserves",
+    "description": "Gestiona les teves reserves de vehicles",
+    "empty": "No tens cap reserva encara",
+    "newBookingDescription": "Funcionalitat de nova reserva disponible pròximament",
+    "actions": {
+      "newBooking": "Nova Reserva",
+      "cancel": "Cancel·lar",
+      "confirmCancel": "Confirmar cancel·lació"
+    },
+    "modal": {
+      "cancelTitle": "Cancel·lar Reserva",
+      "cancelMessage": "Estàs segur que vols cancel·lar aquesta reserva? Aquesta acció no es pot desfer."
+    },
+    "toast": {
+      "cancelled": "Reserva cancel·lada correctament"
+    },
+    "errors": {
+      "cancel": "Error en cancel·lar la reserva"
+    },
+    "browseVehicles": {
+      "title": "Llogar Vehicle",
+      "filters": "Filtres de cerca",
+      "startDate": "Data d'inici",
+      "endDate": "Data de finalització",
+      "startTime": "Hora d'inici",
+      "endTime": "Hora de finalització",
+      "priceRange": "Rang de preu",
+      "search": "Buscar",
+      "perDay": "dia",
+      "bookNow": "Reservar Ara",
+      "noVehicles": "Cap vehicle disponible",
+      "noVehiclesDescription": "Prova a modificar els teus filtres de cerca",
+      "pickupLocation": "Lloc de recollida",
+      "pickupLocationPlaceholder": "Ex: Aeroport de Barcelona",
+      "dropoffLocation": "Lloc de retorn",
+      "dropoffLocationPlaceholder": "Ex: Aeroport de Barcelona",
+      "totalDays": "Dies totals",
+      "totalHours": "Hores totals",
+      "pricePerDay": "Preu per dia",
+      "pricePerHour": "Preu per hora",
+      "totalCost": "Cost Total",
+      "confirmBooking": "Confirmar Reserva",
+      "bookingSuccess": "Reserva creada correctament!",
+      "bookingError": "Error en crear la reserva",
+      "bookingModal": {
+        "title": "Nova Reserva"
+      },
+      "errors": {
+        "endDateBeforeStart": "La data de finalització no pot ser anterior a la data d'inici",
+        "endTimeBeforeStart": "L'hora de finalització ha de ser posterior a l'hora d'inici"
+      }
+    },
+    "myCalendar": {
+      "title": "El Meu Calendari",
       "pending": "Pendent",
       "active": "Activa",
       "completed": "Completada",
-      "cancelled": "Cancel·lada"
-    },
-    "filters": {
-      "all": "Totes"
-    },
-    "modal": {
-      "deleteTitle": "Eliminar Reserva",
-      "deleteMessage": "Estàs segur que vols eliminar la reserva #{id}? Aquesta acció no es pot desfer."
-    },
-    "toast": {
-      "statusUpdated": "Estat de la reserva actualitzat correctament",
-      "deleted": "Reserva eliminada correctament"
-    },
-    "errors": {
-      "load": "Error en carregar les reserves",
-      "updateStatus": "Error en actualitzar l'estat de la reserva",
-      "delete": "Error en eliminar la reserva"
+      "cancelled": "Cancel·lada",
+      "more": "més",
+      "monthBookings": "Reserves d'aquest mes",
+      "noBookingsThisMonth": "No tens reserves aquest mes",
+      "bookingDetails": "Detalls de la Reserva",
+      "days": {
+        "monday": "Dl",
+        "tuesday": "Dt",
+        "wednesday": "Dc",
+        "thursday": "Dj",
+        "friday": "Dv",
+        "saturday": "Ds",
+        "sunday": "Dg"
+      }
     }
   },
   "table": {
