@@ -410,6 +410,100 @@
       "loadVehicles": "Error carregant vehicles al mapa"
     }
   },
+  "tickets": {
+    "title": "Els meus Tickets",
+    "description": "Gestiona els teus tickets d'esdeveniments",
+    "searchPlaceholder": "Buscar per assumpte o descripció...",
+    "loading": "Carregant tickets...",
+    "empty": "No hi ha tickets per mostrar",
+    "table": {
+      "evento": "Esdeveniment",
+      "correo": "Correu",
+      "asunto": "Assumpte",
+      "descripcion": "Descripció",
+      "precio": "Preu",
+      "estado": "Estat",
+      "usuario": "Usuari",
+      "fechaUsuario": "Data",
+      "fechaCompra": "Data de compra",
+      "createdAt": "Data de creació",
+      "actions": "Accions"
+    },
+    "form": {
+      "eventoId": "ID d'Esdeveniment",
+      "eventoIdPlaceholder": "Introdueix l'ID de l'esdeveniment",
+      "precio": "Preu",
+      "precioPlaceholder": "0.00",
+      "correo": "Correu",
+      "correoPlaceholder": "tu.correu.com",
+      "asunto": "Assumpte",
+      "asuntoPlaceholder": "Breu assumpte",
+      "fecha": "Data",
+      "fechaPlaceholder": "AAAA-MM-DD",
+      "descripcion": "Descripció",
+      "descripcionPlaceholder": "Descriu el problema o incidència"
+    },
+    "estados": {
+      "pendiente": "Pendent",
+      "confirmado": "Confirmat",
+      "cancelado": "Cancel·lat",
+      "usado": "Usat"
+    },
+    "modal": {
+      "detailsTitle": "Detalls del ticket"
+    },
+    "actions": {
+      "newTicket": "Nou ticket",
+      "createNewTicket": "Crear nou ticket",
+      "createTicket": "Crear ticket"
+    },
+    "chat": {
+      "noMessages": "No hi ha missatges encara. Envia el teu primer missatge per iniciar la conversa.",
+      "admin": "Administrador",
+      "you": "Tu",
+      "messagePlaceholder": "Escriu el teu missatge...",
+      "send": "Enviar"
+    },
+    "toast": {
+      "created": "Ticket creat correctament",
+      "messageSent": "Missatge enviat correctament"
+    },
+    "errors": {
+      "load": "Error en carregar tickets",
+      "searchEndpointUnavailable": "Endpoint de cerca no disponible. Recarrega per veure tots els tickets.",
+      "search": "Error en buscar tickets",
+      "save": "Error al guardar ticket",
+      "delete": "Error en eliminar ticket",
+      "notFound": "Ticket no trobat"
+    }
+  },
+  "adminTickets": {
+    "title": "Gestió de Tickets",
+    "description": "Administra tots els tickets del sistema",
+    "searchPlaceholder": "Cercar per assumpte, descripció o usuari...",
+    "actions": {
+      "editTicket": "Editar ticket",
+      "reply": "Respondre"
+    },
+    "modal": {
+      "detailsTitle": "Detalls del ticket",
+      "deleteTitle": "Eliminar ticket",
+      "deleteMessage": "Estàs segur que vols eliminar el ticket '{asunto}'? Aquesta acció no es pot desfer."
+    },
+    "chat": {
+      "title": "Conversa del ticket",
+      "noMessages": "No hi ha missatges encara",
+      "admin": "Administrador",
+      "messagePlaceholder": "Escriu la teva resposta...",
+      "replyAs": "Respondre com",
+      "send": "Enviar"
+    },
+    "toast": {
+      "updated": "Ticket actualitzat correctament",
+      "deleted": "Ticket eliminat correctament",
+      "messageSent": "Missatge enviat correctament"
+    }
+  },
   "table": {
     "previous": "Anterior",
     "next": "Següent",
