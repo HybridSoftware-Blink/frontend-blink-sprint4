@@ -52,8 +52,7 @@
       "passwordLabel": "Contraseña",
       "passwordPlaceholder": "••••••••",
       "noAccount": "¿Aún no tienes cuenta?",
-      "goRegister": "Crear cuenta"
-      ,
+      "goRegister": "Crear cuenta",
       "forgotPassword": "¿Has olvidado tu contraseña?",
       "welcome": "¡Bienvenido/a {name}!",
       "genericError": "Error al iniciar sesión. Por favor, inténtalo de nuevo."
@@ -207,19 +206,11 @@
       "all": "Todas"
     },
     "actions": {
-      "edit": "Editar",
-      "editReservation": "Editar Reserva",
-      "delete": "Eliminar",
-      "cancel": "Cancelar",
-      "close": "Cerrar",
-      "clearFilters": "Limpiar filtros"
+      "editReservation": "Editar Reserva"
     },
     "modal": {
       "deleteTitle": "Eliminar Reserva",
       "deleteMessage": "¿Estás seguro de que deseas eliminar la reserva #{id}? Esta acción no se puede deshacer."
-    },
-    "actions": {
-      "editReservation": "Editar Reserva"
     },
     "toast": {
       "statusUpdated": "Estado de la reserva actualizado correctamente",
@@ -248,34 +239,6 @@
       "van": "Furgoneta",
       "coupe": "Cupé",
       "convertible": "Descapotable",
-      "hatchback": "Compacto"
-    },
-    "form": {
-      "licensePlate": "Matrícula",
-      "licensePlatePlaceholder": "ABC1234",
-      "brand": "Marca",
-      "brandPlaceholder": "Tesla",
-      "model": "Modelo",
-      "modelPlaceholder": "Model 3",
-      "year": "Año",
-      "yearPlaceholder": "2024",
-      "type": "Tipo de vehículo",
-      "capacity": "Capacidad",
-      "capacityPlaceholder": "4",
-      "color": "Color",
-      "colorPlaceholder": "Selecciona un color",
-      "status": "Estado",
-      "batteryLevel": "Nivel de batería (%)",
-      "batteryLevelPlaceholder": "85",
-      "pricePerDay": "Precio por día (€)",
-      "pricePerDayPlaceholder": "50",
-      "location": "Ubicación",
-      "locationPlaceholder": "Barcelona"
-    },
-    "errors": {
-      "load": "Error al cargar los vehículos"
-    }
-  },
       "hatchback": "Compacto"
     },
     "form": {

@@ -52,8 +52,7 @@
       "passwordLabel": "Password",
       "passwordPlaceholder": "••••••••",
       "noAccount": "Don’t have an account?",
-      "goRegister": "Create one"
-      ,
+      "goRegister": "Create one",
       "forgotPassword": "Forgot password?",
       "welcome": "Welcome {name}!",
       "genericError": "Could not sign in. Please try again."
@@ -207,19 +206,11 @@
       "all": "All"
     },
     "actions": {
-      "edit": "Edit",
-      "editReservation": "Edit Reservation",
-      "delete": "Delete",
-      "cancel": "Cancel",
-      "close": "Close",
-      "clearFilters": "Clear filters"
+      "editReservation": "Edit Reservation"
     },
     "modal": {
       "deleteTitle": "Delete Reservation",
       "deleteMessage": "Are you sure you want to delete reservation #{id}? This action cannot be undone."
-    },
-    "actions": {
-      "editReservation": "Edit Reservation"
     },
     "toast": {
       "statusUpdated": "Reservation status updated successfully",
@@ -274,12 +265,6 @@
     },
     "errors": {
       "load": "Error loading vehicles"
-    }
-  },
-      "hatchback": "Hatchback"
-    },
-    "errors": {
-      "load": "Failed to load vehicles"
     }
   },
   "bookings": {

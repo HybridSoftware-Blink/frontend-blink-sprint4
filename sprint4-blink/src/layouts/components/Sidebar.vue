@@ -127,7 +127,6 @@ import { computed, type Component } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import {
-  ChartPieIcon,
   Cog6ToothIcon,
   HomeIcon,
   MapPinIcon,
