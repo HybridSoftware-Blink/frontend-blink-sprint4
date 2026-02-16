@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue';
 import type { User } from '../types/auth.types';
-import { authServiceMock as authService } from '../services/auth.service.mock';
+import { authService } from '../services/auth.service';
 
 const user = ref<User | null>(null);
 const avatarUrl = ref<string | null>(null);

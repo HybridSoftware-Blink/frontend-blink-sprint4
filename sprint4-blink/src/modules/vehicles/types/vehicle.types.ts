@@ -10,6 +10,8 @@ export interface Vehicle {
   color: string;
   status: VehicleStatus;
   battery_level?: number;
+  current_latitude?: number;
+  current_longitude?: number;
   created_at: string;
   updated_at: string;
 }

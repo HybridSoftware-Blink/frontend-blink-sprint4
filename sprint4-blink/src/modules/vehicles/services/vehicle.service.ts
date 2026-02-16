@@ -98,7 +98,7 @@ export const vehicleService = {
    * Obtener lista de vehículos
    */
   async getVehicles(page: number = 1, perPage: number = 5): Promise<VehiclesResponse> {
-    const response = await apiClient.get<any>(`/v1/vehicles?page=${page}&per_page=${perPage}`);
+    const response = await apiClient.get<any>(`/vehicles?page=${page}&per_page=${perPage}`);
     
     if (Array.isArray(response)) {
       return {
@@ -117,7 +117,7 @@ export const vehicleService = {
    * Crear un nuevo vehículo
    */
   async createVehicle(data: CreateVehicleData): Promise<Vehicle> {
-    const response = await apiClient.post<any>('/v1/vehicles', data);
+    const response = await apiClient.post<any>('/vehicles', data);
     
     // L'API pot retornar directament l'objecte o dins de {data: ...}
     const vehicle = response.data ? response.data : response;
@@ -146,7 +146,7 @@ export const vehicleService = {
       saveBatteryLevel(id, data.battery_level);
     }
     
-    const response = await apiClient.put<any>(`/v1/vehicles/${id}`, data);
+    const response = await apiClient.put<any>(`/vehicles/${id}`, data);
     
     // L'API pot retornar directament l'objecte o dins de {data: ...}
     const vehicle = response.data ? response.data : response;
@@ -163,14 +163,14 @@ export const vehicleService = {
    * Eliminar un vehículo
    */
   async deleteVehicle(id: number): Promise<void> {
-    await apiClient.delete(`/v1/vehicles/${id}`);
+    await apiClient.delete(`/vehicles/${id}`);
   },
 
   /**
    * Buscar vehículos
    */
   async searchVehicles(query: string): Promise<VehiclesResponse> {
-    const response = await apiClient.get<any>(`/v1/vehicles/search?query=${query}`);
+    const response = await apiClient.get<any>(`/vehicles/search?query=${query}`);
     
     if (Array.isArray(response)) {
       return {

@@ -136,7 +136,7 @@
       "name": "Nombre",
       "namePlaceholder": "Nombre completo",
       "email": "Email",
-      "emailPlaceholder": "correo@ejemplo.com",
+      "emailPlaceholder": "correo{'@'}ejemplo.com",
       "phone": "Teléfono",
       "phonePlaceholder": "+34 600 000 000",
       "role": "Rol",
@@ -224,10 +224,37 @@
   },
   "vehicles": {
     "title": "Vehículos",
+    "description": "Gestiona los vehículos del sistema",
+    "searchPlaceholder": "Busca por matrícula, marca o modelo...",
+    "loading": "Cargando vehículos...",
+    "empty": "No hay vehículos para mostrar",
     "type": "Tipo",
     "seats": "plazas",
+    "table": {
+      "image": "Imagen",
+      "licensePlate": "Matrícula",
+      "brandModel": "Marca/Modelo",
+      "color": "Color",
+      "status": "Estado",
+      "battery": "Batería",
+      "createdAt": "Fecha de creación",
+      "actions": "Acciones"
+    },
+    "actions": {
+      "create": "Crear Vehículo",
+      "newVehicle": "Nuevo Vehículo",
+      "createNewVehicle": "Crear Nuevo Vehículo",
+      "edit": "Editar",
+      "editVehicle": "Editar Vehículo",
+      "delete": "Eliminar",
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "close": "Cerrar",
+      "refresh": "Actualizar"
+    },
     "status": {
       "available": "Disponible",
+      "inactive": "Inactivo",
       "in_use": "En uso",
       "maintenance": "Mantenimiento",
       "out_of_service": "Fuera de servicio"
@@ -239,7 +266,8 @@
       "van": "Furgoneta",
       "coupe": "Cupé",
       "convertible": "Descapotable",
-      "hatchback": "Compacto"
+      "hatchback": "Compacto",
+      "undefined": "No definido"
     },
     "form": {
       "licensePlate": "Matrícula",
@@ -261,7 +289,42 @@
       "pricePerDay": "Precio por día (€)",
       "pricePerDayPlaceholder": "50",
       "location": "Ubicación",
-      "locationPlaceholder": "Barcelona"
+      "locationPlaceholder": "Barcelona",
+      "image": "Imagen del vehículo",
+      "uploadImage": "Subir imagen",
+      "removeImage": "Eliminar imagen",
+      "imageHint": "JPG, PNG o GIF (máximo 5MB)",
+      "invalidImageType": "El archivo debe ser una imagen (JPG, PNG, GIF)",
+      "imageTooLarge": "La imagen es demasiado grande. Máximo 5MB"
+    },
+    "colors": {
+      "Red": "Rojo",
+      "Blue": "Azul",
+      "Green": "Verde",
+      "Yellow": "Amarillo",
+      "Black": "Negro",
+      "White": "Blanco",
+      "Silver": "Plata",
+      "Gray": "Gris",
+      "Orange": "Naranja",
+      "Purple": "Púrpura",
+      "Brown": "Marrón",
+      "Pink": "Rosa"
+    },
+    "battery": {
+      "high": "Alta",
+      "medium": "Media",
+      "low": "Baja"
+    },
+    "modal": {
+      "detailsTitle": "Detalles del Vehículo",
+      "deleteTitle": "Eliminar Vehículo",
+      "deleteMessage": "¿Estás seguro de que deseas eliminar el vehículo con matrícula {plate}? Esta acción no se puede deshacer."
+    },
+    "toast": {
+      "created": "Vehículo creado correctamente",
+      "updated": "Vehículo actualizado correctamente",
+      "deleted": "Vehículo eliminado correctamente"
     },
     "errors": {
       "load": "Error al cargar los vehículos"
@@ -339,6 +402,12 @@
         "saturday": "S",
         "sunday": "D"
       }
+    }
+  },
+  "map": {
+    "title": "Mapa",
+    "errors": {
+      "loadVehicles": "Error cargando vehículos en el mapa"
     }
   },
   "table": {

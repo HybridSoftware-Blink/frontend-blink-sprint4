@@ -136,14 +136,23 @@ export const authServiceMock = {
     await new Promise(resolve => setTimeout(resolve, 300));
     
     const stored = localStorage.getItem(AUTH_USER_KEY);
-    if (!stored) {
+    if (!stored || stored === 'undefined' || stored === 'null') {
       throw {
         message: 'errors.notAuthenticated',
         errors: {},
       };
     }
 
-    return JSON.parse(stored);
+    try {
+      return JSON.parse(stored);
+    } catch (error) {
+      // Si hi ha error de parsing, netejar i llançar error
+      this.clearAuth();
+      throw {
+        message: 'errors.notAuthenticated',
+        errors: {},
+      };
+    }
   },
 
   setToken(token: string): void {
@@ -160,7 +169,16 @@ export const authServiceMock = {
 
   getUser(): User | null {
     const stored = localStorage.getItem(AUTH_USER_KEY);
-    return stored ? JSON.parse(stored) : null;
+    if (!stored || stored === 'undefined' || stored === 'null') {
+      return null;
+    }
+    try {
+      return JSON.parse(stored);
+    } catch (error) {
+      console.error('Error parsing user from localStorage:', error);
+      this.clearAuth();
+      return null;
+    }
   },
 
   clearAuth(): void {

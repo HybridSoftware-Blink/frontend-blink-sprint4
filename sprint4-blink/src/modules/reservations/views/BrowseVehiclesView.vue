@@ -4,6 +4,17 @@
       <!-- Filtres de cerca -->
       <div class="mb-8 bg-white p-6 rounded-lg shadow">
         <h3 class="text-lg font-semibold mb-4">{{ $t('bookings.browseVehicles.filters') }}</h3>
+        
+        <!-- Buscador de text -->
+        <div class="mb-4">
+          <input 
+            type="text" 
+            v-model="searchQuery"
+            :placeholder="$t('vehicles.searchPlaceholder')"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
+
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -74,9 +85,9 @@
       </div>
 
       <!-- Galeria de vehicles -->
-      <div v-else-if="availableVehicles.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div v-else-if="filteredVehicles.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div 
-          v-for="vehicle in availableVehicles" 
+          v-for="vehicle in filteredVehicles" 
           :key="vehicle.vehicle_id"
           class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
         >
@@ -294,6 +305,7 @@ const { success, error } = useToast()
 
 const loading = ref(false)
 const availableVehicles = ref<Vehicle[]>([])
+const searchQuery = ref('')
 const vehicleTypes = ['sedan', 'suv', 'truck', 'van', 'coupe', 'convertible', 'hatchback']
 
 const filters = ref({
@@ -336,6 +348,25 @@ const totalHours = computed(() => {
   const hours = Math.round(diffTime / (1000 * 60 * 60))
   
   return hours
+})
+
+const filteredVehicles = computed(() => {
+  if (!searchQuery.value) {
+    return availableVehicles.value
+  }
+  
+  const query = searchQuery.value.toLowerCase()
+  return availableVehicles.value.filter(vehicle => {
+    const brand = vehicle.brand?.toLowerCase() || ''
+    const model = vehicle.model?.toLowerCase() || ''
+    const licensePlate = vehicle.license_plate?.toLowerCase() || ''
+    const color = vehicle.color?.toLowerCase() || ''
+    
+    return brand.includes(query) || 
+           model.includes(query) || 
+           licensePlate.includes(query) ||
+           color.includes(query)
+  })
 })
 
 const isBookingFormValid = computed(() => {
@@ -427,6 +458,7 @@ const searchVehicles = async () => {
 }
 
 const clearFilters = () => {
+  searchQuery.value = ''
   filters.value = {
     startDate: '',
     endDate: '',

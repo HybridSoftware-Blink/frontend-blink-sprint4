@@ -9,7 +9,7 @@ export const reservationService = {
    * Obtener todas las reservas
    */
   async getReservations(): Promise<Reservation[]> {
-    const response = await apiClient.get<Reservation[]>('/v1/reservations');
+    const response = await apiClient.get<Reservation[]>('/reservations');
     return response;
   },
 
@@ -17,7 +17,7 @@ export const reservationService = {
    * Crear una nueva reserva
    */
   async createReservation(data: Partial<Reservation>): Promise<Reservation> {
-    const response = await apiClient.post<Reservation>('/v1/reservations', data);
+    const response = await apiClient.post<Reservation>('/reservations', data);
     return response;
   },
 
@@ -25,7 +25,7 @@ export const reservationService = {
    * Actualizar el estado de una reserva
    */
   async updateStatus(id: number, data: UpdateReservationStatusData): Promise<Reservation> {
-    const response = await apiClient.patch<Reservation>(`/v1/reservations/${id}/status`, data);
+    const response = await apiClient.patch<Reservation>(`/reservations/${id}/status`, data);
     return response;
   },
 
@@ -33,7 +33,7 @@ export const reservationService = {
    * Actualizar el estado de una reserva (alias)
    */
   async updateReservationStatus(id: number, status: string): Promise<Reservation> {
-    const response = await apiClient.patch<Reservation>(`/v1/reservations/${id}/status`, { status });
+    const response = await apiClient.patch<Reservation>(`/reservations/${id}/status`, { status });
     return response;
   },
 
@@ -41,6 +41,6 @@ export const reservationService = {
    * Eliminar una reserva
    */
   async deleteReservation(id: number): Promise<void> {
-    await apiClient.delete(`/v1/reservations/${id}`);
+    await apiClient.delete(`/reservations/${id}`);
   },
 };

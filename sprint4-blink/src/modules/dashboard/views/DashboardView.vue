@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUser } from '@/modules/auth/composables/useUser';
 import { useToast } from '@/shared/composables/useToast';
-import { authServiceMock as authService } from '@/modules/auth/services/auth.service.mock';
+import { authService } from '@/modules/auth/services/auth.service';
 import Sidebar from '@/layouts/components/Sidebar.vue';
 import Navbar from '@/layouts/components/Navbar.vue';
 import { useI18n } from 'vue-i18n';

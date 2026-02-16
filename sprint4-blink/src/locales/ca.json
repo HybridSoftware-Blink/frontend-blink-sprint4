@@ -136,7 +136,7 @@
       "name": "Nom",
       "namePlaceholder": "Nom complet",
       "email": "Email",
-      "emailPlaceholder": "correu@exemple.com",
+      "emailPlaceholder": "correu{'@'}exemple.com",
       "phone": "Telèfon",
       "phonePlaceholder": "+34 600 000 000",
       "role": "Rol",
@@ -224,10 +224,37 @@
   },
   "vehicles": {
     "title": "Vehicles",
+    "description": "Gestiona els vehicles del sistema",
+    "searchPlaceholder": "Busca per matrícula, marca o model...",
+    "loading": "Carregant vehicles...",
+    "empty": "No hi ha vehicles per mostrar",
     "type": "Tipus",
     "seats": "places",
+    "table": {
+      "image": "Imatge",
+      "licensePlate": "Matrícula",
+      "brandModel": "Marca/Model",
+      "color": "Color",
+      "status": "Estat",
+      "battery": "Bateria",
+      "createdAt": "Data de creació",
+      "actions": "Accions"
+    },
+    "actions": {
+      "create": "Crear Vehicle",
+      "newVehicle": "Nou Vehicle",
+      "createNewVehicle": "Crear Nou Vehicle",
+      "edit": "Editar",
+      "editVehicle": "Editar Vehicle",
+      "delete": "Eliminar",
+      "cancel": "Cancel·lar",
+      "save": "Guardar",
+      "close": "Tancar",
+      "refresh": "Actualitzar"
+    },
     "status": {
       "available": "Disponible",
+      "inactive": "Inactiu",
       "in_use": "En ús",
       "maintenance": "Manteniment",
       "out_of_service": "Fora de servei"
@@ -239,7 +266,8 @@
       "van": "Furgoneta",
       "coupe": "Cupè",
       "convertible": "Descapotable",
-      "hatchback": "Compacte"
+      "hatchback": "Compacte",
+      "undefined": "No definit"
     },
     "form": {
       "licensePlate": "Matrícula",
@@ -261,7 +289,42 @@
       "pricePerDay": "Preu per dia (€)",
       "pricePerDayPlaceholder": "50",
       "location": "Ubicació",
-      "locationPlaceholder": "Barcelona"
+      "locationPlaceholder": "Barcelona",
+      "image": "Imatge del vehicle",
+      "uploadImage": "Pujar imatge",
+      "removeImage": "Eliminar imatge",
+      "imageHint": "JPG, PNG o GIF (màxim 5MB)",
+      "invalidImageType": "El fitxer ha de ser una imatge (JPG, PNG, GIF)",
+      "imageTooLarge": "La imatge és massa gran. Màxim 5MB"
+    },
+    "colors": {
+      "Red": "Vermell",
+      "Blue": "Blau",
+      "Green": "Verd",
+      "Yellow": "Groc",
+      "Black": "Negre",
+      "White": "Blanc",
+      "Silver": "Plata",
+      "Gray": "Gris",
+      "Orange": "Taronja",
+      "Purple": "Porpra",
+      "Brown": "Marró",
+      "Pink": "Rosa"
+    },
+    "battery": {
+      "high": "Alta",
+      "medium": "Mitjana",
+      "low": "Baixa"
+    },
+    "modal": {
+      "detailsTitle": "Detalls del Vehicle",
+      "deleteTitle": "Eliminar Vehicle",
+      "deleteMessage": "Estàs segur que vols eliminar el vehicle amb matrícula {plate}? Aquesta acció no es pot desfer."
+    },
+    "toast": {
+      "created": "Vehicle creat correctament",
+      "updated": "Vehicle actualitzat correctament",
+      "deleted": "Vehicle eliminat correctament"
     },
     "errors": {
       "load": "Error en carregar els vehicles"
@@ -339,6 +402,12 @@
         "saturday": "Ds",
         "sunday": "Dg"
       }
+    }
+  },
+  "map": {
+    "title": "Mapa",
+    "errors": {
+      "loadVehicles": "Error carregant vehicles al mapa"
     }
   },
   "table": {

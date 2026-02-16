@@ -136,7 +136,7 @@
       "name": "Name",
       "namePlaceholder": "Full name",
       "email": "Email",
-      "emailPlaceholder": "email@example.com",
+      "emailPlaceholder": "email{'@'}example.com",
       "phone": "Phone",
       "phonePlaceholder": "+34 600 000 000",
       "role": "Role",
@@ -224,10 +224,37 @@
   },
   "vehicles": {
     "title": "Vehicles",
+    "description": "Manage system vehicles",
+    "searchPlaceholder": "Search by license plate, brand or model...",
+    "loading": "Loading vehicles...",
+    "empty": "No vehicles to display",
     "type": "Type",
     "seats": "seats",
+    "table": {
+      "image": "Image",
+      "licensePlate": "License Plate",
+      "brandModel": "Brand/Model",
+      "color": "Color",
+      "status": "Status",
+      "battery": "Battery",
+      "createdAt": "Created Date",
+      "actions": "Actions"
+    },
+    "actions": {
+      "create": "Create Vehicle",
+      "newVehicle": "New Vehicle",
+      "createNewVehicle": "Create New Vehicle",
+      "edit": "Edit",
+      "editVehicle": "Edit Vehicle",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "save": "Save",
+      "close": "Close",
+      "refresh": "Refresh"
+    },
     "status": {
       "available": "Available",
+      "inactive": "Inactive",
       "in_use": "In use",
       "maintenance": "Maintenance",
       "out_of_service": "Out of service"
@@ -239,7 +266,8 @@
       "van": "Van",
       "coupe": "Coupe",
       "convertible": "Convertible",
-      "hatchback": "Hatchback"
+      "hatchback": "Hatchback",
+      "undefined": "Undefined"
     },
     "form": {
       "licensePlate": "License Plate",
@@ -261,7 +289,42 @@
       "pricePerDay": "Price per day (€)",
       "pricePerDayPlaceholder": "50",
       "location": "Location",
-      "locationPlaceholder": "Barcelona"
+      "locationPlaceholder": "Barcelona",
+      "image": "Vehicle Image",
+      "uploadImage": "Upload Image",
+      "removeImage": "Remove Image",
+      "imageHint": "JPG, PNG or GIF (max 5MB)",
+      "invalidImageType": "File must be an image (JPG, PNG, GIF)",
+      "imageTooLarge": "Image is too large. Maximum 5MB"
+    },
+    "colors": {
+      "Red": "Red",
+      "Blue": "Blue",
+      "Green": "Green",
+      "Yellow": "Yellow",
+      "Black": "Black",
+      "White": "White",
+      "Silver": "Silver",
+      "Gray": "Gray",
+      "Orange": "Orange",
+      "Purple": "Purple",
+      "Brown": "Brown",
+      "Pink": "Pink"
+    },
+    "battery": {
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low"
+    },
+    "modal": {
+      "detailsTitle": "Vehicle Details",
+      "deleteTitle": "Delete Vehicle",
+      "deleteMessage": "Are you sure you want to delete the vehicle with license plate {plate}? This action cannot be undone."
+    },
+    "toast": {
+      "created": "Vehicle created successfully",
+      "updated": "Vehicle updated successfully",
+      "deleted": "Vehicle deleted successfully"
     },
     "errors": {
       "load": "Error loading vehicles"
@@ -339,6 +402,12 @@
         "saturday": "Sat",
         "sunday": "Sun"
       }
+    }
+  },
+  "map": {
+    "title": "Map",
+    "errors": {
+      "loadVehicles": "Error loading vehicles on map"
     }
   },
   "table": {
