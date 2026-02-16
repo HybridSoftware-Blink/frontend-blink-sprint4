@@ -134,6 +134,7 @@ import {
   TicketIcon,
   TruckIcon,
   UsersIcon,
+  CalendarIcon,
 } from '@heroicons/vue/24/outline'
 import blinkLogo from '@/assets/blink-logo.png'
 
@@ -183,16 +184,17 @@ const getItemClasses = (item: NavItem) => {
 const clienteNavigation = computed<NavItem[]>(() => [
   { nameKey: 'nav.dashboard', href: '/dashboard', icon: HomeIcon },
   { nameKey: 'nav.map', href: '#', icon: MapPinIcon },
-  { nameKey: 'nav.tickets', href: '/user/tickets', icon: TicketIcon },
-  { nameKey: 'nav.bookings', href: '#', icon: ChartPieIcon },
+  { nameKey: 'nav.tickets', href: '#', icon: TicketIcon },
+  { nameKey: 'nav.browseVehicles', href: '/browse-vehicles', icon: TruckIcon },
+  { nameKey: 'nav.myCalendar', href: '/my-calendar', icon: CalendarIcon },
   { nameKey: 'nav.settings', href: '/settings', icon: Cog6ToothIcon },
 ])
 
 const adminNavigation = computed<NavItem[]>(() => [
   { nameKey: 'nav.users', href: '/users', icon: UsersIcon },
   { nameKey: 'nav.vehicles', href: '#', icon: TruckIcon, count: '12' },
-  { nameKey: 'nav.bookings', href: '#', icon: ChartPieIcon },
+  { nameKey: 'nav.bookings', href: '/reservations', icon: CalendarIcon },
   { nameKey: 'nav.geofencing', href: '#', icon: MapPinIcon, count: '20+' },
-  { nameKey: 'nav.tickets', href: '/admin/tickets', icon: TicketIcon },
+  { nameKey: 'nav.tickets', href: '#', icon: TicketIcon },
 ])
 </script>
