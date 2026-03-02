@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
-import { authServiceMock as authService } from '@/modules/auth/services/auth.service.mock';
+import { authService } from '@/modules/auth/services/auth.service';
 import type { RegisterData } from '@/modules/auth/types/auth.types';
 import { validateRegisterData, type ValidationErrors } from '@/modules/auth/utils/authValidation';
 import BaseInput from '@/components/base/BaseInput.vue';
@@ -11,10 +11,12 @@ import AuthBackground from '@/modules/auth/components/AuthBackground.vue';
 import AuthLogo from '@/modules/auth/components/AuthLogo.vue';
 import { useToast } from '@/shared/composables/useToast';
 import { useI18n } from 'vue-i18n';
+import { useFormatError } from '@/shared/composables/useFormatError';
 
 const router = useRouter();
 const toast = useToast();
 const { t } = useI18n();
+const { formatError } = useFormatError();
 
 const form = reactive<RegisterData>({
     name: '',
@@ -85,12 +87,6 @@ const handleRegister = async () => {
 
 const getFieldError = (field: string): string => {
     return validationErrors.value[field as keyof ValidationErrors] || fieldErrors.value[field]?.[0] || '';
-};
-
-const formatError = (error: string): string => {
-    if (!error) return '';
-    if (error.startsWith('validation.') || error.startsWith('errors.')) return t(error);
-    return error;
 };
 
 const togglePasswordVisibility = () => {

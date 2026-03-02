@@ -213,7 +213,19 @@
       "fecha": "Data",
       "fechaPlaceholder": "AAAA-MM-DD",
       "descripcion": "Descripció",
-      "descripcionPlaceholder": "Descriu el problema o incidència"
+      "descripcionPlaceholder": "Descriu el problema o incidència",
+      "type": "Tipus",
+      "typeSelect": "Selecciona tipus",
+      "typeSupport": "Suport",
+      "typeBilling": "Facturació",
+      "typeTechnical": "Tècnic",
+      "typeOther": "Altre",
+      "priority": "Prioritat",
+      "prioritySelect": "Selecciona prioritat",
+      "priorityLow": "Baixa",
+      "priorityMedium": "Mitjana",
+      "priorityHigh": "Alta",
+      "priorityUrgent": "Urgent"
     },
     "estados": {
       "pendiente": "Pendent",
@@ -245,7 +257,8 @@
       "searchEndpointUnavailable": "Endpoint de cerca no disponible. Recarrega per veure tots els tickets.",
       "search": "Error en buscar tickets",
       "save": "Error al guardar ticket",
-      "delete": "Error en eliminar ticket"
+      "delete": "Error en eliminar ticket",
+      "invalidId": "ID de ticket no vàlid."
     }
   },
   "adminTickets": {
@@ -318,6 +331,7 @@
     "unexpected": "S’ha produït un error inesperat.",
     "invalidLoginResponse": "Resposta d’inici de sessió no vàlida: falta el token.",
     "requestFailed": "Error en la petició",
-    "serverConnection": "Error de connexió amb el servidor"
+    "serverConnection": "Error de connexió amb el servidor",
+    "notAuthenticated": "No estàs autenticat. Si us plau, inicia sessió."
   }
 }

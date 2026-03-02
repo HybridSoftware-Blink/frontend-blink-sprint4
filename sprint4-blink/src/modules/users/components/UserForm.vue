@@ -46,7 +46,7 @@ import { BaseInput, BaseButton } from '@/components/base';
 import type { User, CreateUserData, UpdateUserData } from '@/modules/users/types/user.types';
 import { useUserForm } from '@/modules/users/composables/useUserForm';
 import type { ValidationErrors } from '@/modules/users/utils/userValidation';
-import { useI18n } from 'vue-i18n';
+import { useFormatError } from '@/shared/composables/useFormatError';
 
 interface Props {
   user?: User | null;
@@ -63,18 +63,11 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<{
   submit: [data: CreateUserData | UpdateUserData];
   cancel: [];
-}>();
+}>(); 
 
-const { t } = useI18n();
+const { formatError } = useFormatError();
 
-const formatError = (error: string): string => {
-  if (!error) return '';
-  if (error.startsWith('validation.') || error.startsWith('errors.')) return t(error);
-  return error;
-};
-
-const isEditing = ref(!!props.user);
-
+const isEditing = ref(false);
 const formData = ref<CreateUserData>({
   name: '',
   email: '',
@@ -96,7 +89,7 @@ watch(
         role: newUser.role as 'user' | 'admin',
         password: '',
         password_confirmation: '',
-      };
+      } as CreateUserData;
     } else {
       isEditing.value = false;
       formData.value = {

@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import type { RouteRecordRaw } from 'vue-router';
-import { authServiceMock as authService } from '../modules/auth/services/auth.service.mock';
+import { authService } from '../modules/auth/services/auth.service';
 import { authRoutes } from '../modules/auth/routes';
 import { dashboardRoutes } from '../modules/dashboard/routes';
 import { settingsRoutes } from '../modules/settings/routes';

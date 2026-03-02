@@ -7,9 +7,8 @@ export default defineConfig({
   plugins: [vue()],
   server: {
     proxy: {
-      // API Laravel (evita CORS en dev usando el mismo origen)
       '/api': {
-        target: 'http://localhost:8001',
+        target: 'http://localhost:8000',
         changeOrigin: true,
         secure: false,
       },

@@ -61,6 +61,8 @@ import type { AdminTicket } from '@/modules/tickets/types/adminTicket.types';
 import type { TableColumn } from '@/components/base/BaseTable.vue';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useDateFormatter } from '@/shared/composables/useDateFormatter';
+import { getEstadoClass } from '@/modules/tickets/utils/ticketHelpers';
 
 interface Props {
   tickets?: AdminTicket[];
@@ -72,7 +74,7 @@ withDefaults(defineProps<Props>(), {
   loading: false,
 });
 
-const { t, locale } = useI18n();
+const { t } = useI18n();
 
 defineEmits<{
   view: [ticket: AdminTicket];
@@ -90,34 +92,5 @@ const columns = computed<TableColumn[]>(() => [
   { key: 'actions', label: t('tickets.table.actions'), align: 'right' },
 ]);
 
-const dateFormatter = computed(() => {
-  const localeMap: Record<string, string> = {
-    ca: 'ca-ES',
-    es: 'es-ES',
-    en: 'en-GB',
-  };
-  const intlLocale = localeMap[String(locale.value)] ?? 'ca-ES';
-
-  return new Intl.DateTimeFormat(intlLocale, {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-});
-
-const formatDate = (date: string): string => {
-  return dateFormatter.value.format(new Date(date));
-};
-
-const getEstadoClass = (estado: string): string => {
-  const classes: Record<string, string> = {
-    pendiente: 'bg-yellow-100 text-yellow-800',
-    confirmado: 'bg-green-100 text-green-800',
-    cancelado: 'bg-red-100 text-red-800',
-    usado: 'bg-gray-100 text-gray-800',
-  };
-  return classes[estado] || 'bg-gray-100 text-gray-800';
-};
+const { formatDate } = useDateFormatter();
 </script>

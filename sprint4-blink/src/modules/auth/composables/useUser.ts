@@ -1,8 +1,9 @@
 import { ref, computed } from 'vue';
 import type { User } from '../types/auth.types';
-import { authServiceMock as authService } from '../services/auth.service.mock';
+import { authService } from '../services/auth.service';
 
-const user = ref<User | null>(null);
+// Inicialitzar des del localStorage immediatament per evitar estat null
+const user = ref<User | null>(authService.getUser());
 const avatarUrl = ref<string | null>(null);
 const AVATAR_KEY = 'user_avatar';
 
@@ -37,8 +38,6 @@ export function useUser() {
     authService.setUser(updatedUser);
   };
 
-  const getCurrentUser = () => user.value;
-
   const clearAvatar = () => {
     avatarUrl.value = null;
     localStorage.removeItem(AVATAR_KEY);
@@ -50,7 +49,6 @@ export function useUser() {
     loadUser,
     updateAvatar,
     updateUser,
-    getCurrentUser,
     clearAvatar,
   };
 }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, useId } from 'vue';
 
 interface Props {
   modelValue: string | number;
@@ -25,7 +25,7 @@ const emit = defineEmits<{
   'togglePassword': [];
 }>();
 
-const inputId = computed(() => `input-${Math.random().toString(36).substr(2, 9)}`);
+const inputId = `input-${useId()}`;
 
 const inputClasses = computed(() => {
   const classes = [

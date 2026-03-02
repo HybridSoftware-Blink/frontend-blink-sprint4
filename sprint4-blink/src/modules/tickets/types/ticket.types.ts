@@ -28,6 +28,8 @@ export interface Ticket {
 export interface CreateTicketData {
   asunto: string;
   descripcion?: string;
+  type?: string;
+  priority?: string;
 }
 
 export interface CreateMessageData {

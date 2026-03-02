@@ -138,25 +138,23 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted } from 'vue';
 import { BaseButton, BaseInput, BaseModal } from '@/components/base';
 import AppLayout from '@/layouts/AppLayout.vue';
 import UserTable from '@/modules/users/components/UserTable.vue';
 import UserForm from '@/modules/users/components/UserForm.vue';
-import { userService } from '@/modules/users/services/user.service.mock';
+import { userService } from '@/modules/users/services/user.service';
 import type { User, CreateUserData, UpdateUserData } from '@/modules/users/types/user.types';
 import { useToast } from '@/shared/composables/useToast';
 import { validateUserForm, type ValidationErrors } from '@/modules/users/utils/userValidation';
 import { useI18n } from 'vue-i18n';
+import { useTranslateError } from '@/shared/composables/useTranslateError';
+import { useDateFormatter } from '@/shared/composables/useDateFormatter';
 
 const toast = useToast();
-const { t, te, locale } = useI18n();
-
-const translateErrorMessage = (message: unknown, fallback: string) => {
-  const msg = typeof message === 'string' ? message : '';
-  if (msg && te(msg)) return t(msg);
-  return msg || fallback;
-};
+const { t } = useI18n();
+const { translateErrorMessage } = useTranslateError();
+const { formatDate } = useDateFormatter({ year: 'numeric', month: 'short', day: 'numeric' });
 
 // Estado
 const users = ref<User[]>([]);
@@ -295,7 +293,9 @@ const handleSubmit = async (data: CreateUserData | UpdateUserData) => {
 
   try {
     if (editingUser.value) {
-      await userService.updateUser(editingUser.value.id, data as UpdateUserData);
+      const id = (editingUser.value.user_id ?? editingUser.value.id) as number | undefined;
+      if (!id) throw { message: 'users.errors.invalidId' };
+      await userService.updateUser(id, data as UpdateUserData);
       toast.success(t('users.toast.updated'));
     } else {
       await userService.createUser(data as CreateUserData);
@@ -323,7 +323,13 @@ const handleDelete = async () => {
 
   deleting.value = true;
   try {
-    await userService.deleteUser(userToDelete.value.id);
+    const id = (userToDelete.value.user_id ?? userToDelete.value.id) as number | undefined;
+    if (!id) {
+      toast.error(t('users.errors.invalidId'));
+      deleting.value = false;
+      return;
+    }
+    await userService.deleteUser(id);
     toast.success(t('users.toast.deleted'));
     closeDeleteModal();
     await loadUsers();
@@ -339,27 +345,6 @@ const handleDelete = async () => {
   } finally {
     deleting.value = false;
   }
-};
-
-const dateFormatter = computed(() => {
-  const localeMap: Record<string, string> = {
-    ca: 'ca-ES',
-    es: 'es-ES',
-    en: 'en-GB',
-  };
-  const intlLocale = localeMap[String(locale.value)] ?? 'ca-ES';
-
-  return new Intl.DateTimeFormat(intlLocale, {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-});
-
-const formatDate = (date: string): string => {
-  return dateFormatter.value.format(new Date(date));
 };
 
 onMounted(() => {

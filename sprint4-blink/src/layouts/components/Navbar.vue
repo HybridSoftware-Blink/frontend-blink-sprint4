@@ -44,10 +44,7 @@ const userInitials = computed(() => {
         .join('');
 });
 
-// Nombre del usuario actual
-const displayName = computed(() => {
-    return user.value?.name;
-});
+
 </script>
 
 <template>
@@ -71,7 +68,7 @@ const displayName = computed(() => {
 
             <!-- User name and Logout button -->
             <div class="flex items-center gap-6">
-                <div v-if="displayName" class="flex items-center gap-3 pr-4 border-r border-gray-200">
+                <div v-if="user?.name" class="flex items-center gap-3 pr-4 border-r border-gray-200">
                     <!-- Avatar con gradiente o imagen -->
                     <div v-if="avatarUrl" class="w-10 h-10 rounded-full overflow-hidden shadow-md flex-shrink-0">
                         <img :src="avatarUrl" :alt="t('common.avatar')" class="w-full h-full object-cover" />
@@ -82,7 +79,7 @@ const displayName = computed(() => {
                     <!-- User name -->
                     <div class="flex flex-col">
                         <span class="text-base font-bold text-gray-900">
-                            {{ displayName }}
+                            {{ user?.name }}
                         </span>
                     </div>
                 </div>

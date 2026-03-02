@@ -1,17 +1,16 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { authServiceMock as authService } from '@/modules/auth/services/auth.service.mock'
+import { authService } from '@/modules/auth/services/auth.service'
 import { useUser } from '@/modules/auth/composables/useUser'
 import { useToast } from '@/shared/composables/useToast'
-import { userService } from '@/modules/users/services/user.service.mock'
+import { userService } from '@/modules/users/services/user.service'
 import { useI18n } from 'vue-i18n'
 
 export function useSettings() {
   const router = useRouter()
   const toast = useToast()
   const { t, te } = useI18n()
-  const isCollapsed = ref(true)
-  const { user, loadUser, updateAvatar, updateUser, avatarUrl, clearAvatar } = useUser()
+  const { user, loadUser, updateAvatar, updateUser, avatarUrl } = useUser()
   const fileInput = ref<HTMLInputElement | null>(null)
 
   const translateErrorMessage = (message: unknown, fallback: string) => {
@@ -25,10 +24,6 @@ export function useSettings() {
   const lastName = ref('')
   const email = ref('')
   const currentPassword = ref('')
-
-  const toggleSidebar = () => {
-    isCollapsed.value = !isCollapsed.value
-  }
 
   onMounted(async () => {
     try {
@@ -46,12 +41,6 @@ export function useSettings() {
       router.push('/login')
     }
   })
-
-  const handleLogout = async () => {
-    clearAvatar()
-    await authService.logout()
-    router.push('/login')
-  }
 
   const handleAvatarClick = () => {
     fileInput.value?.click()
@@ -84,7 +73,11 @@ export function useSettings() {
 
   const handlePersonalInfoSubmit = async () => {
     try {
-      if (!user.value?.id) {
+      // Intentar obtenir l'id de l'usuari: primer del reactive, després del localStorage
+      const userId = user.value?.id ?? authService.getUser()?.id
+      const userPhone = user.value?.phone ?? authService.getUser()?.phone ?? ''
+
+      if (!userId) {
         toast.error(t('settings.errors.userInfoUnavailable'))
         return
       }
@@ -96,7 +89,7 @@ export function useSettings() {
       const updateData: any = {
         name: fullName,
         email: email.value,
-        phone: user.value.phone, // Mantener el teléfono actual
+        phone: userPhone,
       }
 
       // Only include password if provided
@@ -106,7 +99,7 @@ export function useSettings() {
       }
 
       // Call user service to update user
-      const updatedUserData = await userService.updateUser(user.value.id, updateData)
+      const updatedUserData = await userService.updateUser(userId, updateData)
       
       // Update local user data
       updateUser(updatedUserData)
@@ -123,18 +116,16 @@ export function useSettings() {
   }
 
   return {
-    isCollapsed,
     avatarUrl,
     fileInput,
     firstName,
     lastName,
     email,
     currentPassword,
-    toggleSidebar,
-    handleLogout,
     handleAvatarClick,
     handleAvatarChange,
     handlePersonalInfoSubmit,
-    handleDeleteAccount
+    handleDeleteAccount,
   }
 }
+

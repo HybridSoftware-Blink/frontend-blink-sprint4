@@ -137,19 +137,18 @@ import { BaseButton, BaseInput, BaseModal } from '@/components/base';
 import AppLayout from '@/layouts/AppLayout.vue';
 import AdminTicketTable from '@/modules/tickets/components/AdminTicketTable.vue';
 import TicketChat from '@/modules/tickets/components/TicketChat.vue';
-import { adminTicketServiceMock as adminTicketService } from '@/modules/tickets/services/adminTicket.service.mock';
+import { adminTicketService } from '@/modules/tickets/services/adminTicket.service';
 import type { AdminTicket } from '@/modules/tickets/types/adminTicket.types';
 import { useToast } from '@/shared/composables/useToast';
 import { useI18n } from 'vue-i18n';
+import { useTranslateError } from '@/shared/composables/useTranslateError';
+import { getEstadoClass } from '@/modules/tickets/utils/ticketHelpers';
+import { useDateFormatter } from '@/shared/composables/useDateFormatter';
 
 const toast = useToast();
-const { t, te, locale } = useI18n();
-
-const translateErrorMessage = (message: unknown, fallback: string) => {
-  const msg = typeof message === 'string' ? message : '';
-  if (msg && te(msg)) return t(msg);
-  return msg || fallback;
-};
+const { t } = useI18n();
+const { translateErrorMessage } = useTranslateError();
+const { formatDate } = useDateFormatter();
 
 // Estado
 const tickets = ref<AdminTicket[]>([]);
@@ -238,7 +237,9 @@ const switchToChat = () => {
 const openChatModal = async (ticket: AdminTicket) => {
   // Recargar el ticket para obtener los mensajes más recientes
   try {
-    const fullTicket = await adminTicketService.getTicketById(ticket.id);
+    const id = (ticket.id ?? ticket.ticket_id) as number;
+    if (!id) throw { message: 'tickets.errors.invalidId' };
+    const fullTicket = await adminTicketService.getTicketById(id);
     chattingTicket.value = fullTicket;
     showChatModal.value = true;
   } catch (error: any) {
@@ -257,11 +258,13 @@ const handleSendMessage = async (mensaje: string) => {
 
   submitting.value = true;
   try {
-    await adminTicketService.sendMessage(chattingTicket.value.id, { mensaje });
+    const id = (chattingTicket.value.id ?? chattingTicket.value.ticket_id) as number | undefined;
+    if (!id) throw { message: 'tickets.errors.invalidId' };
+    await adminTicketService.sendMessage(id, { mensaje });
     toast.success(t('adminTickets.toast.messageSent'));
     
     // Recargar el ticket para obtener el mensaje recién enviado
-    const updatedTicket = await adminTicketService.getTicketById(chattingTicket.value.id);
+    const updatedTicket = await adminTicketService.getTicketById(id!);
     chattingTicket.value = updatedTicket;
     
     // Recargar la lista de tickets
@@ -299,29 +302,6 @@ const handleDelete = async () => {
   } finally {
     deleting.value = false;
   }
-};
-
-// Formateo
-const dateFormatter = new Intl.DateTimeFormat(String(locale.value), {
-  year: 'numeric',
-  month: 'short',
-  day: 'numeric',
-  hour: '2-digit',
-  minute: '2-digit',
-});
-
-const formatDate = (date: string): string => {
-  return dateFormatter.format(new Date(date));
-};
-
-const getEstadoClass = (estado: string | undefined): string => {
-  const classes: Record<string, string> = {
-    pendiente: 'bg-yellow-100 text-yellow-800',
-    confirmado: 'bg-green-100 text-green-800',
-    cancelado: 'bg-red-100 text-red-800',
-    usado: 'bg-gray-100 text-gray-800',
-  };
-  return classes[String(estado)] || 'bg-gray-100 text-gray-800';
 };
 
 // Cargar datos al montar el componente

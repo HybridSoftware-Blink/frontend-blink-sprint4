@@ -15,15 +15,20 @@ export function validateTicketForm(
       errors.descripcion = 'validation.ticket.descripcionMax';
     }
   }
-  // Validar asunto (requerido)
   if (!formData.asunto || typeof formData.asunto !== 'string' || formData.asunto.trim().length === 0) {
     errors.asunto = 'validation.ticket.asuntoRequired';
   } else if (formData.asunto.length > 255) {
     errors.asunto = 'validation.ticket.asuntoMax';
   }
 
-  // Validar fecha (opcional, si se proporciona debe ser válida)
-  // fecha ya no se proporciona desde el formulario de usuario
-
+  const allowedPriorities = ['low', 'medium', 'high', 'urgent'];
+  if (!formData.priority || typeof formData.priority !== 'string' || formData.priority.trim().length === 0) {
+    errors.priority = 'validation.ticket.priorityRequired';
+  } else if (formData.priority.length > 20) {
+    errors.priority = 'validation.ticket.priorityMax';
+  } else if (!allowedPriorities.includes(formData.priority)) {
+    errors.priority = 'validation.ticket.priorityInvalid';
+  }
+  
   return errors;
 }

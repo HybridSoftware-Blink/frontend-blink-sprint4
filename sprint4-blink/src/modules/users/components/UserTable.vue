@@ -51,6 +51,7 @@ import type { User } from '@/modules/users/types/user.types';
 import type { TableColumn } from '@/components/base/BaseTable.vue';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useDateFormatter } from '@/shared/composables/useDateFormatter';
 
 interface Props {
   users?: User[];
@@ -62,7 +63,7 @@ withDefaults(defineProps<Props>(), {
   loading: false,
 });
 
-const { t, locale } = useI18n();
+const { t } = useI18n();
 
 defineEmits<{
   view: [user: User];
@@ -80,22 +81,5 @@ const columns = computed<TableColumn[]>(() => [
   { key: 'actions', label: t('users.table.actions'), align: 'right' },
 ]);
 
-const dateFormatter = computed(() => {
-  const localeMap: Record<string, string> = {
-    ca: 'ca-ES',
-    es: 'es-ES',
-    en: 'en-GB',
-  };
-  const intlLocale = localeMap[String(locale.value)] ?? 'ca-ES';
-
-  return new Intl.DateTimeFormat(intlLocale, {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  });
-});
-
-const formatDate = (date: string): string => {
-  return dateFormatter.value.format(new Date(date));
-};
+const { formatDate } = useDateFormatter({ year: 'numeric', month: 'short', day: 'numeric' });
 </script>

@@ -101,20 +101,16 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import TicketTable from '@/modules/tickets/components/TicketTable.vue';
 import TicketForm from '@/modules/tickets/components/TicketForm.vue';
 import UserTicketChat from '@/modules/tickets/components/UserTicketChat.vue';
-import { ticketServiceMock as ticketService } from '@/modules/tickets/services/ticket.service.mock';
+import { ticketService } from '@/modules/tickets/services/ticket.service';
 import type { Ticket, CreateTicketData } from '@/modules/tickets/types/ticket.types';
 import { useToast } from '@/shared/composables/useToast';
 import { validateTicketForm, type ValidationErrors } from '@/modules/tickets/utils/ticketValidation';
 import { useI18n } from 'vue-i18n';
+import { useTranslateError } from '@/shared/composables/useTranslateError';
 
 const toast = useToast();
-const { t, te } = useI18n();
-
-const translateErrorMessage = (message: unknown, fallback: string) => {
-  const msg = typeof message === 'string' ? message : '';
-  if (msg && te(msg)) return t(msg);
-  return msg || fallback;
-};
+const { t } = useI18n();
+const { translateErrorMessage } = useTranslateError();
 
 // Estado
 const tickets = ref<Ticket[]>([]);
@@ -195,7 +191,9 @@ const closeTicketModal = () => {
 const openViewModal = async (ticket: Ticket) => {
   // Recargar el ticket para obtener los mensajes más recientes
   try {
-    const fullTicket = await ticketService.getTicketById(ticket.id);
+    const id = (ticket.id ?? ticket.ticket_id) as number;
+    if (!id) throw { message: 'tickets.errors.invalidId' };
+    const fullTicket = await ticketService.getTicketById(id);
     viewingTicket.value = fullTicket;
     showViewModal.value = true;
   } catch (error: any) {
@@ -238,11 +236,13 @@ const handleSendMessage = async (mensaje: string) => {
 
   submitting.value = true;
   try {
-    await ticketService.sendMessage(viewingTicket.value.id, { mensaje });
+    const id = (viewingTicket.value?.id ?? viewingTicket.value?.ticket_id) as number | undefined;
+    if (!id) throw { message: 'tickets.errors.invalidId' };
+    await ticketService.sendMessage(id, { mensaje });
     toast.success(t('tickets.toast.messageSent'));
     
     // Recargar el ticket para obtener el mensaje recién enviado
-    const updatedTicket = await ticketService.getTicketById(viewingTicket.value.id);
+    const updatedTicket = await ticketService.getTicketById(id!);
     viewingTicket.value = updatedTicket;
     
     // Recargar la lista de tickets

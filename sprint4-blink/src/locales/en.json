@@ -213,7 +213,19 @@
       "fecha": "Date",
       "fechaPlaceholder": "YYYY-MM-DD",
       "descripcion": "Description",
-      "descripcionPlaceholder": "Describe the issue or problem"
+      "descripcionPlaceholder": "Describe the issue or problem",
+      "type": "Type",
+      "typeSelect": "Select type",
+      "typeSupport": "Support",
+      "typeBilling": "Billing",
+      "typeTechnical": "Technical",
+      "typeOther": "Other",
+      "priority": "Priority",
+      "prioritySelect": "Select priority",
+      "priorityLow": "Low",
+      "priorityMedium": "Medium",
+      "priorityHigh": "High",
+      "priorityUrgent": "Urgent"
     },
     "estados": {
       "pendiente": "Pending",
@@ -245,7 +257,8 @@
       "searchEndpointUnavailable": "Search endpoint unavailable. Reload to see all tickets.",
       "search": "Error searching tickets",
       "save": "Error saving ticket",
-      "delete": "Error deleting ticket"
+      "delete": "Error deleting ticket",
+      "invalidId": "Invalid ticket ID."
     }
   },
   "adminTickets": {
@@ -318,6 +331,7 @@
     "unexpected": "An unexpected error occurred.",
     "invalidLoginResponse": "Invalid login response: missing token.",
     "requestFailed": "Request failed",
-    "serverConnection": "Server connection error"
+    "serverConnection": "Server connection error",
+    "notAuthenticated": "You are not authenticated. Please sign in."
   }
 }

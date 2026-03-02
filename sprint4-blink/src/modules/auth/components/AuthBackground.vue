@@ -3,7 +3,6 @@ import backgroundVideo from '@/assets/blackground.mp4';
 
 withDefaults(
   defineProps<{
-    showLogo?: boolean;
     containerClass?: string;
   }>(),
   {

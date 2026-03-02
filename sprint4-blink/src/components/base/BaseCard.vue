@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { computed } from 'vue';
+
 interface Props {
   padding?: 'sm' | 'md' | 'lg' | 'none';
   shadow?: boolean;
@@ -9,13 +11,13 @@ const props = withDefaults(defineProps<Props>(), {
   shadow: true,
 });
 
-const cardClasses = [
+const cardClasses = computed(() => [
   'bg-white rounded-2xl',
   props.shadow ? 'shadow-lg' : '',
   props.padding === 'sm' ? 'p-4' : '',
   props.padding === 'md' ? 'p-8' : '',
   props.padding === 'lg' ? 'p-12' : '',
-].filter(Boolean).join(' ');
+].filter(Boolean).join(' '));
 </script>
 
 <template>

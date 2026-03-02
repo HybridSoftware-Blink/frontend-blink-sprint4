@@ -213,7 +213,19 @@
       "fecha": "Fecha",
       "fechaPlaceholder": "AAAA-MM-DD",
       "descripcion": "Descripción",
-      "descripcionPlaceholder": "Describe el problema o incidencia"
+      "descripcionPlaceholder": "Describe el problema o incidencia",
+      "type": "Tipo",
+      "typeSelect": "Selecciona tipo",
+      "typeSupport": "Soporte",
+      "typeBilling": "Facturación",
+      "typeTechnical": "Técnico",
+      "typeOther": "Otro",
+      "priority": "Prioridad",
+      "prioritySelect": "Selecciona prioridad",
+      "priorityLow": "Baja",
+      "priorityMedium": "Media",
+      "priorityHigh": "Alta",
+      "priorityUrgent": "Urgente"
     },
     "estados": {
       "pendiente": "Pendiente",
@@ -245,7 +257,8 @@
       "searchEndpointUnavailable": "Endpoint de búsqueda no disponible. Recarga para ver todos los tickets.",
       "search": "Error al buscar tickets",
       "save": "Error al guardar ticket",
-      "delete": "Error al eliminar ticket"
+      "delete": "Error al eliminar ticket",
+      "invalidId": "ID de ticket inválido."
     }
   },
   "adminTickets": {
@@ -318,6 +331,7 @@
     "unexpected": "Ha ocurrido un error inesperado.",
     "invalidLoginResponse": "Respuesta de login inválida: falta token.",
     "requestFailed": "Error en la petición",
-    "serverConnection": "Error de conexión con el servidor"
+    "serverConnection": "Error de conexión con el servidor",
+    "notAuthenticated": "No estás autenticado. Por favor, inicia sesión."
   }
 }
